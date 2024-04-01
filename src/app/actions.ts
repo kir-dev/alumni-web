@@ -1,3 +1,3 @@
-'use server';
+'use trpc';
 
 export * from './actions/user.actions';
