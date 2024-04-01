@@ -2,20 +2,21 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { RegisterForm } from '@/app/register/register-form';
+import { LoginForm } from '@/app/login/login-form';
 import Providers from '@/components/providers';
 
-export default async function RegisterPage() {
+export default async function LoginPage() {
   const session = await getServerSession(authOptions);
+
   if (session?.user) {
     return redirect('/profile');
   }
 
   return (
     <main className='container'>
-      <h1>Regisztráció</h1>
+      <h1>Bejelentkezés</h1>
       <Providers>
-        <RegisterForm />
+        <LoginForm />
       </Providers>
     </main>
   );
