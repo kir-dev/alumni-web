@@ -33,6 +33,17 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    session({ session, token }) {
+      if (!token.sub) return session;
+
+      session.user = {
+        id: token.sub,
+        email: session.user?.email,
+      };
+      return session;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',

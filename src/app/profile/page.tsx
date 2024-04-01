@@ -3,12 +3,13 @@ import { getServerSession } from 'next-auth/next';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { SignOut } from '@/app/login/sign-out';
+import { UpdateProfileForm } from '@/app/profile/update-profile-form';
+import Providers from '@/components/providers';
 import { prismaClient } from '@/config/prisma.config';
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
-    console.log(session);
     return redirect('/login');
   }
 
@@ -29,6 +30,9 @@ export default async function ProfilePage() {
         {user.firstName} {user.lastName}
       </p>
       <SignOut />
+      <Providers>
+        <UpdateProfileForm />
+      </Providers>
     </main>
   );
 }
