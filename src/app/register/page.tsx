@@ -1,15 +1,18 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Control, FieldPath, FieldValues, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { trpc } from '@/_trpc/client';
 import Providers from '@/components/providers';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { RegisterDto } from '@/types/user.types';
-import { trpc } from '@/utils/trpc-client.utils';
 
 export default function RegisterPage() {
   return (
-    <main>
+    <main className='container'>
       <h1>Regisztráció</h1>
       <Providers>
         <RegisterForm />
@@ -21,34 +24,56 @@ export default function RegisterPage() {
 function RegisterForm() {
   const { mutateAsync, isPending, isError } = trpc.registerUser.useMutation();
 
-  const { handleSubmit, register } = useForm<z.infer<typeof RegisterDto>>();
+  const form = useForm<z.infer<typeof RegisterDto>>();
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = form.handleSubmit(async (data) => {
     await mutateAsync(data);
   });
 
   return (
-    <form onSubmit={onSubmit}>
-      <label>Vezetéknév</label>
-      <input type='text' {...register('lastName')} />
+    <Form {...form}>
+      <form onSubmit={onSubmit}>
+        <TextField control={form.control} name='lastName' label='Vezetéknév' />
+        <TextField control={form.control} name='firstName' label='Keresztnév' />
+        <TextField control={form.control} name='email' label='Email' />
+        <TextField control={form.control} name='password' label='Jelszó' />
+        <TextField control={form.control} name='phone' label='Telefonszám' />
+        <TextField control={form.control} name='address' label='Levelezési cím' />
+        <Button type='submit'>Regisztráció</Button>
+        {isError && <p>Hiba történt a regisztráció során</p>}
+        {isPending && <p>Folyamatban...</p>}
+      </form>
+    </Form>
+  );
+}
 
-      <label>Keresztnév</label>
-      <input type='text' {...register('firstName')} />
+interface FormFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name: TName;
+  label: string;
+  description?: string;
+}
 
-      <label>E-mail</label>
-      <input type='email' {...register('email')} />
-      <label>Jelszó</label>
-      <input type='password' {...register('password')} />
-
-      <label>Telefonszám</label>
-      <input type='tel' {...register('phone')} />
-
-      <label>Levelezési cím</label>
-      <input type='text' {...register('address')} />
-
-      <button type='submit'>Regisztráció</button>
-      {isError && <p>Hiba történt a regisztráció során</p>}
-      {isPending && <p>Folyamatban...</p>}
-    </form>
+function TextField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
+  control,
+  name,
+  label,
+  description,
+}: FormFieldProps<TName, TFieldValues>) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
+          {description && <FormDescription>{description}</FormDescription>}
+          {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
+        </FormItem>
+      )}
+    />
   );
 }

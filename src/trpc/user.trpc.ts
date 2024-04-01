@@ -1,7 +1,7 @@
 import { prismaClient } from '@/config/prisma.config';
+import { hashPassword } from '@/lib/utils';
 import { publicProcedure } from '@/trpc/trpc';
 import { RegisterDto, UserProfileDto } from '@/types/user.types';
-import { hashPassword } from '@/utils/auth.utils';
 
 export const registerUser = publicProcedure.input(RegisterDto).mutation(async (opts): Promise<UserProfileDto> => {
   const { password, ...data } = opts.input;
