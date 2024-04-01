@@ -1,3 +1,4 @@
+import { HTMLAttributes, HTMLInputTypeAttribute } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -8,6 +9,7 @@ interface TextFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues ext
   name: TName;
   label: string;
   description?: string;
+  type?: HTMLInputTypeAttribute;
 }
 
 export function TextField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
@@ -15,6 +17,7 @@ export function TextField<TName extends FieldPath<TFieldValues>, TFieldValues ex
   name,
   label,
   description,
+  type,
 }: TextFieldProps<TName, TFieldValues>) {
   return (
     <FormField
@@ -24,7 +27,7 @@ export function TextField<TName extends FieldPath<TFieldValues>, TFieldValues ex
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input {...field} />
+            <Input type={type} {...field} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}

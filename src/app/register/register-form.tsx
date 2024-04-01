@@ -24,12 +24,12 @@ export function RegisterForm() {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField control={form.control} name='lastName' label='Vezetéknév' />
-        <TextField control={form.control} name='firstName' label='Keresztnév' />
-        <TextField control={form.control} name='email' label='Email' />
-        <TextField control={form.control} name='password' label='Jelszó' />
-        <TextField control={form.control} name='phone' label='Telefonszám' />
-        <TextField control={form.control} name='address' label='Levelezési cím' />
+        <TextField control={form.control} type='text' name='lastName' label='Vezetéknév' />
+        <TextField control={form.control} type='text' name='firstName' label='Keresztnév' />
+        <TextField control={form.control} type='email' name='email' label='Email' />
+        <TextField control={form.control} type='password' name='password' label='Jelszó' />
+        <TextField control={form.control} type='tel' name='phone' label='Telefonszám' />
+        <TextField control={form.control} type='text' name='address' label='Levelezési cím' />
         <Button type='submit'>Regisztráció</Button>
         {isError && <p>Hiba történt a regisztráció során</p>}
         {isPending && <p>Folyamatban...</p>}

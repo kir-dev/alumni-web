@@ -26,8 +26,8 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField control={form.control} name='email' label='E-mail cím' />
-        <TextField control={form.control} name='password' label='Jelszó' />
+        <TextField control={form.control} name='email' label='E-mail cím' type='email' />
+        <TextField control={form.control} name='password' label='Jelszó' type='password' />
         <Button type='submit'>Bejelentkezés</Button>
         {/*{isError && <p>Hiba történt a regisztráció során</p>}*/}
         {/*{isPending && <p>Folyamatban...</p>}*/}
