@@ -31,6 +31,7 @@ model User {
 model Group {
   id            String  @id @default(uuid())
   name          String
+  description   String
   parentGroupId String?
   parentGroup   Group?  @relation("ParentGroup", fields: [parentGroupId], references: [id])
   subGroups     Group[] @relation("ParentGroup")
