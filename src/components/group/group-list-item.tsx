@@ -11,9 +11,9 @@ interface GroupListItemProps {
 export function GroupListItem({ group }: GroupListItemProps) {
   return (
     <Link href={`/groups/${group.id}`}>
-      <Card>
+      <Card className='mt-2'>
         <CardHeader className='flex-row justify-between items-center'>
-          <CardTitle>{group.name}</CardTitle>
+          <CardTitle className='text-lg'>{group.name}</CardTitle>
           <TbChevronRight className='text-slate-500' />
         </CardHeader>
       </Card>

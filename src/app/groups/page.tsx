@@ -28,7 +28,7 @@ export default async function GroupsPage() {
           </Button>
         )}
       </div>
-      <div className='mt-10 '>
+      <div className='mt-10'>
         {groups.map((group) => (
           <GroupListItem key={group.id} group={group} />
         ))}
