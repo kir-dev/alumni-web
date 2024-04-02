@@ -36,7 +36,9 @@ export function UpdateProfileForm() {
         <TextField control={form.control} name='email' label='E-mail cím' />
         <TextField control={form.control} name='phone' label='Telefonszám' />
         <TextField control={form.control} name='address' label='Levelezési cím' />
-        <Button type='submit'>Mentés</Button>
+        <Button className='mt-5' type='submit'>
+          Mentés
+        </Button>
       </form>
     </Form>
   );

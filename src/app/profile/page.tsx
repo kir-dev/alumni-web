@@ -29,10 +29,11 @@ export default async function ProfilePage() {
     <main>
       <h1>Profil</h1>
       <Card className='mt-10'>
-        <CardHeader>
+        <CardHeader className='flex flex-row justify-between items-center gap-5'>
           <CardTitle>
             {user.firstName} {user.lastName}
           </CardTitle>
+          <SignOut />
         </CardHeader>
         <CardContent>
           <p>
@@ -46,7 +47,6 @@ export default async function ProfilePage() {
           </p>
         </CardContent>
       </Card>
-      <SignOut />
       <Providers>
         <UpdateProfileForm />
       </Providers>

@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -28,7 +29,12 @@ export function LoginForm() {
       <form onSubmit={onSubmit}>
         <TextField control={form.control} name='email' label='E-mail cím' type='email' />
         <TextField control={form.control} name='password' label='Jelszó' type='password' />
-        <Button type='submit'>Bejelentkezés</Button>
+        <div className='mt-5'>
+          <Button type='submit'>Bejelentkezés</Button>
+          <Button variant='link' asChild>
+            <Link href='/register'>Regisztráció</Link>
+          </Button>
+        </div>
         {/*{isError && <p>Hiba történt a regisztráció során</p>}*/}
         {/*{isPending && <p>Folyamatban...</p>}*/}
       </form>

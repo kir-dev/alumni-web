@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/button';
 import { TextField } from '@/components/ui/fields';
-import { Form } from '@/components/ui/form';
+import { Form, FormMessage } from '@/components/ui/form';
 import { RegisterDto } from '@/types/user.types';
 
 export function RegisterForm() {
@@ -30,9 +30,10 @@ export function RegisterForm() {
         <TextField control={form.control} type='password' name='password' label='Jelszó' />
         <TextField control={form.control} type='tel' name='phone' label='Telefonszám' />
         <TextField control={form.control} type='text' name='address' label='Levelezési cím' />
-        <Button type='submit'>Regisztráció</Button>
-        {isError && <p>Hiba történt a regisztráció során</p>}
-        {isPending && <p>Folyamatban...</p>}
+        <LoadingButton isLoading={isPending} className='mt-5' type='submit'>
+          Regisztráció
+        </LoadingButton>
+        {isError && <FormMessage>Hiba történt a regisztráció során</FormMessage>}
       </form>
     </Form>
   );
