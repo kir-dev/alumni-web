@@ -16,13 +16,6 @@ export function UpdateProfileForm() {
   const update = trpc.updateProfile.useMutation();
   const form = useForm<z.infer<typeof UpdateUserProfileDto>>({
     resolver: zodResolver(UpdateUserProfileDto),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      address: '',
-    },
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
@@ -38,8 +31,8 @@ export function UpdateProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField control={form.control} name='firstName' label='Vezetéknév' />
-        <TextField control={form.control} name='lastName' label='Keresztnév' />
+        <TextField control={form.control} name='lastName' label='Vezetéknév' />
+        <TextField control={form.control} name='firstName' label='Keresztnév' />
         <TextField control={form.control} name='email' label='E-mail cím' />
         <TextField control={form.control} name='phone' label='Telefonszám' />
         <TextField control={form.control} name='address' label='Levelezési cím' />

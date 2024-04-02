@@ -15,11 +15,11 @@ h1{
 }
 
 h2{
-    @apply text-2xl font-bold text-slate-800 mt-10 mb-0;
+    @apply text-2xl font-bold text-slate-800;
 }
 
 h3{
-    @apply text-xl font-bold text-slate-700 mt-8 mb-0;
+    @apply text-xl font-bold text-slate-700;
 }
 
 p{

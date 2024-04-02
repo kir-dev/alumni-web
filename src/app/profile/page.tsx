@@ -1,10 +1,12 @@
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
+import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { SignOut } from '@/app/login/sign-out';
 import { UpdateProfileForm } from '@/app/profile/update-profile-form';
 import Providers from '@/components/providers';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
 
 export default async function ProfilePage() {
@@ -26,9 +28,24 @@ export default async function ProfilePage() {
   return (
     <main>
       <h1>Profil</h1>
-      <p>
-        {user.firstName} {user.lastName}
-      </p>
+      <Card className='mt-10'>
+        <CardHeader>
+          <CardTitle>
+            {user.firstName} {user.lastName}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>
+            <TbMail className='inline' /> {user.email}
+          </p>
+          <p>
+            <TbPhone className='inline' /> {user.phone}
+          </p>
+          <p>
+            <TbHome className='inline' /> {user.address}
+          </p>
+        </CardContent>
+      </Card>
       <SignOut />
       <Providers>
         <UpdateProfileForm />
