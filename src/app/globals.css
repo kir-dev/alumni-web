@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 body{
-    @apply bg-slate-100 p-10;
+    @apply bg-slate-100;
 }
 
 main{
-    @apply container mx-auto;
+    @apply container mx-auto p-10;
 }
 
 h1{

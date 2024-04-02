@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import React from 'react';
 
-import { Navbar } from '@/components/ui/navbar';
+import { NavbarWrapper } from '@/components/ui/navbar/navbar-wrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: 'Villanykari Alumni Információs Rendszer',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang='hu'>
       <body className={inter.className}>
-        <Navbar />
+        <NavbarWrapper />
         {children}
       </body>
     </html>
