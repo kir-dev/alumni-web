@@ -29,7 +29,3 @@ p{
 label{
     @apply text-slate-700 mt-5 block mb-2;
 }
-
-button{
-    @apply mt-5 mb-0;
-}

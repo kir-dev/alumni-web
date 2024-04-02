@@ -17,6 +17,7 @@ model Group {
   id            String  @id @default(uuid())
   name          String
   description   String
+  color         String?
   parentGroupId String?
   parentGroup   Group?  @relation("ParentGroup", fields: [parentGroupId], references: [id])
   subGroups     Group[] @relation("ParentGroup")
@@ -98,6 +99,7 @@ model User {
   password      String?
   email         String    @unique
   emailVerified DateTime?
+  isSuperAdmin  Boolean   @default(false)
 
   phone   String @default("")
   address String @default("")

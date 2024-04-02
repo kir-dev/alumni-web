@@ -34,12 +34,18 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    session({ session, token }) {
+    async session({ session, token }) {
       if (!token.sub) return session;
+      const user = await prismaClient.user.findUnique({
+        where: {
+          id: token.sub,
+        },
+      });
 
       session.user = {
         id: token.sub,
         email: session.user?.email,
+        isSuperAdmin: user?.isSuperAdmin ?? false,
       };
       return session;
     },
