@@ -2,7 +2,7 @@
 
 import { Membership } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { TbUserCancel, TbUserCheck, TbUserExclamation, TbUserMinus, TbUserPlus, TbX } from 'react-icons/tb';
+import { TbUserCancel, TbUserExclamation, TbUserMinus, TbUserPlus } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Button } from '@/components/ui/button';

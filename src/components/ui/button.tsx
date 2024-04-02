@@ -1,6 +1,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
+import { TbLoader } from 'react-icons/tb';
 
 import { cn } from '@/lib/utils';
 
@@ -41,6 +42,23 @@ const buttonVariants = cva(
   }
 );
 
+export interface LoadingButtonProps extends ButtonProps {
+  isLoading: boolean;
+}
+
+const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
+  ({ isLoading, children, disabled, ...props }, ref) => {
+    return (
+      <Button ref={ref} disabled={disabled || isLoading} {...props}>
+        {isLoading && <TbLoader className='animate-spin' />}
+        {children}
+      </Button>
+    );
+  }
+);
+
+LoadingButton.displayName = 'LoadingButton';
+
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -55,4 +73,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = 'Button';
 
-export { Button, buttonVariants };
+export { Button, buttonVariants, LoadingButton };
