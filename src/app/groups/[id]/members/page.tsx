@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { EditGroupForm } from '@/app/groups/[id]/edit/edit-group-form';
 import { MembersList } from '@/app/groups/[id]/members/members-list';
 import Providers from '@/components/providers';
 import { prismaClient } from '@/config/prisma.config';
@@ -43,14 +42,7 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
       groupId: params.id,
     },
     include: {
-      user: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true,
-        },
-      },
+      user: true,
     },
   });
 

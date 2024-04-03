@@ -1,35 +1,20 @@
 'use client';
 
-import { Membership, MembershipStatus } from '@prisma/client';
+import { Membership, MembershipStatus, User } from '@prisma/client';
 import type { VariantProps } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
-import {
-  TbCheck,
-  TbPlayerStop,
-  TbShield,
-  TbShieldMinus,
-  TbShieldPlus,
-  TbTrash,
-  TbUserCancel,
-  TbUserMinus,
-  TbUserShield,
-  TbX,
-} from 'react-icons/tb';
+import { TbCheck, TbSearch, TbShieldMinus, TbShieldPlus, TbTrash, TbX } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { UserDetails } from '@/components/ui/group/user-details';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface MemberListProps {
   memberships: (Membership & {
-    user: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
+    user: User;
   })[];
   groupId: string;
 }
@@ -81,6 +66,14 @@ export function MembersList({ memberships, groupId }: MemberListProps) {
                 </TableCell>
                 <TableCell>
                   <div className='space-x-2 text-right'>
+                    <UserDetails
+                      member={membership.user}
+                      trigger={
+                        <Button size='icon' variant='outline'>
+                          <TbSearch />
+                        </Button>
+                      }
+                    />
                     {(membership.status === 'Pending' || membership.status === 'Rejected') && (
                       <Button onClick={() => onApprove(membership.user.id)} size='icon' variant='successOutline'>
                         <TbCheck />
