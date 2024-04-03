@@ -1,3 +1,4 @@
+import { createEvent, createEventApplication, getEventApplicationForUser, updateEvent } from '@/trpc/event.trpc';
 import {
   createGroup,
   deleteMembership,
@@ -26,6 +27,10 @@ export const appRouter = router({
   editMembership,
   deleteMembership,
   toggleAdmin,
+  createEvent,
+  updateEvent,
+  getEventApplicationForUser,
+  createEventApplication,
 });
 
 export type AppRouter = typeof appRouter;

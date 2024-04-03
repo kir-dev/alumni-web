@@ -1,6 +1,8 @@
 import { HTMLAttributes, HTMLInputTypeAttribute } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 
+import { Checkbox } from '@/components/ui/checkbox';
+import { DatePicker } from '@/components/ui/date-picker';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -108,6 +110,68 @@ export function SelectField<TName extends FieldPath<TFieldValues>, TFieldValues 
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
+        </FormItem>
+      )}
+    />
+  );
+}
+
+interface DateFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name: TName;
+  label: string;
+  description?: string;
+}
+
+export function DateField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
+  control,
+  name,
+  label,
+  description,
+}: DateFieldProps<TName, TFieldValues>) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <DatePicker {...field} />
+          </FormControl>
+          {description && <FormDescription>{description}</FormDescription>}
+          {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
+        </FormItem>
+      )}
+    />
+  );
+}
+
+interface CheckboxFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name: TName;
+  label: string;
+  description?: string;
+}
+
+export function CheckboxField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
+  control,
+  name,
+  label,
+  description,
+}: CheckboxFieldProps<TName, TFieldValues>) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem className='items-center flex space-x-2'>
+          <Checkbox id={`${name}-checkbox`} {...field} />
+          <div className='grid gap-1.5 leading-none'>
+            <FormLabel htmlFor={`${name}-checkbox`}>{label}</FormLabel>
+            {description && <FormDescription className='m-0'>{description}</FormDescription>}
+            {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
+          </div>
         </FormItem>
       )}
     />

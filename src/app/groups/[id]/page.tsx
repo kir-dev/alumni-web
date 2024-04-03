@@ -2,10 +2,11 @@ import { Membership } from '@prisma/client';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbEdit, TbUserPlus, TbUsers, TbUsersGroup } from 'react-icons/tb';
+import { TbCalendarPlus, TbEdit, TbUserPlus, TbUsers, TbUsersGroup } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { JoinButton } from '@/app/groups/[id]/join-button';
+import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
@@ -39,6 +40,15 @@ export default async function GroupDetailPage({ params }: { params: { id: string
       },
     });
   }
+
+  const events = await prismaClient.event.findMany({
+    where: {
+      groupId: params.id,
+      isPrivate: membership ? undefined : false,
+    },
+  });
+
+  const sortedEvents = events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
   const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
 
@@ -87,6 +97,23 @@ export default async function GroupDetailPage({ params }: { params: { id: string
           </div>
         </CardContent>
       </Card>
+      <div className='flex gap-5 items-center mt-10'>
+        <h2>Események</h2>
+        {canEdit && (
+          <Button asChild>
+            <Link href={`/groups/${group.id}/events/new`}>
+              <TbCalendarPlus />
+              Új esemény
+            </Link>
+          </Button>
+        )}
+      </div>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5'>
+        {sortedEvents.map((event) => (
+          <EventListItem event={event} key={event.id} />
+        ))}
+        {sortedEvents.length === 0 && <p>Nincsenek események.</p>}
+      </div>
       {group.subGroups.length > 0 && (
         <>
           <h2 className='mt-10'>Alcsoportok</h2>
