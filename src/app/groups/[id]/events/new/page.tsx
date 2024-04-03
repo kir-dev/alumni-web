@@ -1,4 +1,3 @@
-import { Membership } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 

@@ -1,4 +1,4 @@
-import { HTMLAttributes, HTMLInputTypeAttribute } from 'react';
+import { HTMLInputTypeAttribute } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 
 import { Checkbox } from '@/components/ui/checkbox';

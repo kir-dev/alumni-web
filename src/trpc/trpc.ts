@@ -39,7 +39,14 @@ const isSuperAdmin = middleware(async (opts) => {
 
 const isGroupAdmin = middleware(async (opts) => {
   const isSuperAdmin = opts.ctx.session?.user?.isSuperAdmin;
-  const groupId = typeof opts.input === 'object' ? (opts.input as { groupId: string | undefined }).groupId : undefined;
+  const groupId =
+    typeof opts.input === 'object'
+      ? (
+          opts.input as {
+            groupId: string | undefined;
+          }
+        ).groupId
+      : undefined;
 
   const membership = await prismaClient.membership.findFirst({
     where: {

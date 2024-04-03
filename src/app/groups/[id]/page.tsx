@@ -2,7 +2,7 @@ import { Membership } from '@prisma/client';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbCalendarPlus, TbEdit, TbUserPlus, TbUsers, TbUsersGroup } from 'react-icons/tb';
+import { TbCalendarPlus, TbEdit, TbUsersGroup } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { JoinButton } from '@/app/groups/[id]/join-button';

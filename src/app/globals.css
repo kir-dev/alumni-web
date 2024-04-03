@@ -2,30 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
     @apply bg-slate-100;
 }
 
-main{
+main {
     @apply container mx-auto p-10;
 }
 
-h1{
+h1 {
     @apply text-3xl font-bold text-slate-900 mb-0;
 }
 
-h2{
+h2 {
     @apply text-2xl font-bold text-slate-800;
 }
 
-h3{
+h3 {
     @apply text-xl font-bold text-slate-700;
 }
 
-p{
+p {
     @apply text-lg text-slate-600 mt-5 mb-0;
 }
 
-label{
+label {
     @apply text-slate-700 mt-5 block mb-2;
 }
