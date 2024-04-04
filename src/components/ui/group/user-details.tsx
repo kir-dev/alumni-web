@@ -1,3 +1,5 @@
+'use client';
+
 import { User } from '@prisma/client';
 import { ReactNode } from 'react';
 import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
@@ -10,7 +12,7 @@ interface UserDetailsProps {
   trigger: ReactNode;
 }
 
-export function UserDetails({ member, trigger }: UserDetailsProps) {
+export default function UserDetails({ member, trigger }: UserDetailsProps) {
   return (
     <Dialog>
       <DialogTrigger>{trigger}</DialogTrigger>

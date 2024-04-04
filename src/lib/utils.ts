@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import crypto from 'crypto';
 import { format, isSameDay, isSameYear } from 'date-fns';
@@ -26,4 +27,20 @@ export function getFormattedDateInterval(start: string | number | Date, end: str
   const endDateString = isSameDay(startDate, endDate) ? formatHu(endDate, 'HH:mm') : formatHu(endDate, 'MMM dd. HH:mm');
 
   return `${startDateString} - ${endDateString}`;
+}
+
+export function exportUsersToCsv(users: User[], name: string = 'vair-export') {
+  const fileName = name.toLowerCase().replace(/ /g, '-');
+  const csv = `Név,Email,Telefonszám,Cím\n${users
+    .map((user) => `${user.lastName} ${user.firstName},${user.email},${user.phone},${user.address}`)
+    .join('\n')}`;
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${fileName}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  a.remove();
 }

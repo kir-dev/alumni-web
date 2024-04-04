@@ -1,4 +1,5 @@
-import { Membership } from '@prisma/client';
+import { EventApplication, Membership, User } from '@prisma/client';
+import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbMapPin } from 'react-icons/tb';
@@ -9,6 +10,8 @@ import Providers from '@/components/providers';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 import { prismaClient } from '@/config/prisma.config';
 import { getFormattedDateInterval } from '@/lib/utils';
+
+const AttendeeList = dynamic(() => import('@/app/groups/[id]/events/[eventId]/attendee-list'), { ssr: false });
 
 export default async function EventDetailsPage({ params }: { params: { id: string; eventId: string } }) {
   const session = await getServerSession(authOptions);
@@ -43,6 +46,20 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
   if (!event) return notFound();
 
+  const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
+
+  let applications: (EventApplication & { user: User })[] = [];
+  if (canEdit) {
+    applications = await prismaClient.eventApplication.findMany({
+      where: {
+        eventId: event.id,
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
   return (
     <main>
       <h1>{event.name}</h1>
@@ -52,6 +69,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
       <Providers>
         <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />
       </Providers>
+      {canEdit && <AttendeeList eventApplications={applications} eventName={event.name} />}
     </main>
   );
 }

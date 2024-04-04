@@ -50,7 +50,7 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
     <main>
       <h1>{group.name} tagjai</h1>
       <Providers>
-        <MembersList memberships={members} groupId={params.id} />
+        <MembersList memberships={members} groupId={params.id} groupName={group.name} />
       </Providers>
     </main>
   );
