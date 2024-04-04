@@ -37,12 +37,6 @@ module.exports = {
         properties: 'never',
       },
     ],
-    complexity: [
-      'error',
-      {
-        max: 15,
-      },
-    ],
     eqeqeq: 'error',
     'max-depth': 'error',
     'max-lines': 'error',

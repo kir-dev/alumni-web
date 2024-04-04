@@ -10,6 +10,7 @@ import {
   toggleAdmin,
   updateGroup,
 } from '@/trpc/group.trpc';
+import { createNews } from '@/trpc/news.trpc';
 import { router } from '@/trpc/trpc';
 import { getMyUser, getUserById, registerUser, updateProfile } from '@/trpc/user.trpc';
 
@@ -31,6 +32,7 @@ export const appRouter = router({
   updateEvent,
   getEventApplicationForUser,
   createEventApplication,
+  createNews,
 });
 
 export type AppRouter = typeof appRouter;
