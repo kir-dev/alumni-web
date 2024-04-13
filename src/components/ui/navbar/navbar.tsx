@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -32,7 +33,10 @@ export function Navbar({ isLoggedIn }: NavbarProps) {
         'border-b bg-white shadow-sm': !onTop,
       })}
     >
-      <div>VAIR</div>
+      <Link href='/' className='flex items-center gap-2'>
+        <Image src='/icon.png' alt='Sch' width={100} height={100} className='h-10 w-10' />
+        <div className='text-xl text-primary-500'>Villanykari Alumni</div>
+      </Link>
       <div className='flex'>
         <Button variant='link' asChild>
           <Link href='/groups'>Csoportok</Link>

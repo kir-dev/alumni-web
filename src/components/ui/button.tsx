@@ -6,12 +6,12 @@ import { TbLoader } from 'react-icons/tb';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex gap-2 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300',
+  'inline-flex gap-2 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-900 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-primary-900 dark:focus-visible:ring-primary-300',
   {
     variants: {
       variant: {
         default:
-          'bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90',
+          'bg-primary-500 text-slate-50 hover:bg-primary-500/90 dark:bg-primary-300 dark:text-primary-900 dark:hover:bg-primary-300/90',
         destructive:
           'bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
         destructiveOutline:
@@ -21,12 +21,12 @@ const buttonVariants = cva(
         successOutline:
           'border border-green-500 text-green-500 hover:bg-green-500/10 dark:border-green-500 dark:text-green-500 dark:hover:bg-green-500/10',
         outline:
-          'border border-slate-200' +
-          ' hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50',
+          'border text-primary-500 border-primary-500 hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950 dark:hover:bg-primary-800 dark:hover:text-slate-50',
         secondary:
-          'bg-slate-100 text-slate-900 hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80',
-        ghost: 'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50',
-        link: 'text-slate-900 underline-offset-4 hover:underline dark:text-slate-50',
+          'bg-primary-50 text-primary-500 hover:bg-primary-100 dark:bg-primary-800 dark:text-slate-50 dark:hover:bg-primary-800/80',
+        ghost:
+          'hover:bg-primary-100 text-primary-500 hover:text-primary-900 dark:hover:bg-primary-800 dark:hover:text-slate-50',
+        link: 'text-primary-500 underline-offset-4 hover:underline dark:text-slate-50',
       },
       size: {
         default: 'h-10 px-4 py-2',
