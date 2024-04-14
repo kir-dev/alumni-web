@@ -3,8 +3,9 @@ import { getServerSession } from 'next-auth/next';
 import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { SignOut } from '@/app/login/sign-out';
 import { UpdateProfileForm } from '@/app/profile/update-profile-form';
+import { SignOut } from '@/components/profile/sign-out';
+import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
@@ -18,6 +19,9 @@ export default async function ProfilePage() {
   const user = await prismaClient.user.findUnique({
     where: {
       email: session.user.email,
+    },
+    include: {
+      TfaToken: true,
     },
   });
 
@@ -33,7 +37,12 @@ export default async function ProfilePage() {
           <CardTitle>
             {user.firstName} {user.lastName}
           </CardTitle>
-          <SignOut />
+          <div className='flex flex-col gap-2'>
+            <SignOut />
+            <Providers>
+              <Tfa token={user.TfaToken} />
+            </Providers>
+          </div>
         </CardHeader>
         <CardContent>
           <p>

@@ -12,6 +12,7 @@ import {
 } from '@/trpc/group.trpc';
 import { createNews } from '@/trpc/news.trpc';
 import { createSite, deleteSite, editSite } from '@/trpc/site-editor.trpc';
+import { createTfa, removeTfa, verifyTfa } from '@/trpc/tfa.trpc';
 import { router } from '@/trpc/trpc';
 import { getMyUser, getUserById, registerUser, updateProfile } from '@/trpc/user.trpc';
 
@@ -37,6 +38,9 @@ export const appRouter = router({
   createSite,
   editSite,
   deleteSite,
+  createTfa,
+  removeTfa,
+  verifyTfa,
 });
 
 export type AppRouter = typeof appRouter;

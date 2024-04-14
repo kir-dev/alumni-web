@@ -1,6 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { authenticator } from 'otplib';
 
 import { prismaClient } from '@/config/prisma.config';
 import { hashPassword } from '@/lib/utils';
@@ -12,6 +13,7 @@ export const authOptions: AuthOptions = {
       credentials: {
         email: { label: 'E-mail', type: 'email' },
         password: { label: 'Jelszó', type: 'password' },
+        token: { label: 'Token', type: 'text', required: false },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -23,7 +25,22 @@ export const authOptions: AuthOptions = {
             email: credentials.email,
             password: hashedPassword,
           },
+          include: {
+            TfaToken: {
+              where: {
+                isEnabled: true,
+              },
+            },
+          },
         });
+        if (user?.TfaToken) {
+          if (!credentials.token) throw new Error('token_required');
+          const isValidToken = authenticator.verify({
+            token: credentials.token,
+            secret: user.TfaToken.secret,
+          });
+          if (!isValidToken) throw new Error('invalid_token');
+        }
 
         if (user) {
           return user;

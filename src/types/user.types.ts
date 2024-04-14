@@ -16,6 +16,7 @@ export const RegisterDto = z.object({
 export const LoginDto = z.object({
   email: z.string({ required_error: 'Email cím megadása kötelező' }).email('Helytelen email cím'),
   password: z.string({ required_error: 'Jelszó megadása kötelező' }),
+  token: z.string().optional(),
 });
 
 export const UpdateUserProfileDto = z.object({
