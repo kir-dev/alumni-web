@@ -44,3 +44,33 @@ export function exportUsersToCsv(users: User[], name: string = 'vair-export') {
   URL.revokeObjectURL(url);
   a.remove();
 }
+
+export function slugify(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[áéíóöőúüű]/g, (char) => {
+      switch (char) {
+        case 'á':
+          return 'a';
+        case 'é':
+          return 'e';
+        case 'í':
+          return 'i';
+        case 'ó':
+          return 'o';
+        case 'ö':
+          return 'o';
+        case 'ő':
+          return 'o';
+        case 'ú':
+          return 'u';
+        case 'ü':
+          return 'u';
+        case 'ű':
+          return 'u';
+      }
+      return '';
+    })
+    .replace(/[^a-z0-9-]/g, '');
+}

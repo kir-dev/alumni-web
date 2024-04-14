@@ -81,8 +81,9 @@ module.exports = {
     'react/self-closing-comp': 'error',
     'react/style-prop-object': 'error',
     'react/void-dom-elements-no-children': 'error',
-
+    'no-unused-vars': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-extra-semi': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
   },
 };

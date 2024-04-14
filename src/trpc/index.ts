@@ -11,6 +11,7 @@ import {
   updateGroup,
 } from '@/trpc/group.trpc';
 import { createNews } from '@/trpc/news.trpc';
+import { createSite, deleteSite, editSite } from '@/trpc/site-editor.trpc';
 import { router } from '@/trpc/trpc';
 import { getMyUser, getUserById, registerUser, updateProfile } from '@/trpc/user.trpc';
 
@@ -33,6 +34,9 @@ export const appRouter = router({
   getEventApplicationForUser,
   createEventApplication,
   createNews,
+  createSite,
+  editSite,
+  deleteSite,
 });
 
 export type AppRouter = typeof appRouter;

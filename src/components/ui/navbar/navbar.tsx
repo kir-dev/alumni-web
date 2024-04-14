@@ -9,9 +9,10 @@ import { cn } from '@/lib/utils';
 
 interface NavbarProps {
   isLoggedIn?: boolean;
+  isAdmin?: boolean;
 }
 
-export function Navbar({ isLoggedIn }: NavbarProps) {
+export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
   const [onTop, setOnTop] = useState(true);
 
   useEffect(() => {
@@ -41,6 +42,11 @@ export function Navbar({ isLoggedIn }: NavbarProps) {
         <Button variant='link' asChild>
           <Link href='/groups'>Csoportok</Link>
         </Button>
+        {isLoggedIn && isAdmin && (
+          <Button variant='link' asChild>
+            <Link href='/sites'>Statikus oldalak</Link>
+          </Button>
+        )}
         {isLoggedIn ? (
           <Button variant='link' asChild>
             <Link href='/profile'>Profil</Link>
