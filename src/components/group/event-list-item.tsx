@@ -1,7 +1,7 @@
 import { Event } from '@prisma/client';
 import { isPast } from 'date-fns';
 import Link from 'next/link';
-import { TbArchive, TbLock } from 'react-icons/tb';
+import { TbArchive, TbChevronRight, TbLock } from 'react-icons/tb';
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getFormattedDateInterval } from '@/lib/utils';
@@ -24,6 +24,7 @@ export function EventListItem({ event }: EventListItemProps) {
             <div className='flex gap-1'>
               {event.isPrivate && <TbLock className='text-red-500 w-5 h-5' />}
               {isArchived && <TbArchive className='text-amber-800 w-5 h-5' />}
+              <TbChevronRight className='text-slate-500' />
             </div>
           </div>
           <CardDescription>{dateString}</CardDescription>

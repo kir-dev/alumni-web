@@ -21,9 +21,10 @@ export function getFormattedDateInterval(start: string | number | Date, end: str
   const startDate = new Date(start);
   const endDate = new Date(end);
 
-  const startDateString = isSameYear(startDate, endDate)
-    ? formatHu(startDate, 'MMM dd. HH:mm')
-    : formatHu(startDate, 'yyyy. MMM dd. HH:mm');
+  const startDateString =
+    isSameYear(startDate, endDate) && isSameYear(startDate, new Date())
+      ? formatHu(startDate, 'MMM dd. HH:mm')
+      : formatHu(startDate, 'yyyy. MMM dd. HH:mm');
   const endDateString = isSameDay(startDate, endDate) ? formatHu(endDate, 'HH:mm') : formatHu(endDate, 'MMM dd. HH:mm');
 
   return `${startDateString} - ${endDateString}`;

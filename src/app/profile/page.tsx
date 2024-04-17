@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
@@ -34,6 +35,20 @@ export default async function ProfilePage() {
     },
     include: {
       group: true,
+    },
+  });
+
+  const eventRegistrations = await prismaClient.eventApplication.findMany({
+    where: {
+      userId: session.user.id,
+      event: {
+        endDate: {
+          gt: new Date(),
+        },
+      },
+    },
+    include: {
+      event: true,
     },
   });
 
@@ -69,6 +84,16 @@ export default async function ProfilePage() {
           </p>
         </CardContent>
       </Card>
+      {eventRegistrations.length > 0 && (
+        <>
+          <h2 className='mt-10'>Jelentkezéseid eseményekre</h2>
+          <div className='mt-5'>
+            {eventRegistrations.map((eventRegistration) => (
+              <EventListItem event={eventRegistration.event} key={eventRegistration.event.id} />
+            ))}
+          </div>
+        </>
+      )}
       <h2 className='mt-10'>Csoport tagságok</h2>
       <div className='mt-5'>
         {memberships.map((membership) => (
