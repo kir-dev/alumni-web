@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { GroupListItem } from '@/components/group/group-list-item';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
@@ -27,6 +28,15 @@ export default async function ProfilePage() {
     },
   });
 
+  const memberships = await prismaClient.membership.findMany({
+    where: {
+      userId: session.user.id,
+    },
+    include: {
+      group: true,
+    },
+  });
+
   if (!user) {
     return notFound();
   }
@@ -34,7 +44,7 @@ export default async function ProfilePage() {
   return (
     <main>
       <h1>Profil</h1>
-      <Card className='mt-10'>
+      <Card className='mt-5'>
         <CardHeader className='flex flex-row justify-between items-center gap-5'>
           <CardTitle>
             {user.firstName} {user.lastName}
@@ -59,6 +69,12 @@ export default async function ProfilePage() {
           </p>
         </CardContent>
       </Card>
+      <h2 className='mt-10'>Csoport tagságok</h2>
+      <div className='mt-5'>
+        {memberships.map((membership) => (
+          <GroupListItem key={membership.group.id} group={membership.group} />
+        ))}
+      </div>
     </main>
   );
 }
