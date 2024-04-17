@@ -33,7 +33,7 @@ export function getFormattedDateInterval(start: string | number | Date, end: str
 export function exportUsersToCsv(users: User[], name: string = 'vair-export') {
   const fileName = name.toLowerCase().replace(/ /g, '-');
   const csv = `Név,Email,Telefonszám,Cím\n${users
-    .map((user) => `${user.lastName} ${user.firstName},${user.email},${user.phone},${user.address}`)
+    .map((user) => `${user.lastName} ${user.firstName},${user.email},${user.phone}`)
     .join('\n')}`;
 
   const blob = new Blob([csv], { type: 'text/csv' });

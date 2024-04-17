@@ -30,9 +30,9 @@ export default function TfaDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant='outline'>TFA bekapcsolása</Button>
-      </DialogTrigger>
+      <Button variant='outline' asChild>
+        <DialogTrigger>TFA bekapcsolása</DialogTrigger>
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Kétlépcsős azonosítás</DialogTitle>

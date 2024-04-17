@@ -7,7 +7,7 @@ body {
 }
 
 main {
-    @apply container mx-auto p-10;
+    @apply container mx-auto p-10 min-h-screen;
 }
 
 h1 {

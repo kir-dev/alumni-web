@@ -5,7 +5,7 @@ import type { VariantProps } from 'class-variance-authority';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { TbCheck, TbSearch, TbShieldMinus, TbShieldPlus, TbTrash, TbX } from 'react-icons/tb';
+import { TbCheck, TbShieldMinus, TbShieldPlus, TbTrash, TbX } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Badge, badgeVariants } from '@/components/ui/badge';
@@ -69,7 +69,7 @@ export function MembersList({ memberships, groupId, groupName }: MemberListProps
           <TableBody>
             {memberships.map((membership) => (
               <TableRow key={membership.user.id}>
-                <TableCell>
+                <TableCell className='text-nowrap'>
                   {membership.user.lastName} {membership.user.firstName}{' '}
                   {membership.isAdmin && <Badge variant='outline'>Admin</Badge>}
                 </TableCell>
@@ -78,15 +78,8 @@ export function MembersList({ memberships, groupId, groupName }: MemberListProps
                   <Badge variant={StatusMap[membership.status].color}>{StatusMap[membership.status].label}</Badge>
                 </TableCell>
                 <TableCell>
-                  <div className='space-x-2 text-right'>
-                    <UserDetails
-                      member={membership.user}
-                      trigger={
-                        <Button size='icon' variant='outline'>
-                          <TbSearch />
-                        </Button>
-                      }
-                    />
+                  <div className='space-x-2 text-right text-nowrap'>
+                    <UserDetails member={membership.user} />
                     {(membership.status === 'Pending' || membership.status === 'Rejected') && (
                       <Button onClick={() => onApprove(membership.user.id)} size='icon' variant='successOutline'>
                         <TbCheck />

@@ -2,9 +2,7 @@
 
 import { EventApplication, User } from '@prisma/client';
 import dynamic from 'next/dynamic';
-import { TbSearch } from 'react-icons/tb';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { UserListExportButton } from '@/components/ui/user-list-export-button';
@@ -46,14 +44,7 @@ export default function AttendeeList({ eventApplications, eventName }: AttendeeL
                 <TableCell>{application.user.email}</TableCell>
                 <TableCell>
                   <div className='space-x-2 text-right'>
-                    <UserDetails
-                      member={application.user}
-                      trigger={
-                        <Button size='icon' variant='outline'>
-                          <TbSearch />
-                        </Button>
-                      }
-                    />
+                    <UserDetails member={application.user} />
                   </div>
                 </TableCell>
               </TableRow>

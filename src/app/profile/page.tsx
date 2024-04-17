@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
+import { TbMail, TbPhone } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { EventListItem } from '@/components/group/event-list-item';
@@ -78,9 +78,6 @@ export default async function ProfilePage() {
           </p>
           <p>
             <TbPhone className='inline' /> {user.phone}
-          </p>
-          <p>
-            <TbHome className='inline' /> {user.address}
           </p>
         </CardContent>
       </Card>

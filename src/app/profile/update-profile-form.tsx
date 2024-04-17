@@ -39,9 +39,9 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant='outline'>Adataim szerkesztése</Button>
-      </DialogTrigger>
+      <Button variant='outline' asChild>
+        <DialogTrigger>Adataim szerkesztése</DialogTrigger>
+      </Button>
       <DialogContent>
         <DialogHeader>Adataim szerkesztése</DialogHeader>
         <Form {...form}>
@@ -54,11 +54,9 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
               <TextField control={form.control} name='address' label='Levelezési cím' />
             </DialogBody>
             <DialogFooter>
-              <DialogClose>
-                <Button className='mt-5' type='submit'>
-                  Mentés
-                </Button>
-              </DialogClose>
+              <Button className='mt-5' type='submit' asChild>
+                <DialogClose>Mentés</DialogClose>
+              </Button>
             </DialogFooter>
           </form>
         </Form>
