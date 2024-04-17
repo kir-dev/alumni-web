@@ -14,6 +14,7 @@ interface TextFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues ext
   label: string;
   description?: string;
   type?: HTMLInputTypeAttribute;
+  autoComplete?: string;
 }
 
 export function TextField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
@@ -22,6 +23,7 @@ export function TextField<TName extends FieldPath<TFieldValues>, TFieldValues ex
   label,
   description,
   type,
+  autoComplete,
 }: TextFieldProps<TName, TFieldValues>) {
   return (
     <FormField
@@ -31,7 +33,7 @@ export function TextField<TName extends FieldPath<TFieldValues>, TFieldValues ex
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input type={type} {...field} />
+            <Input type={type} autoComplete={autoComplete} {...field} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}

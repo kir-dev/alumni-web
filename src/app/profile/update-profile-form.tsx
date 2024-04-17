@@ -1,45 +1,68 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { User } from '@prisma/client';
+import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
 import { TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { UpdateUserProfileDto } from '@/types/user.types';
 
-export function UpdateProfileForm() {
-  const user = trpc.getMyUser.useQuery(undefined);
+interface UpdateProfileFormProps {
+  user: User;
+}
+
+export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
+  const router = useRouter();
   const update = trpc.updateProfile.useMutation();
   const form = useForm<z.infer<typeof UpdateUserProfileDto>>({
     resolver: zodResolver(UpdateUserProfileDto),
+    defaultValues: {
+      lastName: user.lastName,
+      firstName: user.firstName,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+    },
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
     await update.mutateAsync(data);
+    router.refresh();
   });
 
-  useEffect(() => {
-    if (user.data) {
-      form.reset(user.data);
-    }
-  }, [user.data]);
-
   return (
-    <Form {...form}>
-      <form onSubmit={onSubmit}>
-        <TextField control={form.control} name='lastName' label='Vezetéknév' />
-        <TextField control={form.control} name='firstName' label='Keresztnév' />
-        <TextField control={form.control} name='email' label='E-mail cím' />
-        <TextField control={form.control} name='phone' label='Telefonszám' />
-        <TextField control={form.control} name='address' label='Levelezési cím' />
-        <Button className='mt-5' type='submit'>
-          Mentés
-        </Button>
-      </form>
-    </Form>
+    <Dialog>
+      <DialogTrigger>
+        <Button variant='outline'>Adataim szerkesztése</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>Adataim szerkesztése</DialogHeader>
+        <Form {...form}>
+          <form onSubmit={onSubmit}>
+            <DialogBody>
+              <TextField control={form.control} name='lastName' label='Vezetéknév' />
+              <TextField control={form.control} name='firstName' label='Keresztnév' />
+              <TextField control={form.control} name='email' label='E-mail cím' />
+              <TextField control={form.control} name='phone' label='Telefonszám' autoComplete='tel' />
+              <TextField control={form.control} name='address' label='Levelezési cím' />
+            </DialogBody>
+            <DialogFooter>
+              <DialogClose>
+                <Button className='mt-5' type='submit'>
+                  Mentés
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

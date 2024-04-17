@@ -1,14 +1,16 @@
+import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { UpdateProfileForm } from '@/app/profile/update-profile-form';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
+
+const UpdateProfileForm = dynamic(() => import('@/app/profile/update-profile-form'), { ssr: false });
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -18,7 +20,7 @@ export default async function ProfilePage() {
 
   const user = await prismaClient.user.findUnique({
     where: {
-      email: session.user.email,
+      id: session.user.id,
     },
     include: {
       TfaToken: true,
@@ -41,6 +43,7 @@ export default async function ProfilePage() {
             <SignOut />
             <Providers>
               <Tfa token={user.TfaToken} />
+              <UpdateProfileForm user={user} />
             </Providers>
           </div>
         </CardHeader>
@@ -56,9 +59,6 @@ export default async function ProfilePage() {
           </p>
         </CardContent>
       </Card>
-      <Providers>
-        <UpdateProfileForm />
-      </Providers>
     </main>
   );
 }
