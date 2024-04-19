@@ -33,7 +33,7 @@ const InputOTPSlot = forwardRef<ElementRef<'div'>, ComponentPropsWithoutRef<'div
       <div
         ref={ref}
         className={cn(
-          'relative flex h-10 w-10 items-center justify-center border-y border-r border-slate-200 text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md dark:border-slate-800',
+          'relative flex h-10 w-10 items-center justify-center border-y border-r border-slate-200 text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md dark:border-slate-800 dark:text-primary-200 dark:bg-slate-950',
           isActive && 'z-10 ring-2 ring-slate-950 ring-offset-white dark:ring-slate-300 dark:ring-offset-slate-950',
           className
         )}

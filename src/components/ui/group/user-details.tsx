@@ -4,7 +4,14 @@ import { User } from '@prisma/client';
 import { TbMail, TbPhone, TbUserSearch } from 'react-icons/tb';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 
 interface UserDetailsProps {
@@ -21,7 +28,9 @@ export default function UserDetails({ member }: UserDetailsProps) {
       </Button>
       <DialogContent>
         <DialogHeader className='text-lg'>
-          {member.lastName} {member.lastName}
+          <DialogTitle>
+            {member.lastName} {member.firstName}
+          </DialogTitle>
         </DialogHeader>
         <DialogDescription className='space-y-4'>
           <IconValueDisplay icon={TbMail} value={member.email} type='email' />

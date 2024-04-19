@@ -21,7 +21,7 @@ interface AddBlockFieldProps {
 export function AddBlockField({ onAdd }: AddBlockFieldProps) {
   return (
     <Drawer>
-      <DrawerTrigger className='w-full border-2 border-dashed border-primary-500 rounded-md p-10 flex flex-col gap-2 items-center justify-center text-primary-500 hover:bg-primary-100 mt-10'>
+      <DrawerTrigger className='w-full border-2 border-dashed border-primary-500 rounded-md p-10 flex flex-col gap-2 items-center justify-center text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-800 mt-10'>
         <TbSquarePlus />
         Blokk hozzáadása
       </DrawerTrigger>

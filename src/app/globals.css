@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply bg-slate-100;
+    @apply bg-slate-100 dark:bg-slate-950 text-primary-800 dark:text-primary-200;
 }
 
 main {
@@ -11,19 +11,19 @@ main {
 }
 
 h1 {
-    @apply text-3xl font-bold text-primary-900 mb-0;
+    @apply text-3xl font-bold text-primary-900 dark:text-primary-100 mb-0;
 }
 
 h2 {
-    @apply text-2xl font-bold text-primary-800;
+    @apply text-2xl font-bold text-primary-800 dark:text-primary-200;
 }
 
 h3 {
-    @apply text-xl font-bold text-primary-700;
+    @apply text-xl font-bold text-primary-700 dark:text-primary-200;
 }
 
 p, blockquote, li, td {
-    @apply text-lg text-primary-600 mt-5 mb-0;
+    @apply text-lg text-primary-600 mt-5 mb-0 dark:text-primary-300;
 }
 
 label {
@@ -42,18 +42,30 @@ ul{
     @apply text-blue-500 underline cursor-pointer;
 }
 
-blockquote{
+.mdxeditor blockquote{
     @apply pl-4 relative before:bg-slate-300 before:content-[''] before:block before:w-1 before:h-full before:absolute before:left-0 before:top-0 before:bottom-0 before:rounded-full;
 }
 
-table{
+.mdxeditor table, .mdxcontent table{
     @apply w-full border-collapse border border-slate-300 mt-5;
 }
 
-th{
-    @apply bg-slate-50 border border-slate-300 p-2;
+.mdxeditor th, .mdxcontent th{
+    @apply bg-slate-50 border border-slate-300 p-2 dark:bg-slate-900 dark:text-primary-200;
 }
 
-td{
-    @apply border border-slate-300 p-2;
+.mdxeditor td, .mdxcontent td{
+    @apply border border-slate-300 p-2 dark:text-primary-200;
+}
+
+.mdxeditor .mdxeditor-toolbar{
+    @apply bg-slate-50 dark:bg-slate-900 text-primary-800 dark:text-primary-300 p-2 border border-slate-300 rounded-md;
+}
+
+.mdxeditor .mdxeditor-toolbar button, .mdxeditor .mdxeditor-toolbar button[disabled]{
+    @apply bg-transparent cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800;
+}
+
+.mdxeditor .mdxeditor-toolbar button[disabled]{
+    @apply opacity-50
 }

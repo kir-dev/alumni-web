@@ -27,12 +27,12 @@ export function ColorPicker<TName extends FieldPath<TFieldValues>, TFieldValues 
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <ul className='flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 w-fit'>
+            <ul className='flex mt-0 items-center gap-2 p-2 rounded-lg bg-white dark:bg-slate-900 dark:border-slate-800 border border-slate-200 w-fit'>
               {availableColors.map((color) => (
                 <li
                   key={color}
                   onClick={() => field.onChange(color)}
-                  className='rounded-md h-10 w-10 flex items-center justify-center cursor-pointer'
+                  className='rounded-md h-10 w-10 flex items-center justify-center cursor-pointer mt-0'
                   style={{ backgroundColor: color }}
                 >
                   {field.value === color && <TbCheck size={20} className='text-white' />}

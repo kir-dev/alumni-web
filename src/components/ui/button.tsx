@@ -11,22 +11,22 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary-500 text-slate-50 hover:bg-primary-500/90 dark:bg-primary-300 dark:text-primary-900 dark:hover:bg-primary-300/90',
+          'bg-primary-500 text-slate-50 hover:bg-primary-500/90 dark:bg-primary-400 dark:text-primary-900 dark:hover:bg-primary-400/80',
         destructive:
           'bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
         destructiveOutline:
-          'border border-red-500 text-red-500 hover:bg-red-500/10 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-500/10',
+          'border border-red-500 text-red-500 hover:bg-red-500/10 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-400/10',
         success:
           'bg-green-500 text-slate-50 hover:bg-green-500/90 dark:bg-green-900 dark:text-slate-50 dark:hover:bg-green-900/90',
         successOutline:
-          'border border-green-500 text-green-500 hover:bg-green-500/10 dark:border-green-500 dark:text-green-500 dark:hover:bg-green-500/10',
+          'border border-green-500 text-green-500 hover:bg-green-500/10 dark:border-green-400 dark:text-green-400 dark:hover:bg-green-400/10',
         outline:
-          'border text-primary-500 border-primary-500 hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950 dark:hover:bg-primary-800 dark:hover:text-slate-50',
+          'border text-primary-500 border-primary-500 hover:bg-primary-100  dark:text-primary-400 dark:border-primary-400 dark:hover:bg-primary-700',
         secondary:
           'bg-primary-50 text-primary-500 hover:bg-primary-100 dark:bg-primary-800 dark:text-slate-50 dark:hover:bg-primary-800/80',
         ghost:
           'hover:bg-primary-100 text-primary-500 hover:text-primary-900 dark:hover:bg-primary-800 dark:hover:text-slate-50',
-        link: 'text-primary-500 underline-offset-4 hover:underline dark:text-slate-50',
+        link: 'text-primary-500 underline-offset-4 hover:underline dark:text-primary-300',
       },
       size: {
         default: 'h-10 px-4 py-2',

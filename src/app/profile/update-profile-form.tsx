@@ -9,7 +9,15 @@ import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { UpdateUserProfileDto } from '@/types/user.types';
@@ -43,7 +51,9 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
         <DialogTrigger>Adataim szerkesztése</DialogTrigger>
       </Button>
       <DialogContent>
-        <DialogHeader>Adataim szerkesztése</DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Adataim szerkesztése</DialogTitle>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={onSubmit}>
             <DialogBody>

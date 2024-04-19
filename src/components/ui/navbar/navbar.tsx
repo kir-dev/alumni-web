@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { ColorModeSelector } from '@/components/ui/navbar/color-mode-selector';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {
@@ -23,7 +24,7 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
         setOnTop(true);
       }
     };
-
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -31,13 +32,13 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
   return (
     <nav
       className={cn('sticky top-0 z-10 transition-colors', {
-        'border-b bg-white shadow-sm': !onTop,
+        'border-b bg-white shadow-sm dark:bg-slate-900 dark:shadow-slate-950 dark:border-0': !onTop,
       })}
     >
       <div className='flex justify-between items-center container px-10 py-5'>
         <Link href='/' className='flex items-center gap-2'>
           <Image src='/icon.png' alt='Sch' width={100} height={100} className='h-10 w-10' />
-          <div className='text-xl text-primary-500'>Villanykari Alumni</div>
+          <div className='text-xl text-primary-500 dark:text-primary-300'>Villanykari Alumni</div>
         </Link>
         <div className='flex'>
           <Button variant='link' asChild>
@@ -57,6 +58,7 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
               <Link href='/login'>Bejelentkezés</Link>
             </Button>
           )}
+          <ColorModeSelector />
         </div>
       </div>
     </nav>
