@@ -22,10 +22,38 @@ h3 {
     @apply text-xl font-bold text-primary-700;
 }
 
-p {
+p, blockquote, li, td {
     @apply text-lg text-primary-600 mt-5 mb-0;
 }
 
 label {
     @apply text-primary-700 mt-5 block mb-2;
+}
+
+ol{
+    @apply list-decimal list-inside;
+}
+
+ul{
+    @apply list-disc list-inside;
+}
+
+.mdxeditor a, .mdxcontent a{
+    @apply text-blue-500 underline cursor-pointer;
+}
+
+blockquote{
+    @apply pl-4 relative before:bg-slate-300 before:content-[''] before:block before:w-1 before:h-full before:absolute before:left-0 before:top-0 before:bottom-0 before:rounded-full;
+}
+
+table{
+    @apply w-full border-collapse border border-slate-300 mt-5;
+}
+
+th{
+    @apply bg-slate-50 border border-slate-300 p-2;
+}
+
+td{
+    @apply border border-slate-300 p-2;
 }

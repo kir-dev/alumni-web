@@ -30,7 +30,7 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
 
   return (
     <nav
-      className={cn('sticky top-0 transition-colors', {
+      className={cn('sticky top-0 z-10 transition-colors', {
         'border-b bg-white shadow-sm': !onTop,
       })}
     >
