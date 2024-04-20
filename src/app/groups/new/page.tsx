@@ -1,9 +1,16 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { CreateGroupForm } from '@/app/groups/new/create-group-form';
 import Providers from '@/components/providers';
+import { getSuffixedTitle } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Új csoport'),
+  description: 'Hozz létre egy új csoportot.',
+};
 
 export default async function CreateGroupPage() {
   const session = await getServerSession(authOptions);

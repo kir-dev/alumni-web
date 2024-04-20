@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
@@ -11,6 +12,12 @@ import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Profilom'),
+  description: 'Tekintsd meg a profilodat.',
+};
 
 const UpdateProfileForm = dynamic(() => import('@/app/profile/update-profile-form'), { ssr: false });
 

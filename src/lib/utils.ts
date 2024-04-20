@@ -75,3 +75,12 @@ export function slugify(title: string) {
     })
     .replace(/[^a-z0-9-]/g, '');
 }
+
+export function getSuffixedTitle(title: string, ...suffix: string[]): string {
+  let suffixedTitle = title;
+  suffix.forEach((s) => {
+    suffixedTitle += ` | ${s}`;
+  });
+  suffixedTitle += ' | Alumni';
+  return suffixedTitle;
+}

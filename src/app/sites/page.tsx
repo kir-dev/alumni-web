@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
@@ -7,8 +8,14 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { SiteListItem } from '@/components/sites/site-list-item';
 import { Button } from '@/components/ui/button';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Statikus oldalak'),
+  description: 'Statikus oldalak listázása.',
+};
 
 export default async function SitesPage() {
   const session = await getServerSession(authOptions);

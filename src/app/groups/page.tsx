@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth/next';
 import { TbPlus } from 'react-icons/tb';
@@ -6,6 +7,12 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { Button } from '@/components/ui/button';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Csoportok'),
+  description: 'Tekintsd meg a csoportokat.',
+};
 
 export default async function GroupsPage() {
   const session = await getServerSession(authOptions);

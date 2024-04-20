@@ -1,4 +1,5 @@
 import { Membership } from '@prisma/client';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
@@ -6,6 +7,12 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { EditGroupForm } from '@/app/groups/[id]/edit/edit-group-form';
 import Providers from '@/components/providers';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Csoport szerkesztése'),
+  description: 'Tartsd naprakészen a csoport adatait.',
+};
 
 export default async function EditGroupPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

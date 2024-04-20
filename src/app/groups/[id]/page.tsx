@@ -1,4 +1,5 @@
 import { Membership } from '@prisma/client';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
@@ -13,8 +14,30 @@ import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
 
-export default async function GroupDetailPage({ params }: { params: { id: string } }) {
+interface GroupPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export async function generateMetadata({ params }: GroupPageProps): Promise<Metadata> {
+  const group = await prismaClient.group.findFirst({
+    where: {
+      id: params.id,
+    },
+  });
+
+  if (!group) return notFound();
+
+  return {
+    title: getSuffixedTitle(group.name),
+    description: group.description,
+  };
+}
+
+export default async function GroupDetailPage({ params }: GroupPageProps) {
   const session = await getServerSession(authOptions);
 
   const group = await prismaClient.group.findUnique({

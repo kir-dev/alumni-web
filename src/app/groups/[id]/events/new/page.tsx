@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
@@ -5,6 +6,12 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { CreateEventForm } from '@/app/groups/[id]/events/new/create-event-form';
 import Providers from '@/components/providers';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Új esemény'),
+  description: 'Hozz létre egy új eseményt a csoportod számára.',
+};
 
 export default async function CreateEventPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

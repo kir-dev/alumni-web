@@ -1,4 +1,5 @@
 import { Membership } from '@prisma/client';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
@@ -6,6 +7,12 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { MembersList } from '@/app/groups/[id]/members/members-list';
 import Providers from '@/components/providers';
 import { prismaClient } from '@/config/prisma.config';
+import { getSuffixedTitle } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  title: getSuffixedTitle('Csoport tagjai'),
+  description: 'A csoport tagjainak kezelése.',
+};
 
 export default async function GroupMembersPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
