@@ -39,6 +39,7 @@ export function LoginForm() {
         form.setError('token', { message: 'Hibás token' });
       } else if (response?.ok) {
         router.push('/profile');
+        router.refresh();
       }
     });
   });

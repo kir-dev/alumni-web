@@ -1,6 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -11,6 +13,7 @@ import { Form, FormMessage } from '@/components/ui/form';
 import { RegisterDto } from '@/types/user.types';
 
 export function RegisterForm() {
+  const router = useRouter();
   const { mutateAsync, isPending, isError } = trpc.registerUser.useMutation();
 
   const form = useForm<z.infer<typeof RegisterDto>>({
@@ -18,7 +21,18 @@ export function RegisterForm() {
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await mutateAsync(data);
+    mutateAsync(data).then(() => {
+      signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      }).then((response) => {
+        if (response?.ok) {
+          router.push('/profile');
+          router.refresh();
+        }
+      });
+    });
   });
 
   return (
