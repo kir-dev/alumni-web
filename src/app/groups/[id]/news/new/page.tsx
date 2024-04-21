@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { CreateNewsForm } from '@/app/groups/[id]/news/new/create-news-form';
 import Providers from '@/components/providers';
+import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 
 export const metadata: Metadata = {

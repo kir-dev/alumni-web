@@ -5,10 +5,10 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbMapPin } from 'react-icons/tb';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Rsvp from '@/app/groups/[id]/events/[eventId]/rsvp';
 import Providers from '@/components/providers';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
+import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getFormattedDateInterval, getSuffixedTitle } from '@/lib/utils';
 

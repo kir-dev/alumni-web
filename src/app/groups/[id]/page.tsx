@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbCalendarPlus, TbEdit, TbUsersGroup } from 'react-icons/tb';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { JoinButton } from '@/app/groups/[id]/join-button';
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
@@ -13,6 +12,7 @@ import { NewsListItem } from '@/components/group/news-list-item';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
 

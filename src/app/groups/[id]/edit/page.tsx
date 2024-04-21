@@ -3,9 +3,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { EditGroupForm } from '@/app/groups/[id]/edit/edit-group-form';
 import Providers from '@/components/providers';
+import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
 

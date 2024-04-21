@@ -15,14 +15,16 @@ interface DatePickerProps extends Omit<ButtonProps, 'onChange' | 'value'> {
   onChange: (date: string | undefined) => void;
 }
 
-export function DatePicker({ value, onSelect, className, variant, onChange, ...props }: DatePickerProps) {
+export function DatePicker({ value, className, variant, onChange, ...props }: DatePickerProps) {
   const [dateState, setDateState] = useState<Date>();
 
   let date = dateState;
   if (value) {
     try {
       date = new Date(value);
-    } catch {}
+    } catch {
+      date = undefined;
+    }
   }
 
   const onDateSelect: SelectSingleEventHandler = (date: Date | undefined) => {

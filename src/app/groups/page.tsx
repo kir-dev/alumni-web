@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { getServerSession } from 'next-auth/next';
 import { TbPlus } from 'react-icons/tb';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { Button } from '@/components/ui/button';
+import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
 

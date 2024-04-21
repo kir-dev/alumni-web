@@ -29,13 +29,11 @@ export const updateProfile = privateProcedure
   .mutation(async (opts): Promise<UserProfileDto> => {
     if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
 
-    const { email, ...data } = opts.input;
-
     return prismaClient.user.update({
       where: {
         id: opts.ctx.session.user.id,
       },
-      data,
+      data: opts.input,
       select: {
         email: true,
         firstName: true,

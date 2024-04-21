@@ -28,7 +28,7 @@ export function CreateEventForm({ groupId }: CreateGroupFormProps) {
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await createEvent.mutateAsync(data).then((data) => {
+    await createEvent.mutateAsync(data).then(() => {
       router.push(`/groups/${groupId}`);
     });
   });

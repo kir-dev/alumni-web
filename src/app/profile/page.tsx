@@ -4,13 +4,13 @@ import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbMail, TbPhone } from 'react-icons/tb';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
 

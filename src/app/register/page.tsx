@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { RegisterForm } from '@/app/register/register-form';
 import Providers from '@/components/providers';
+import { authOptions } from '@/config/auth.config';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
