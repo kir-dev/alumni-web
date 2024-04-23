@@ -96,7 +96,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
           <CardTitle>{group.name}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className='flex justify-between overflow-hidden gap-5'>
+          <div className='flex justify-between overflow-hidden gap-5 flex-col md:flex-row'>
             <div>
               {group.parentGroup && (
                 <p className='truncate'>

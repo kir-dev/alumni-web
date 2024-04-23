@@ -2,14 +2,15 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbMail, TbPhone } from 'react-icons/tb';
+import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { IconValueDisplay } from '@/components/ui/icon-value-display';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
@@ -67,10 +68,17 @@ export default async function ProfilePage() {
     <main>
       <h1>Profil</h1>
       <Card className='mt-5'>
-        <CardHeader className='flex flex-row justify-between items-center gap-5'>
-          <CardTitle>
-            {user.firstName} {user.lastName}
-          </CardTitle>
+        <CardContent className='flex flex-col md:flex-row justify-between md:items-center gap-5 pt-5'>
+          <div>
+            <CardTitle>
+              {user.firstName} {user.lastName}
+            </CardTitle>
+            <div className='mt-5'>
+              <IconValueDisplay icon={TbMail} value={user.email} type='email' />
+              <IconValueDisplay icon={TbPhone} value={user.phone} type='tel' />
+              <IconValueDisplay icon={TbHome} value={user.address} type='address' />
+            </div>
+          </div>
           <div className='flex flex-col gap-2'>
             <SignOut />
             <Providers>
@@ -78,14 +86,6 @@ export default async function ProfilePage() {
               <UpdateProfileForm user={user} />
             </Providers>
           </div>
-        </CardHeader>
-        <CardContent>
-          <p>
-            <TbMail className='inline' /> {user.email}
-          </p>
-          <p>
-            <TbPhone className='inline' /> {user.phone}
-          </p>
         </CardContent>
       </Card>
       {eventRegistrations.length > 0 && (

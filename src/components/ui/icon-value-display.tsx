@@ -11,7 +11,10 @@ interface IconValueDisplayProps extends HTMLAttributes<HTMLDivElement> {
 
 export function IconValueDisplay({ icon: Icon, value, type, className, ...props }: IconValueDisplayProps) {
   return (
-    <span className={cn('flex items-center space-x-2 text-lg', className)} {...props}>
+    <span
+      className={cn('flex items-center space-x-2 text-lg text-primary-600 dark:text-primary-300', className)}
+      {...props}
+    >
       <Icon />
       {type === 'email' && <a href={`mailto:${value}`}>{value}</a>}
       {type === 'tel' && <a href={`tel:${value}`}>{value}</a>}

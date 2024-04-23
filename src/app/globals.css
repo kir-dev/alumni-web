@@ -22,7 +22,7 @@ h3 {
     @apply text-xl font-bold text-primary-700 dark:text-primary-200;
 }
 
-p, blockquote, li, td {
+p, blockquote, li, .mdxeditor td, .mdxcontent td {
     @apply text-lg text-primary-600 mt-5 mb-0 dark:text-primary-300;
 }
 
