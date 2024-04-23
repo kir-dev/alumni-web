@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Link, { LinkProps } from 'next/link';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { TbMenu } from 'react-icons/tb';
 
 import { Button } from '@/components/ui/button';
 import { ColorModeSelector } from '@/components/ui/navbar/color-mode-selector';
@@ -14,6 +15,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [onTop, setOnTop] = useState(true);
 
   useEffect(() => {
@@ -40,27 +42,59 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
           <Image src='/icon.png' alt='Sch' width={100} height={100} className='h-10 w-10' />
           <div className='text-xl text-primary-500 dark:text-primary-300'>Villanykari Alumni</div>
         </Link>
-        <div className='flex'>
-          <Button variant='link' asChild>
-            <Link href='/groups'>Csoportok</Link>
-          </Button>
-          {isLoggedIn && isAdmin && (
+        <div className='flex z-10'>
+          <div className='hidden md:flex'>
             <Button variant='link' asChild>
-              <Link href='/sites'>Statikus oldalak</Link>
+              <Link href='/groups'>Csoportok</Link>
             </Button>
-          )}
-          {isLoggedIn ? (
-            <Button variant='link' asChild>
-              <Link href='/profile'>Profil</Link>
-            </Button>
-          ) : (
-            <Button variant='link' asChild>
-              <Link href='/login'>Bejelentkezés</Link>
-            </Button>
-          )}
+            {isLoggedIn && isAdmin && (
+              <Button variant='link' asChild>
+                <Link href='/sites'>Statikus oldalak</Link>
+              </Button>
+            )}
+            {isLoggedIn ? (
+              <Button variant='link' asChild>
+                <Link href='/profile'>Profil</Link>
+              </Button>
+            ) : (
+              <Button variant='link' asChild>
+                <Link href='/login'>Bejelentkezés</Link>
+              </Button>
+            )}
+          </div>
           <ColorModeSelector />
+          <Button
+            size='icon'
+            variant='outline'
+            className='ml-2 md:hidden'
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label='Menü'
+          >
+            <TbMenu />
+          </Button>
         </div>
+      </div>
+      <div
+        className={cn('md:hidden px-10', {
+          hidden: !menuOpen,
+        })}
+      >
+        <MobileNavItem href='/groups'>Csoportok</MobileNavItem>
+        {isLoggedIn && isAdmin && <MobileNavItem href='/sites'>Statikus oldalak</MobileNavItem>}
+        {isLoggedIn ? (
+          <MobileNavItem href='/profile'>Profil</MobileNavItem>
+        ) : (
+          <MobileNavItem href='/login'>Bejelentkezés</MobileNavItem>
+        )}
       </div>
     </nav>
   );
+}
+
+interface MobileNavItemProps extends LinkProps, PropsWithChildren {
+  className?: string;
+}
+
+function MobileNavItem({ className, ...props }: MobileNavItemProps) {
+  return <Link className={cn('py-2 block border-t', className)} {...props} />;
 }

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { TbMoon, TbSun } from 'react-icons/tb';
 
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-export function ColorModeSelector() {
+export function ColorModeSelector({ size, variant, className }: Omit<ButtonProps, 'children' | 'onClick'>) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,12 @@ export function ColorModeSelector() {
   }, [isDarkMode]);
 
   return (
-    <Button size='icon' variant='outline' className='ml-2' onClick={toggleColorMode}>
+    <Button
+      size={size ?? 'icon'}
+      variant={variant ?? 'outline'}
+      className={cn('ml-2', className)}
+      onClick={toggleColorMode}
+    >
       {isDarkMode ? <TbMoon /> : <TbSun />}
     </Button>
   );
