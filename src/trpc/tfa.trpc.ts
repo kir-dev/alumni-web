@@ -26,8 +26,10 @@ export const createTfa = privateProcedure.mutation(async (opts) => {
     },
   });
 
+  const issuer = process.env.TFA_ISSUER || 'localhost:3000';
+
   return {
-    url: authenticator.keyuri(opts.ctx.session.user.email, 'localhost:3000', token.secret),
+    url: authenticator.keyuri(opts.ctx.session.user.email, issuer, token.secret),
   };
 });
 
