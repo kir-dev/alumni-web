@@ -19,7 +19,7 @@ export default async function RegisterPage() {
   }
 
   return (
-    <main className='container'>
+    <main>
       <h1>Regisztráció</h1>
       <Providers>
         <RegisterForm />

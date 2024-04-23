@@ -20,7 +20,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className='container'>
+    <main>
       <h1>Bejelentkezés</h1>
       <Providers>
         <LoginForm />
