@@ -78,7 +78,7 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
           control={form.control}
           label='Cím'
           name='title'
-          description='Speciális címek: Főoldal, Adatvédelmi tájékoztató, Impresszum, Kapcsolat'
+          description='Speciális címek: Főoldal, Adatvédelem, Impresszum, Kapcsolat'
         />
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />

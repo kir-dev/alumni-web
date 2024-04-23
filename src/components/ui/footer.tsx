@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 
 const FooterLinks: { label: string; href: string }[] = [
   { label: 'Kezdőlap', href: '/' },
-  { label: 'Impresszum', href: '/impresszum' },
-  { label: 'Adatvédelem', href: '/adatvedelmi-tajekoztato' },
-  { label: 'Kapcsolat', href: '/kapcsolat' },
+  { label: 'Impresszum', href: '/sites/impresszum' },
+  { label: 'Adatvédelem', href: '/sites/adatvedelem' },
+  { label: 'Kapcsolat', href: '/sites/kapcsolat' },
 ];
 
 export function Footer() {

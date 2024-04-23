@@ -56,7 +56,12 @@ export function CreateSiteForm() {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField control={form.control} label='Cím' name='title' />
+        <TextField
+          control={form.control}
+          label='Cím'
+          name='title'
+          description='Speciális címek: Főoldal, Adatvédelem, Impresszum, Kapcsolat'
+        />
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
         <Button className='mt-10' type='submit'>
