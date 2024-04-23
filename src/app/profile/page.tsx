@@ -82,8 +82,8 @@ export default async function ProfilePage() {
           <div className='flex flex-col gap-2'>
             <SignOut />
             <Providers>
-              <Tfa token={user.TfaToken} />
               <UpdateProfileForm user={user} />
+              <Tfa token={user.TfaToken} />
             </Providers>
           </div>
         </CardContent>
