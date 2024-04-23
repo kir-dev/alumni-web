@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons';
-import { TbAlignJustified, TbPhoto, TbQuote, TbSquareHalf, TbSquarePlus } from 'react-icons/tb';
+import { TbAlignJustified, TbPhoto, TbSquareHalf, TbSquarePlus } from 'react-icons/tb';
 
 import { Button } from '@/components/ui/button';
 import {
