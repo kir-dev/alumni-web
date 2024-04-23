@@ -169,12 +169,11 @@ model Account {
 }
 
 model StaticSite {
-  id         String         @id @default(uuid())
+  id         String      @id @default(uuid())
   title      String
   url        String
-  specialty  SiteSpecialty?
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   siteBlocks SiteBlock[]
 }
 
@@ -184,12 +183,6 @@ model SiteBlock {
   type       SiteBlockType
   content    String
   staticSite StaticSite    @relation(fields: [siteId], references: [id], onDelete: Cascade)
-}
-
-enum SiteSpecialty {
-  Home
-  Impressum
-  PrivacyPolicy
 }
 
 enum SiteBlockType {

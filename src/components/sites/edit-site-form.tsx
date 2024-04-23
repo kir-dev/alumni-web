@@ -74,11 +74,16 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField control={form.control} label='Cím' name='title' />
+        <TextField
+          control={form.control}
+          label='Cím'
+          name='title'
+          description='Speciális címek: Főoldal, Adatvédelmi tájékoztató, Impresszum, Kapcsolat'
+        />
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
         <div className='flex justify-between gap-2 mt-10'>
-          <Button disabled={Boolean(site.specialty)} variant='destructiveOutline' type='button' onClick={onDelete}>
+          <Button variant='destructiveOutline' type='button' onClick={onDelete}>
             Oldal törlése
           </Button>
           <Button type='submit'>Mentés</Button>

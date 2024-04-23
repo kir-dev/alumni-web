@@ -1,4 +1,3 @@
-import { SiteSpecialty } from '@prisma/client';
 import { z } from 'zod';
 
 export type StaticSite = {
@@ -30,11 +29,6 @@ export const EditSiteDto = z.object({
       content: z.string(),
     })
   ),
-});
-
-export const SetSiteSpecialtyDto = z.object({
-  siteId: z.string(),
-  specialty: z.enum([SiteSpecialty.Home, SiteSpecialty.PrivacyPolicy, SiteSpecialty.Impressum]),
 });
 
 export const DeleteSiteDto = z.string();

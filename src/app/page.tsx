@@ -1,4 +1,3 @@
-import { SiteSpecialty } from '@prisma/client';
 import { Metadata } from 'next';
 
 import { prismaClient } from '@/config/prisma.config';
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   const site = await prismaClient.staticSite.findFirst({
     where: {
-      specialty: SiteSpecialty.Home,
+      url: 'fooldal',
     },
     include: {
       siteBlocks: true,
