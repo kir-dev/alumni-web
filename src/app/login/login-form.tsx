@@ -8,13 +8,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
+import { Button, LoadingButton } from '@/components/ui/button';
 import { TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
 import { LoginDto } from '@/types/user.types';
 
 export function LoginForm() {
+  const [loginLoading, setLoginLoading] = useState(false);
   const router = useRouter();
   const [tokenInputVisible, setTokenInputVisible] = useState(false);
   const form = useForm<z.infer<typeof LoginDto>>({
@@ -27,21 +28,30 @@ export function LoginForm() {
   });
 
   const onSubmit = form.handleSubmit((data) => {
+    setLoginLoading(true);
     signIn('credentials', {
       email: data.email,
       password: data.password,
       token: data.token,
       redirect: false,
-    }).then((response) => {
-      if (response?.error === 'token_required') {
-        setTokenInputVisible(true);
-      } else if (response?.error === 'invalid_token') {
-        form.setError('token', { message: 'Hibás token' });
-      } else if (response?.ok) {
-        router.push('/profile');
-        router.refresh();
-      }
-    });
+    })
+      .then((response) => {
+        if (response?.error === 'token_required') {
+          setTokenInputVisible(true);
+        } else if (response?.error === 'invalid_token') {
+          form.setError('token', { message: 'Hibás token' });
+        } else if (response?.ok) {
+          router.push('/profile');
+          router.refresh();
+        } else if (response?.status === 401) {
+          form.setError('email', { message: 'Hibás e-mail cím vagy jelszó' });
+        } else {
+          form.setError('email', { message: 'Hiba történt a bejelentkezés során' });
+        }
+      })
+      .finally(() => {
+        setLoginLoading(false);
+      });
   });
 
   const token = form.watch('token', '');
@@ -76,7 +86,9 @@ export function LoginForm() {
           </>
         )}
         <div className='mt-5'>
-          <Button type='submit'>Bejelentkezés</Button>
+          <LoadingButton isLoading={loginLoading} type='submit'>
+            Bejelentkezés
+          </LoadingButton>
           <Button variant='link' asChild>
             <Link href='/register'>Regisztráció</Link>
           </Button>
