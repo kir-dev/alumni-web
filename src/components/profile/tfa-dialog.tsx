@@ -37,7 +37,11 @@ export default function TfaDialog() {
         <DialogHeader>
           <DialogTitle>Kétlépcsős azonosítás</DialogTitle>
         </DialogHeader>
-        <p>A kétlépcsős azonosítás bekapcsolásával a fiókjához egy második eszközre lesz szükséged a belépéshez.</p>
+        <p>
+          A kétlépcsős azonosítás bekapcsolásával a fiókodba való belépéshez egy második eszközre lesz szükséged. A
+          kódot egyszer tudod megnézni, beállítása az érvényesítés után történik csak meg. A kódot minden
+          bejelentkezéskor meg kell adnod. Bejelentkezés után ugyanitt ki tudod kapcsolni ezt a funkciót.
+        </p>
         {!createTfa.data && <Button onClick={() => createTfa.mutate()}>Bekapcsolás</Button>}
         {createTfa.data && !isValidating && (
           <>
