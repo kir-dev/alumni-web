@@ -63,5 +63,4 @@ const BlockFieldComponents: Record<StaticSiteBlock['type'], FunctionComponent<Bl
   Text: TextBlockField,
   Image: ImageBlockField,
   ImageText: ImageTextBlockField,
-  Testimonial: TextBlockField,
 };

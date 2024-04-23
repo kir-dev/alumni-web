@@ -1,13 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { FunctionComponent } from 'react';
 
-import { ImageRenderer } from '@/components/sites/render/image-renderer';
-import { ImageTextRenderer } from '@/components/sites/render/image-text-renderer';
-import { TextRenderer } from '@/components/sites/render/text-renderer';
 import { prismaClient } from '@/config/prisma.config';
+import { BlockMap } from '@/lib/static-site';
 import { getSuffixedTitle } from '@/lib/utils';
-import { StaticSiteBlock } from '@/types/site-editor.types';
 
 interface SitePageProps {
   params: {
@@ -52,10 +48,3 @@ export default async function SitePage({ params }: SitePageProps) {
     </main>
   );
 }
-
-const BlockMap: Record<StaticSiteBlock['type'], FunctionComponent<{ content: string }>> = {
-  Text: TextRenderer,
-  Image: ImageRenderer,
-  ImageText: ImageTextRenderer,
-  Testimonial: TextRenderer,
-};

@@ -9,9 +9,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_PRISMA_URL")
-  directUrl = env("DATABASE_URL_NON_POOLING")
+  provider = "postgresql"
+  url      = env("DATABASE_PRISMA_URL")
+  // directUrl = env("DATABASE_URL_NON_POOLING")
 }
 
 model Group {
@@ -169,11 +169,12 @@ model Account {
 }
 
 model StaticSite {
-  id         String      @id @default(uuid())
+  id         String         @id @default(uuid())
   title      String
   url        String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  specialty  SiteSpecialty?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
   siteBlocks SiteBlock[]
 }
 
@@ -185,9 +186,14 @@ model SiteBlock {
   staticSite StaticSite    @relation(fields: [siteId], references: [id], onDelete: Cascade)
 }
 
+enum SiteSpecialty {
+  Home
+  Impressum
+  PrivacyPolicy
+}
+
 enum SiteBlockType {
   Text
   Image
   ImageText
-  Testimonial
 }

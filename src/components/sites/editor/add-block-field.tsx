@@ -85,10 +85,4 @@ const Blocks: AddBlockType[] = [
     name: 'Kép és szöveg',
     description: 'Kép és szöveg megjelenítése egymás mellett',
   },
-  {
-    type: 'Testimonial',
-    icon: TbQuote,
-    name: 'Idézet',
-    description: 'Idézet megjelenítése idézőjelekkel',
-  },
 ];

@@ -43,11 +43,6 @@ export function CreateSiteForm() {
           }),
         };
         break;
-      case 'Testimonial':
-        newBlock = {
-          type,
-          content: '',
-        };
     }
     form.setValue('blocks', [...blocks, newBlock]);
   };

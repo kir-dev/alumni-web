@@ -55,11 +55,6 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
           }),
         };
         break;
-      case 'Testimonial':
-        newBlock = {
-          type,
-          content: '',
-        };
     }
     form.setValue('blocks', [...blocks, newBlock]);
   };
@@ -83,7 +78,7 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
         <div className='flex justify-between gap-2 mt-10'>
-          <Button variant='destructiveOutline' type='button' onClick={onDelete}>
+          <Button disabled={Boolean(site.specialty)} variant='destructiveOutline' type='button' onClick={onDelete}>
             Oldal törlése
           </Button>
           <Button type='submit'>Mentés</Button>
