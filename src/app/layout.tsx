@@ -10,8 +10,8 @@ import { NavbarWrapper } from '@/components/ui/navbar/navbar-wrapper';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Villanykari Alumni Információs Rendszer',
-  description: 'Villanykari Alumni Információs Rendszer',
+  title: 'Schönherz Alumni Információs Rendszer',
+  description: 'Schönherz Alumni Információs Rendszer',
 };
 
 export default async function RootLayout({
