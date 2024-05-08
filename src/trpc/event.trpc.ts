@@ -1,6 +1,9 @@
+import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 
+import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
+import { batchSendEmail } from '@/lib/email';
 import { groupAdminProcedure, privateProcedure } from '@/trpc/trpc';
 import {
   CreateEventApplicationDto,
@@ -9,9 +12,40 @@ import {
   UpdateEventDto,
 } from '@/types/event.types';
 
+import NewEventEmail from '../../emails/new-event';
+
 export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(async (opts) => {
-  return prismaClient.event.create({
+  const event = await prismaClient.event.create({
     data: opts.input,
+    include: {
+      group: true,
+    },
+  });
+
+  const membersOfGroup = await prismaClient.membership.findMany({
+    where: {
+      groupId: event.groupId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  const emailRecipients = membersOfGroup.map(({ user }) => ({
+    id: user.id,
+    email: user.email,
+  }));
+
+  batchSendEmail({
+    to: emailRecipients,
+    subject: event.name,
+    html: render(
+      NewEventEmail({
+        eventLink: `${SITE_URL}/groups/${event.groupId}/events/${event.id}`,
+        event,
+        groupName: event.group.name,
+      })
+    ),
   });
 });
 
