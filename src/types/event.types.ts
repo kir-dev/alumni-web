@@ -26,8 +26,16 @@ export const UpdateEventDto = z.object({
   endDate: z.string().datetime().optional(),
   location: z.string().optional(),
   isPrivate: z.boolean().optional(),
+  groupId: z.string(),
 });
 
 export const GetEventApplicationForUserDto = z.string();
 
 export const CreateEventApplicationDto = z.string();
+
+export type Difference<T> = {
+  [P in keyof T]?: {
+    before: T[P];
+    after: T[P];
+  };
+};

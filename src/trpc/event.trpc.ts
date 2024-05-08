@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server';
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
 import { batchSendEmail } from '@/lib/email';
+import { getEventDifference } from '@/lib/event';
 import { groupAdminProcedure, privateProcedure } from '@/trpc/trpc';
 import {
   CreateEventApplicationDto,
@@ -13,6 +14,7 @@ import {
 } from '@/types/event.types';
 
 import NewEventEmail from '../../emails/new-event';
+import UpdateEventEmail from '../../emails/update-event';
 
 export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(async (opts) => {
   const event = await prismaClient.event.create({
@@ -31,10 +33,9 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
     },
   });
 
-  const emailRecipients = membersOfGroup.map(({ user }) => ({
-    id: user.id,
-    email: user.email,
-  }));
+  const emailRecipients = membersOfGroup
+    .filter(({ user }) => Boolean(user.emailVerified))
+    .map(({ user }) => user.email);
 
   batchSendEmail({
     to: emailRecipients,
@@ -47,17 +48,54 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
       })
     ),
   });
+
+  return event;
 });
 
 export const updateEvent = groupAdminProcedure.input(UpdateEventDto).mutation(async (opts) => {
   const { id, ...data } = opts.input;
 
-  return prismaClient.event.update({
+  const prevEvent = await prismaClient.event.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!prevEvent) throw new TRPCError({ code: 'NOT_FOUND' });
+
+  const updatedEvent = await prismaClient.event.update({
     where: {
       id,
     },
     data,
   });
+
+  const attendees = await prismaClient.eventApplication.findMany({
+    where: {
+      eventId: id,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  const emailRecipients = attendees.filter(({ user }) => Boolean(user.emailVerified)).map(({ user }) => user.email);
+
+  const difference = getEventDifference(prevEvent, updatedEvent);
+  if (Object.keys(difference).length > 0) {
+    batchSendEmail({
+      to: emailRecipients,
+      subject: 'Egy eseményedet frissítették',
+      html: render(
+        UpdateEventEmail({
+          eventName: updatedEvent.name,
+          difference,
+        })
+      ),
+    });
+  }
+
+  return updatedEvent;
 });
 
 export const getEventApplicationForUser = privateProcedure.input(GetEventApplicationForUserDto).query(async (opts) => {

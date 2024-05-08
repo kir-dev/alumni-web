@@ -8,22 +8,11 @@ export function sendEmail(options: SendMailOptions) {
   });
 }
 
-type BatchSendEmailOptions = Omit<SendMailOptions, 'to'> & { to: { email: string; id: string }[] };
+type BatchSendEmailOptions = Omit<SendMailOptions, 'to'> & { to: string[] };
 
 export function batchSendEmail(options: BatchSendEmailOptions) {
-  const recipientVariables = options.to.reduce(
-    (acc, recipient) => {
-      acc[recipient.email] = { id: recipient.id };
-      return acc;
-    },
-    {} as Record<string, { id: string }>
-  );
-
-  sendEmail({
-    ...options,
-    to: options.to.map((recipient) => recipient.email),
-    headers: {
-      'X-Mailgun-Recipient-Variables': JSON.stringify(recipientVariables),
-    },
+  const { to, ...rest } = options;
+  to.forEach((recipient) => {
+    sendEmail({ to: recipient, ...rest });
   });
 }

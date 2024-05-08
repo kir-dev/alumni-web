@@ -1,12 +1,14 @@
 import { EventApplication, Membership, User } from '@prisma/client';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbMapPin } from 'react-icons/tb';
 
 import Rsvp from '@/app/groups/[id]/events/[eventId]/rsvp';
 import Providers from '@/components/providers';
+import { Button } from '@/components/ui/button';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
@@ -123,6 +125,11 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
         <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />
       </Providers>
       {canEdit && <AttendeeList eventApplications={applications} eventName={event.name} />}
+      {canEdit && (
+        <Button className='mt-5' asChild>
+          <Link href={`/groups/${params.id}/events/${params.eventId}/update`}>Szerkesztés</Link>
+        </Button>
+      )}
     </main>
   );
 }
