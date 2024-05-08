@@ -2,12 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { TbMailCheck, TbMailX } from 'react-icons/tb';
 import { z } from 'zod';
 
+import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Button, LoadingButton } from '@/components/ui/button';
 import { TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
@@ -15,6 +17,7 @@ import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/comp
 import { LoginDto } from '@/types/user.types';
 
 export function LoginForm() {
+  const params = useSearchParams();
   const [loginLoading, setLoginLoading] = useState(false);
   const router = useRouter();
   const [tokenInputVisible, setTokenInputVisible] = useState(false);
@@ -62,8 +65,23 @@ export function LoginForm() {
     }
   };
 
+  const isVerified = params.get('verified') === 'true';
+  const isVerificationError = params.get('verified') === 'false';
+
   return (
     <Form {...form}>
+      {isVerified && (
+        <Alert variant='success' className='mt-5'>
+          <TbMailCheck />
+          <AlertTitle>Sikeresen megerősítetted az e-mail címedet!</AlertTitle>
+        </Alert>
+      )}
+      {isVerificationError && (
+        <Alert variant='error' className='mt-5'>
+          <TbMailX />
+          <AlertTitle>Hiba történt az e-mail cím megerősítése során</AlertTitle>
+        </Alert>
+      )}
       <form onSubmit={onSubmit}>
         {tokenInputVisible ? (
           <InputOTP maxLength={6} autoFocus onChange={(value) => setToken(value)} value={token}>
@@ -91,6 +109,9 @@ export function LoginForm() {
           </LoadingButton>
           <Button variant='link' asChild>
             <Link href='/register'>Regisztráció</Link>
+          </Button>
+          <Button variant='link' asChild>
+            <Link href='/password-reset'>Elfelejtett jelszó</Link>
           </Button>
         </div>
       </form>

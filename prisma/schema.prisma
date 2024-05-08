@@ -116,9 +116,10 @@ model User {
   Membership       Membership[]
   EventApplication EventApplication[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  TfaToken  TfaToken?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  TfaToken          TfaToken?
+  VerificationToken VerificationToken[]
 }
 
 model TfaToken {
@@ -142,11 +143,18 @@ model Session {
 }
 
 model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+  token   String                @unique
+  expires DateTime
+  userId  String
+  type    VerificationTokenType
+  user    User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([identifier, token])
+  @@unique([userId, token, type])
+}
+
+enum VerificationTokenType {
+  Email
+  Password
 }
 
 model Account {

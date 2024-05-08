@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { authenticator } from 'otplib';
 
+import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
 import { privateProcedure } from '@/trpc/trpc';
 import { VerifyTfaInput } from '@/types/tfa.types';
@@ -26,10 +27,8 @@ export const createTfa = privateProcedure.mutation(async (opts) => {
     },
   });
 
-  const issuer = process.env.TFA_ISSUER || 'localhost:3000';
-
   return {
-    url: authenticator.keyuri(opts.ctx.session.user.email, issuer, token.secret),
+    url: authenticator.keyuri(opts.ctx.session.user.email, SITE_URL, token.secret),
   };
 });
 

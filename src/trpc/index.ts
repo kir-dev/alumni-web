@@ -14,7 +14,15 @@ import { createNews } from '@/trpc/news.trpc';
 import { createSite, deleteSite, editSite } from '@/trpc/site-editor.trpc';
 import { createTfa, removeTfa, verifyTfa } from '@/trpc/tfa.trpc';
 import { router } from '@/trpc/trpc';
-import { getMyUser, getUserById, registerUser, updateProfile } from '@/trpc/user.trpc';
+import {
+  getMyUser,
+  getUserById,
+  newPassword,
+  registerUser,
+  requestEmailVerification,
+  resetPassword,
+  updateProfile,
+} from '@/trpc/user.trpc';
 
 export const appRouter = router({
   registerUser,
@@ -41,6 +49,9 @@ export const appRouter = router({
   createTfa,
   removeTfa,
   verifyTfa,
+  resetPassword,
+  newPassword,
+  requestEmailVerification,
 });
 
 export type AppRouter = typeof appRouter;

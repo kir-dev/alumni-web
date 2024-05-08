@@ -2,18 +2,20 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbHome, TbMail, TbPhone } from 'react-icons/tb';
+import { TbHome, TbMailCheck, TbMailExclamation, TbMailX, TbPhone } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
+import { RequestEmailVerification } from '@/components/profile/request-email-verification';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
-import { getSuffixedTitle } from '@/lib/utils';
+import { cn, getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: getSuffixedTitle('Profilom'),
@@ -64,9 +66,20 @@ export default async function ProfilePage() {
     return notFound();
   }
 
+  const emailVerified = Boolean(user.emailVerified);
+
   return (
     <main>
       <h1>Profil</h1>
+      {!emailVerified && (
+        <Providers>
+          <Alert variant='error' className='mt-5'>
+            <TbMailExclamation />
+            <AlertTitle>Kérjük, erősítsd meg az email címedet!</AlertTitle>
+            <RequestEmailVerification />
+          </Alert>
+        </Providers>
+      )}
       <Card className='mt-5'>
         <CardContent className='flex flex-col md:flex-row justify-between md:items-center gap-5 pt-5'>
           <div>
@@ -74,7 +87,15 @@ export default async function ProfilePage() {
               {user.firstName} {user.lastName}
             </CardTitle>
             <div className='mt-5'>
-              <IconValueDisplay icon={TbMail} value={user.email} type='email' />
+              <IconValueDisplay
+                className={cn({
+                  'text-green-500 dark:text-green-300': emailVerified,
+                  'text-red-500 dark:text-red-300': !emailVerified,
+                })}
+                icon={emailVerified ? TbMailCheck : TbMailX}
+                value={user.email}
+                type='email'
+              />
               <IconValueDisplay icon={TbPhone} value={user.phone} type='tel' />
               <IconValueDisplay icon={TbHome} value={user.address} type='address' />
             </div>

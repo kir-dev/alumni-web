@@ -29,4 +29,14 @@ export const UpdateUserProfileDto = z.object({
     .min(5, 'A cím legalább 5 karakter hosszú kell legyen'),
 });
 
+export const PasswordResetDto = z.object({
+  email: z.string({ required_error: 'Email cím megadása kötelező' }).email('Helytelen email cím'),
+});
+
+export const NewPasswordDto = z.object({
+  password: z
+    .string({ required_error: 'Jelszó megadása kötelező' })
+    .min(8, 'A jelszó legalább 8 karakter hosszú kell legyen'),
+});
+
 export type UserProfileDto = z.infer<typeof UpdateUserProfileDto>;

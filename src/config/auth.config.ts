@@ -3,6 +3,7 @@ import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { authenticator } from 'otplib';
 
+import { NEXTAUTH_SECRET } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
 import { hashPassword } from '@/lib/utils';
 
@@ -67,7 +68,7 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
     maxAge: 24 * 60 * 60,

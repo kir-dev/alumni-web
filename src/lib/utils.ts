@@ -84,3 +84,12 @@ export function getSuffixedTitle(title: string, ...suffix: string[]): string {
   suffixedTitle += ' | Alumni';
   return suffixedTitle;
 }
+
+export function generateRandomString(length: number): string {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let randomPart = '';
+  for (let i = 0; i < length; i++) {
+    randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return randomPart;
+}
