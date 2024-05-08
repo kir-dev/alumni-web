@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 
+import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
 
 export const GET = async (
@@ -14,9 +15,9 @@ export const GET = async (
 ) => {
   try {
     await verifyToken(token);
-    return Response.redirect('http://localhost:3000/login?verified=true');
+    return Response.redirect(`${SITE_URL}/login?verified=true`);
   } catch (error) {
-    return Response.redirect('http://localhost:3000/login?verified=false');
+    return Response.redirect(`${SITE_URL}/login?verified=false`);
   }
 };
 
