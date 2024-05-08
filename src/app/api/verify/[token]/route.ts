@@ -1,9 +1,9 @@
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 
 import { prismaClient } from '@/config/prisma.config';
 
 export const GET = async (
-  _: NextApiRequest,
+  _: NextRequest,
   {
     params: { token },
   }: {
