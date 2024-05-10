@@ -13,7 +13,7 @@ export function ImageTextRenderer({ content }: ImageTextRendererProps) {
     console.error('Error parsing content', e);
   }
   return (
-    <div className='grid-cols-2 grid gap-10'>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
       <TextRenderer className='mt-0' content={parsedContent.text} />
       <ImageRenderer content={parsedContent.image} />
     </div>

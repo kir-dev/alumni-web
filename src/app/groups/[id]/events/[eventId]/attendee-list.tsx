@@ -5,26 +5,18 @@ import dynamic from 'next/dynamic';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { UserListExportButton } from '@/components/ui/user-list-export-button';
 
 interface AttendeeListProps {
   eventApplications: (EventApplication & { user: User })[];
-  eventName: string;
 }
 
 const UserDetails = dynamic(() => import('@/components/ui/group/user-details'), { ssr: false });
 
-export default function AttendeeList({ eventApplications, eventName }: AttendeeListProps) {
+export default function AttendeeList({ eventApplications }: AttendeeListProps) {
   return (
     <Card className='mt-10'>
       <CardHeader className='flex items-center justify-between flex-row'>
         <CardTitle>Jelentkezések</CardTitle>
-        <UserListExportButton
-          users={eventApplications.map((application) => application.user)}
-          fileName={`${eventName}-jelentkezok`}
-          variant='outline'
-          size='sm'
-        />
       </CardHeader>
       <CardContent>
         <Table>

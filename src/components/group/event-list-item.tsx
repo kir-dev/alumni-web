@@ -17,7 +17,7 @@ export function EventListItem({ event }: EventListItemProps) {
 
   return (
     <Link href={`/groups/${event.groupId}/events/${event.id}`}>
-      <Card>
+      <Card className='mt-2'>
         <CardHeader>
           <div className='flex items-center justify-between overflow-hidden'>
             <CardTitle className='text-lg truncate'>{event.name}</CardTitle>

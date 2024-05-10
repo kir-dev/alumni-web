@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 
 import { CreateEventForm } from '@/app/groups/[id]/events/new/create-event-form';
 import Providers from '@/components/providers';
+import Forbidden from '@/components/sites/forbidden';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
@@ -37,7 +38,7 @@ export default async function CreateEventPage({ params }: { params: { id: string
     },
   });
 
-  if (!adminMembership && !session.user.isSuperAdmin) return notFound();
+  if (!adminMembership && !session.user.isSuperAdmin) return <Forbidden />;
 
   return (
     <main>

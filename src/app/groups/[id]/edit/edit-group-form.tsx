@@ -35,6 +35,7 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
   const onSubmit = form.handleSubmit(async (data) => {
     await updateGroup.mutateAsync({ id: group.id, data }).then((data) => {
       router.push(`/groups/${data.id}`);
+      router.refresh();
     });
   });
 
@@ -44,7 +45,9 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
         <TextField control={form.control} name='name' label='Csoport neve' />
         <TextAreaField control={form.control} name='description' label='Csoport leírása' />
         <ColorPicker control={form.control} name='color' label='Csoport színe' />
-        <Button type='submit'>Mentés</Button>
+        <Button className='mt-5' type='submit'>
+          Mentés
+        </Button>
       </form>
     </Form>
   );

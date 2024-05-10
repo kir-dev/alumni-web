@@ -33,7 +33,8 @@ export function UpdateEventForm({ groupId, event }: CreateGroupFormProps) {
 
   const onSubmit = form.handleSubmit(async (data) => {
     await updateEvent.mutateAsync(data).then(() => {
-      router.push(`/groups/${groupId}`);
+      router.push(`/groups/${groupId}/events/${event.id}`);
+      router.refresh();
     });
   });
 

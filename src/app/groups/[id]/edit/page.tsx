@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth/next';
 
 import { EditGroupForm } from '@/app/groups/[id]/edit/edit-group-form';
 import Providers from '@/components/providers';
+import Forbidden from '@/components/sites/forbidden';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
@@ -41,7 +42,7 @@ export default async function EditGroupPage({ params }: { params: { id: string }
   const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
 
   if (!canEdit) {
-    return notFound();
+    return <Forbidden />;
   }
 
   return (

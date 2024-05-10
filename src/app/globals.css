@@ -11,7 +11,7 @@ main {
 }
 
 h1 {
-    @apply text-3xl font-bold text-primary-900 dark:text-primary-100 mb-0;
+    @apply text-3xl font-bold text-primary-900 dark:text-primary-100;
 }
 
 h2 {
@@ -36,6 +36,10 @@ ol{
 
 ul{
     @apply list-disc list-inside;
+}
+
+.mdxcontent h2, .mdxcontent h3, .mdxcontent h4, .mdxcontent h5, .mdxcontent h6{
+    @apply mt-8;
 }
 
 .mdxeditor a, .mdxcontent a{

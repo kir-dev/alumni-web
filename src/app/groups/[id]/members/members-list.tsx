@@ -4,27 +4,24 @@ import { Membership, MembershipStatus, User } from '@prisma/client';
 import type { VariantProps } from 'class-variance-authority';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
 import { TbCheck, TbShieldMinus, TbShieldPlus, TbTrash, TbX } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Badge, badgeVariants } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { LoadingButton } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { UserListExportButton } from '@/components/ui/user-list-export-button';
 
 interface MemberListProps {
   memberships: (Membership & {
     user: User;
   })[];
-  groupName: string;
   groupId: string;
 }
 
 const UserDetails = dynamic(() => import('@/components/ui/group/user-details'), { ssr: false });
 
-export function MembersList({ memberships, groupId, groupName }: MemberListProps) {
+export function MembersList({ memberships, groupId }: MemberListProps) {
   const router = useRouter();
   const editMembership = trpc.editMembership.useMutation();
   const deleteMembership = trpc.deleteMembership.useMutation();
@@ -46,16 +43,8 @@ export function MembersList({ memberships, groupId, groupName }: MemberListProps
     await toggleAdmin.mutateAsync({ userId, groupId }).then(() => router.refresh());
   };
 
-  const approvedMembers = useMemo(
-    () => memberships.filter((m) => m.status === 'Approved').map((m) => m.user),
-    [memberships]
-  );
-
   return (
     <Card className='mt-10'>
-      <CardHeader className='flex justify-end flex-row'>
-        <UserListExportButton users={approvedMembers} fileName={`${groupName}-tagok`} />
-      </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
@@ -81,24 +70,44 @@ export function MembersList({ memberships, groupId, groupName }: MemberListProps
                   <div className='space-x-2 text-right text-nowrap'>
                     <UserDetails member={membership.user} />
                     {(membership.status === 'Pending' || membership.status === 'Rejected') && (
-                      <Button onClick={() => onApprove(membership.user.id)} size='icon' variant='successOutline'>
+                      <LoadingButton
+                        isLoading={editMembership.isPending}
+                        onClick={() => onApprove(membership.user.id)}
+                        size='icon'
+                        variant='successOutline'
+                      >
                         <TbCheck />
-                      </Button>
+                      </LoadingButton>
                     )}
                     {membership.status === 'Pending' && (
-                      <Button onClick={() => onReject(membership.user.id)} size='icon' variant='destructiveOutline'>
+                      <LoadingButton
+                        isLoading={editMembership.isPending}
+                        onClick={() => onReject(membership.user.id)}
+                        size='icon'
+                        variant='destructiveOutline'
+                      >
                         <TbX />
-                      </Button>
+                      </LoadingButton>
                     )}
                     {membership.status === 'Approved' && (
-                      <Button onClick={() => onToggleAdmin(membership.user.id)} size='icon' variant='outline'>
+                      <LoadingButton
+                        isLoading={toggleAdmin.isPending}
+                        onClick={() => onToggleAdmin(membership.user.id)}
+                        size='icon'
+                        variant='outline'
+                      >
                         {membership.isAdmin ? <TbShieldMinus /> : <TbShieldPlus />}
-                      </Button>
+                      </LoadingButton>
                     )}
                     {membership.status === 'Approved' && (
-                      <Button onClick={() => onDelete(membership.user.id)} size='icon' variant='destructiveOutline'>
+                      <LoadingButton
+                        isLoading={deleteMembership.isPending}
+                        onClick={() => onDelete(membership.user.id)}
+                        size='icon'
+                        variant='destructiveOutline'
+                      >
                         <TbTrash />
-                      </Button>
+                      </LoadingButton>
                     )}
                   </div>
                 </TableCell>

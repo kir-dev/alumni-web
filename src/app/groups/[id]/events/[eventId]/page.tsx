@@ -124,7 +124,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
       <Providers>
         <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />
       </Providers>
-      {canEdit && <AttendeeList eventApplications={applications} eventName={event.name} />}
+      {canEdit && <AttendeeList eventApplications={applications} />}
       {canEdit && (
         <Button className='mt-5' asChild>
           <Link href={`/groups/${params.id}/events/${params.eventId}/update`}>Szerkesztés</Link>

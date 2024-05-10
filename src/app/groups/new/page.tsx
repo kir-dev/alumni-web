@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 
 import { CreateGroupForm } from '@/app/groups/new/create-group-form';
 import Providers from '@/components/providers';
+import Forbidden from '@/components/sites/forbidden';
 import { authOptions } from '@/config/auth.config';
 import { getSuffixedTitle } from '@/lib/utils';
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 export default async function CreateGroupPage() {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.isSuperAdmin) {
-    return notFound();
+    return <Forbidden />;
   }
 
   return (

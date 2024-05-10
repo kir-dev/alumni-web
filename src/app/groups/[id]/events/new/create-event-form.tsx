@@ -28,8 +28,8 @@ export function CreateEventForm({ groupId }: CreateGroupFormProps) {
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await createEvent.mutateAsync(data).then(() => {
-      router.push(`/groups/${groupId}`);
+    await createEvent.mutateAsync(data).then((result) => {
+      router.push(`/groups/${groupId}/events/${result.id}`);
     });
   });
 

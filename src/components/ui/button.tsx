@@ -51,7 +51,7 @@ const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
     return (
       <Button ref={ref} disabled={disabled || isLoading} {...props}>
         {isLoading && <TbLoader className='animate-spin' />}
-        {children}
+        {(!isLoading || props.size !== 'icon') && children}
       </Button>
     );
   }
