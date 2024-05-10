@@ -36,3 +36,9 @@ export const ToggleAdminDto = z.object({
   userId: z.string(),
   groupId: z.string(),
 });
+
+export const SendEmailDto = z.object({
+  groupId: z.string({ required_error: 'Csoport kötelező' }),
+  subject: z.string({ required_error: 'Tárgy kötelező' }),
+  content: z.string({ required_error: 'Tartalom kötelező' }),
+});

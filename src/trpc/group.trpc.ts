@@ -1,16 +1,21 @@
+import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { prismaClient } from '@/config/prisma.config';
+import { batchSendEmail } from '@/lib/email';
 import { groupAdminProcedure, privateProcedure, superAdminProcedure } from '@/trpc/trpc';
 import {
   CreateGroupDto,
   DeleteMembershipDto,
   EditMembershipDto,
   JoinGroupDto,
+  SendEmailDto,
   ToggleAdminDto,
   UpdateGroupDto,
 } from '@/types/group.types';
+
+import GroupGeneralEmail from '../../emails/group-general';
 
 export const getGroups = superAdminProcedure.query(async () => {
   return prismaClient.group.findMany();
@@ -107,5 +112,37 @@ export const toggleAdmin = groupAdminProcedure.input(ToggleAdminDto).mutation(as
     data: {
       isAdmin: !membership.isAdmin,
     },
+  });
+});
+
+export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async (opts) => {
+  const group = await prismaClient.group.findUnique({
+    where: {
+      id: opts.input.groupId,
+    },
+    include: {
+      members: {
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!group) throw new TRPCError({ code: 'NOT_FOUND' });
+
+  batchSendEmail({
+    to: group.members.map((member) => member.user.email),
+    subject: opts.input.subject,
+    html: render(
+      GroupGeneralEmail({
+        content: opts.input.content,
+        groupName: group.name,
+      })
+    ),
   });
 });

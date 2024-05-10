@@ -7,6 +7,7 @@ import {
   getGroups,
   joinGroup,
   leaveGroup,
+  sendEmail,
   toggleAdmin,
   updateGroup,
 } from '@/trpc/group.trpc';
@@ -52,6 +53,7 @@ export const appRouter = router({
   resetPassword,
   newPassword,
   requestEmailVerification,
+  sendEmail,
 });
 
 export type AppRouter = typeof appRouter;

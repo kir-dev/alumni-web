@@ -1,5 +1,6 @@
 import { Membership } from '@prisma/client';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
@@ -15,6 +16,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
+
+const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
 
 interface GroupPageProps {
   params: {
@@ -124,6 +127,11 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
                     Tagok kezelése
                   </Link>
                 </Button>
+              )}
+              {canEdit && (
+                <Providers>
+                  <SendEmail groupId={params.id} />
+                </Providers>
               )}
               {session && (
                 <Providers>
