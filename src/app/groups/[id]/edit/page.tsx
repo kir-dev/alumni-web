@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { EditGroupForm } from '@/app/groups/[id]/edit/edit-group-form';
+import { EditGroupForm } from '@/components/group/edit-group-form';
 import Providers from '@/components/providers';
 import Forbidden from '@/components/sites/forbidden';
 import { authOptions } from '@/config/auth.config';

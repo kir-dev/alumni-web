@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth/next';
 
-import { Navbar } from '@/components/ui/navbar/navbar';
+import { Navbar } from '@/components/navbar/navbar';
 import { authOptions } from '@/config/auth.config';
 
 export async function NavbarWrapper() {

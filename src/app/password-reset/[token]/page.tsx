@@ -1,6 +1,6 @@
 import { isAfter } from 'date-fns';
 
-import { NewPasswordForm } from '@/app/password-reset/[token]/new-password-form';
+import { NewPasswordForm } from '@/components/password-reset/new-password-form';
 import Providers from '@/components/providers';
 import { prismaClient } from '@/config/prisma.config';
 

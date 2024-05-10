@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description: 'Tekintsd meg a profilodat.',
 };
 
-const UpdateProfileForm = dynamic(() => import('@/app/profile/update-profile-form'), { ssr: false });
+const UpdateProfileForm = dynamic(() => import('@/components/profile/update-profile-form'), { ssr: false });
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);

@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbMapPin } from 'react-icons/tb';
 
-import Rsvp from '@/app/groups/[id]/events/[eventId]/rsvp';
+import Rsvp from '@/components/group/rsvp';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
   };
 }
 
-const AttendeeList = dynamic(() => import('@/app/groups/[id]/events/[eventId]/attendee-list'), { ssr: false });
+const AttendeeList = dynamic(() => import('@/components/group/attendee-list'), { ssr: false });
 
 export default async function EventDetailsPage({ params }: { params: { id: string; eventId: string } }) {
   const session = await getServerSession(authOptions);

@@ -19,7 +19,7 @@ interface MemberListProps {
   groupId: string;
 }
 
-const UserDetails = dynamic(() => import('@/components/ui/group/user-details'), { ssr: false });
+const UserDetails = dynamic(() => import('@/components/group/user-details'), { ssr: false });
 
 export function MembersList({ memberships, groupId }: MemberListProps) {
   const router = useRouter();

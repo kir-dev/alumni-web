@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { LoginForm } from '@/app/login/login-form';
+import { LoginForm } from '@/components/login/login-form';
 import Providers from '@/components/providers';
 import { authOptions } from '@/config/auth.config';
 import { getSuffixedTitle } from '@/lib/utils';

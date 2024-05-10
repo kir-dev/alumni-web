@@ -5,9 +5,9 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbCalendarPlus, TbEdit, TbUsersGroup } from 'react-icons/tb';
 
-import { JoinButton } from '@/app/groups/[id]/join-button';
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
+import { JoinButton } from '@/components/group/join-button';
 import { NewsListItem } from '@/components/group/news-list-item';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';

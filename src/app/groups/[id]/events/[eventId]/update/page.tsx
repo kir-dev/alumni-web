@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { UpdateEventForm } from '@/app/groups/[id]/events/[eventId]/update/update-event-form';
+import { UpdateEventForm } from '@/components/group/update-event-form';
 import Providers from '@/components/providers';
 import Forbidden from '@/components/sites/forbidden';
 import { authOptions } from '@/config/auth.config';

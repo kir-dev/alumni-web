@@ -10,7 +10,7 @@ interface AttendeeListProps {
   eventApplications: (EventApplication & { user: User })[];
 }
 
-const UserDetails = dynamic(() => import('@/components/ui/group/user-details'), { ssr: false });
+const UserDetails = dynamic(() => import('@/components/group/user-details'), { ssr: false });
 
 export default function AttendeeList({ eventApplications }: AttendeeListProps) {
   return (

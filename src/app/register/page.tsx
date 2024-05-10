@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
-import { RegisterForm } from '@/app/register/register-form';
 import Providers from '@/components/providers';
+import { RegisterForm } from '@/components/register/register-form';
 import { authOptions } from '@/config/auth.config';
 import { getSuffixedTitle } from '@/lib/utils';
 
