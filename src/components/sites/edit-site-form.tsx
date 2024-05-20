@@ -62,12 +62,14 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
   const onSubmit = form.handleSubmit((data) => {
     editSite.mutateAsync(data).then(() => {
       router.push('/sites');
+      router.refresh();
     });
   });
 
   const onDelete = () => {
     deleteSite.mutateAsync(site.id).then(() => {
       router.push('/sites');
+      router.refresh();
     });
   };
 

@@ -22,13 +22,13 @@ export function BlockFieldDistributor<TName extends FieldPath<TFieldValues>, TFi
       name={name}
       render={({ field }) => (
         <div className='space-y-5 mt-5'>
-          {(field.value as StaticSiteBlock[]).map((block, index) => {
+          {(field.value as StaticSiteBlock[]).map((block, idx) => {
             const BlockFieldComponent = BlockFieldComponents[block.type];
             /* eslint-disable react/no-array-index-key */
             return (
               <BlockFieldComponent
-                key={index}
-                index={index}
+                key={idx}
+                index={idx}
                 value={block.content}
                 onChange={(index, value) => {
                   const newBlocks = [...field.value];

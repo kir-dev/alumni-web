@@ -12,8 +12,6 @@ import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getSuffixedTitle } from '@/lib/utils';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata: Metadata = {
   title: getSuffixedTitle('Statikus oldal szerkesztése'),
   description: 'Tartsd karban a statikus oldalakat.',
