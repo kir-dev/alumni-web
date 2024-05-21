@@ -67,6 +67,9 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
                   <DropdownMenuItem asChild>
                     <Link href='/admin/users'>Felhasználók</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href='/admin/uploads'>Feltöltések</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
