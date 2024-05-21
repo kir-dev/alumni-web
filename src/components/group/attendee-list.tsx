@@ -18,7 +18,7 @@ export default function AttendeeList({ eventApplications }: AttendeeListProps) {
       <CardHeader className='flex items-center justify-between flex-row'>
         <CardTitle>Jelentkezések</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className='p-0'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -36,7 +36,7 @@ export default function AttendeeList({ eventApplications }: AttendeeListProps) {
                 <TableCell>{application.user.email}</TableCell>
                 <TableCell>
                   <div className='space-x-2 text-right'>
-                    <UserDetails member={application.user} />
+                    <UserDetails user={application.user} />
                   </div>
                 </TableCell>
               </TableRow>

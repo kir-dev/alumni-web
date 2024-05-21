@@ -59,40 +59,6 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
   return user;
 });
 
-publicProcedure.input(z.string()).mutation(async (opts) => {
-  const verificationToken = await prismaClient.verificationToken.findUnique({
-    where: {
-      token: opts.input,
-    },
-  });
-
-  if (!verificationToken) throw new TRPCError({ code: 'NOT_FOUND', message: 'Invalid token' });
-
-  if (verificationToken.expires < new Date()) {
-    await prismaClient.verificationToken.delete({
-      where: {
-        token: verificationToken.token,
-      },
-    });
-    throw new TRPCError({ code: 'FORBIDDEN', message: 'Token expired' });
-  }
-
-  await prismaClient.user.update({
-    where: {
-      id: verificationToken.userId,
-    },
-    data: {
-      emailVerified: new Date(),
-    },
-  });
-
-  await prismaClient.verificationToken.delete({
-    where: {
-      token: verificationToken.token,
-    },
-  });
-});
-
 export const requestEmailVerification = privateProcedure.mutation(async (opts) => {
   if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
 
@@ -281,3 +247,24 @@ async function createEmailVerificationSession(userId: string) {
     ),
   });
 }
+
+export const toggleSuperAdmin = privateProcedure.input(z.string()).mutation(async (opts) => {
+  if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
+
+  const user = await prismaClient.user.findUnique({
+    where: {
+      id: opts.input,
+    },
+  });
+
+  if (!user) throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+
+  await prismaClient.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      isSuperAdmin: !user.isSuperAdmin,
+    },
+  });
+});

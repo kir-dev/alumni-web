@@ -45,7 +45,7 @@ export function MembersList({ memberships, groupId }: MemberListProps) {
 
   return (
     <Card className='mt-10'>
-      <CardContent>
+      <CardContent className='p-0'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -68,7 +68,7 @@ export function MembersList({ memberships, groupId }: MemberListProps) {
                 </TableCell>
                 <TableCell>
                   <div className='space-x-2 text-right text-nowrap'>
-                    <UserDetails member={membership.user} />
+                    <UserDetails user={membership.user} />
                     {(membership.status === 'Pending' || membership.status === 'Rejected') && (
                       <LoadingButton
                         isLoading={editMembership.isPending}
@@ -94,7 +94,7 @@ export function MembersList({ memberships, groupId }: MemberListProps) {
                         isLoading={toggleAdmin.isPending}
                         onClick={() => onToggleAdmin(membership.user.id)}
                         size='icon'
-                        variant='outline'
+                        variant={membership.isAdmin ? 'default' : 'outline'}
                       >
                         {membership.isAdmin ? <TbShieldMinus /> : <TbShieldPlus />}
                       </LoadingButton>

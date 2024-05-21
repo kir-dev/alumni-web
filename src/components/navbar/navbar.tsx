@@ -3,10 +3,16 @@
 import Image from 'next/image';
 import Link, { LinkProps } from 'next/link';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { TbMenu } from 'react-icons/tb';
+import { TbChevronDown, TbMenu } from 'react-icons/tb';
 
 import { ColorModeSelector } from '@/components/navbar/color-mode-selector';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {
@@ -48,9 +54,21 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
               <Link href='/groups'>Csoportok</Link>
             </Button>
             {isLoggedIn && isAdmin && (
-              <Button variant='link' asChild>
-                <Link href='/sites'>Statikus oldalak</Link>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant='link'>
+                    Admin <TbChevronDown />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <Link href='/sites'>Statikus oldalak</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href='/admin/users'>Felhasználók</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
             {isLoggedIn ? (
               <Button variant='link' asChild>

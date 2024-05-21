@@ -15,10 +15,10 @@ import {
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 
 interface UserDetailsProps {
-  member: User;
+  user: User;
 }
 
-export default function UserDetails({ member }: UserDetailsProps) {
+export default function UserDetails({ user }: UserDetailsProps) {
   return (
     <Dialog>
       <Button variant='outline' size='icon' asChild>
@@ -29,12 +29,12 @@ export default function UserDetails({ member }: UserDetailsProps) {
       <DialogContent>
         <DialogHeader className='text-lg'>
           <DialogTitle>
-            {member.lastName} {member.firstName}
+            {user.lastName} {user.firstName}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className='space-y-4'>
-          <IconValueDisplay icon={TbMail} value={member.email} type='email' />
-          <IconValueDisplay icon={TbPhone} value={member.phone} type='tel' />
+          <IconValueDisplay icon={TbMail} value={user.email} type='email' />
+          <IconValueDisplay icon={TbPhone} value={user.phone} type='tel' />
         </DialogDescription>
       </DialogContent>
     </Dialog>

@@ -22,6 +22,7 @@ import {
   registerUser,
   requestEmailVerification,
   resetPassword,
+  toggleSuperAdmin,
   updateProfile,
 } from '@/trpc/user.trpc';
 
@@ -54,6 +55,7 @@ export const appRouter = router({
   newPassword,
   requestEmailVerification,
   sendEmail,
+  toggleSuperAdmin,
 });
 
 export type AppRouter = typeof appRouter;
