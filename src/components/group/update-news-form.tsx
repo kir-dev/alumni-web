@@ -1,35 +1,37 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { News } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/button';
 import { CheckboxField, DateField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
-import { CreateNewsDto } from '@/types/news.types';
+import { UpdateNewsDto } from '@/types/news.types';
 
-interface CreateNewsFormProps {
-  groupId: string;
+interface UpdateNewsFormProps {
+  news: News;
 }
 
-export function CreateNewsForm({ groupId }: CreateNewsFormProps) {
+export function UpdateNewsForm({ news }: UpdateNewsFormProps) {
   const router = useRouter();
-  const createNews = trpc.createNews.useMutation();
+  const updateNews = trpc.updateNews.useMutation();
 
-  const form = useForm<z.infer<typeof CreateNewsDto>>({
-    resolver: zodResolver(CreateNewsDto),
+  const form = useForm<z.infer<typeof UpdateNewsDto>>({
+    resolver: zodResolver(UpdateNewsDto),
     defaultValues: {
-      isPrivate: false,
-      groupId,
+      ...news,
+      publishDate: news.publishDate ? new Date(news.publishDate).toISOString() : undefined,
     },
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await createNews.mutateAsync(data).then((result) => {
-      router.push(`/groups/${groupId}/news/${result.id}`);
+    await updateNews.mutateAsync(data).then(() => {
+      router.push(`/groups/${news.groupId}/news/${news.id}`);
+      router.refresh();
     });
   });
 
@@ -45,9 +47,9 @@ export function CreateNewsForm({ groupId }: CreateNewsFormProps) {
           label='Privát hír'
           description='Privát hír csak tagok számára elérhető'
         />
-        <Button className='mt-5' type='submit'>
-          Létrehozás
-        </Button>
+        <LoadingButton isLoading={updateNews.isPending} className='mt-5' type='submit'>
+          Mentés
+        </LoadingButton>
       </form>
     </Form>
   );

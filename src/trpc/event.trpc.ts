@@ -1,6 +1,5 @@
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';

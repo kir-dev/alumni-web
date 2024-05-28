@@ -135,11 +135,11 @@ export function DateField<TName extends FieldPath<TFieldValues>, TFieldValues ex
     <FormField
       control={control}
       name={name}
-      render={({ field, fieldState }) => (
+      render={({ field: { onChange, onBlur, disabled, name, value }, fieldState }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <DatePicker {...field} />
+            <DatePicker value={value} onChange={onChange} onBlur={onBlur} disabled={disabled} name={name} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
@@ -166,9 +166,9 @@ export function CheckboxField<TName extends FieldPath<TFieldValues>, TFieldValue
     <FormField
       control={control}
       name={name}
-      render={({ field, fieldState }) => (
+      render={({ field: { value, onChange, ...field }, fieldState }) => (
         <FormItem className='items-center flex space-x-2'>
-          <Checkbox id={`${name}-checkbox`} {...field} />
+          <Checkbox id={`${name}-checkbox`} checked={value} onCheckedChange={onChange} {...field} />
           <div className='grid gap-1.5 leading-none'>
             <FormLabel htmlFor={`${name}-checkbox`}>{label}</FormLabel>
             {description && <FormDescription className='m-0'>{description}</FormDescription>}

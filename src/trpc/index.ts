@@ -17,7 +17,7 @@ import {
   toggleAdmin,
   updateGroup,
 } from '@/trpc/group.trpc';
-import { createNews } from '@/trpc/news.trpc';
+import { createNews, deleteNews, updateNews } from '@/trpc/news.trpc';
 import { createSite, deleteSite, editSite } from '@/trpc/site-editor.trpc';
 import { createTfa, removeTfa, verifyTfa } from '@/trpc/tfa.trpc';
 import { router } from '@/trpc/trpc';
@@ -51,6 +51,8 @@ export const appRouter = router({
   getEventApplicationForUser,
   createEventApplication,
   createNews,
+  updateNews,
+  deleteNews,
   createSite,
   editSite,
   deleteSite,

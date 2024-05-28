@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button, LoadingButton } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/button';
 import { CheckboxField, DateField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { CreateEventDto } from '@/types/event.types';
