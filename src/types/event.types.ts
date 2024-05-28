@@ -29,6 +29,11 @@ export const UpdateEventDto = z.object({
   groupId: z.string(),
 });
 
+export const DeleteEventDto = z.object({
+  eventId: z.string(),
+  groupId: z.string(),
+});
+
 export const GetEventApplicationForUserDto = z.string();
 
 export const CreateEventApplicationDto = z.string();

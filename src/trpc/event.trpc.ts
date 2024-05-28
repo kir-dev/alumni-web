@@ -1,5 +1,6 @@
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
@@ -9,10 +10,12 @@ import { groupAdminProcedure, privateProcedure } from '@/trpc/trpc';
 import {
   CreateEventApplicationDto,
   CreateEventDto,
+  DeleteEventDto,
   GetEventApplicationForUserDto,
   UpdateEventDto,
 } from '@/types/event.types';
 
+import DeleteEventEmail from '../../emails/delete-event';
 import NewEventEmail from '../../emails/new-event';
 import UpdateEventEmail from '../../emails/update-event';
 
@@ -139,5 +142,35 @@ export const createEventApplication = privateProcedure.input(CreateEventApplicat
       userId: opts.ctx.session.user.id,
       eventId: event.id,
     },
+  });
+});
+
+export const deleteEvent = groupAdminProcedure.input(DeleteEventDto).mutation(async (opts) => {
+  const event = await prismaClient.event.findUnique({
+    where: {
+      id: opts.input.eventId,
+    },
+    include: {
+      group: true,
+      EventApplication: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
+  if (!event) throw new TRPCError({ code: 'NOT_FOUND' });
+
+  await prismaClient.event.delete({
+    where: {
+      id: opts.input.eventId,
+    },
+  });
+
+  batchSendEmail({
+    to: event.EventApplication.map(({ user }) => user.email),
+    subject: 'Esemény törölve',
+    html: render(DeleteEventEmail({ event, groupName: event.group.name })),
   });
 });

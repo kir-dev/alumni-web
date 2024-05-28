@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { Button, LoadingButton } from '@/components/ui/button';
 import { CheckboxField, DateField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { CreateEventDto } from '@/types/event.types';
@@ -47,9 +47,9 @@ export function CreateEventForm({ groupId }: CreateGroupFormProps) {
           label='Privát esemény'
           description='Privát esemény csak tagok számára elérhető'
         />
-        <Button className='mt-5' type='submit'>
+        <LoadingButton isLoading={createEvent.isPending} className='mt-5' type='submit'>
           Létrehozás
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );

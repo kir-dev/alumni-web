@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { TbMapPin } from 'react-icons/tb';
 
+import { DeleteEvent } from '@/components/group/delete-event';
 import Rsvp from '@/components/group/rsvp';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
@@ -123,13 +124,16 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
       <p>{event.description}</p>
       <Providers>
         <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />
+        {canEdit && <AttendeeList eventApplications={applications} />}
+        {canEdit && (
+          <div className='flex justify-end items-center gap-2 mt-5'>
+            <DeleteEvent eventId={params.eventId} groupId={params.id} />
+            <Button asChild>
+              <Link href={`/groups/${params.id}/events/${params.eventId}/update`}>Szerkesztés</Link>
+            </Button>
+          </div>
+        )}
       </Providers>
-      {canEdit && <AttendeeList eventApplications={applications} />}
-      {canEdit && (
-        <Button className='mt-5' asChild>
-          <Link href={`/groups/${params.id}/events/${params.eventId}/update`}>Szerkesztés</Link>
-        </Button>
-      )}
     </main>
   );
 }
