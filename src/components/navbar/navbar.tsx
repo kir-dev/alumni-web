@@ -50,6 +50,11 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
         </Link>
         <div className='flex z-10'>
           <div className='hidden md:flex'>
+            {isLoggedIn && (
+              <Button variant='link' asChild>
+                <Link href='/feed'>Hírfolyam</Link>
+              </Button>
+            )}
             <Button variant='link' asChild>
               <Link href='/groups'>Csoportok</Link>
             </Button>
@@ -100,6 +105,7 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
           hidden: !menuOpen,
         })}
       >
+        {isLoggedIn && <MobileNavItem href='/feed'>Hírfolyam</MobileNavItem>}
         <MobileNavItem href='/groups'>Csoportok</MobileNavItem>
         {isLoggedIn && isAdmin && <MobileNavItem href='/sites'>Statikus oldalak</MobileNavItem>}
         {isLoggedIn ? (

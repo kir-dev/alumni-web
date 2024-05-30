@@ -19,7 +19,7 @@ export function IconValueDisplay({ icon: Icon, value, type, className, ...props 
       {type === 'email' && <a href={`mailto:${value}`}>{value}</a>}
       {type === 'tel' && <a href={`tel:${value}`}>{value}</a>}
       {type === 'address' && <a href={`https://maps.google.com/?q=${encodeURIComponent(value)}`}>{value}</a>}
-      {!type && <p>{value}</p>}
+      {!type && <p className='mt-0'>{value}</p>}
     </span>
   );
 }

@@ -44,7 +44,7 @@ export function LoginForm() {
         } else if (response?.error === 'invalid_token') {
           form.setError('token', { message: 'Hibás token' });
         } else if (response?.ok) {
-          router.push('/profile');
+          router.push('/feed');
           router.refresh();
         } else if (response?.status === 401) {
           form.setError('email', { message: 'Hibás e-mail cím vagy jelszó' });

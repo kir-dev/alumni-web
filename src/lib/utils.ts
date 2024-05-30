@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import crypto from 'crypto';
-import { format, isSameDay, isSameYear } from 'date-fns';
+import { format, formatRelative, isSameDay, isSameYear } from 'date-fns';
 import { hu } from 'date-fns/locale/hu';
 import { twMerge } from 'tailwind-merge';
 
@@ -15,6 +15,10 @@ export function hashPassword(password: string): string {
 
 export function formatHu(date: string | number | Date, formatString: string): string {
   return format(date, formatString, { locale: hu });
+}
+
+export function formatRelativeHu(date: string | number | Date, baseDate: string | number | Date): string {
+  return formatRelative(date, baseDate, { locale: hu });
 }
 
 export function getFormattedDateInterval(start: string | number | Date, end: string | number | Date): string {
