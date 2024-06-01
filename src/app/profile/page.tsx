@@ -1,8 +1,9 @@
+import { isBefore, subYears } from 'date-fns';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbHome, TbMailCheck, TbMailExclamation, TbMailX, TbPhone } from 'react-icons/tb';
+import { TbHome, TbMailCheck, TbMailExclamation, TbMailX, TbPhone, TbUserExclamation } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
@@ -10,7 +11,7 @@ import { RequestEmailVerification } from '@/components/profile/request-email-ver
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
-import { Alert, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 import { authOptions } from '@/config/auth.config';
@@ -67,6 +68,7 @@ export default async function ProfilePage() {
   }
 
   const emailVerified = Boolean(user.emailVerified);
+  const profileOutdated = isBefore(new Date(user.updatedAt), subYears(new Date(), 1));
 
   return (
     <main>
@@ -79,6 +81,15 @@ export default async function ProfilePage() {
             <RequestEmailVerification />
           </Alert>
         </Providers>
+      )}
+      {profileOutdated && (
+        <Alert variant='warning' className='mt-5'>
+          <TbUserExclamation />
+          <AlertTitle>Ellenőrizd a profilod adatait!</AlertTitle>
+          <AlertDescription>
+            A profilod adatai több mint egy éve nem frissültek. Kérjük, hogy frissítsd és ments rá az adataidra!
+          </AlertDescription>
+        </Alert>
       )}
       <Card className='mt-5'>
         <CardContent className='flex flex-col md:flex-row justify-between md:items-center gap-5 pt-5'>

@@ -68,7 +68,7 @@ export const joinGroup = privateProcedure.input(JoinGroupDto).mutation(async (op
 
   singleSendEmail({
     to: opts.ctx.session.user.email,
-    subject: `${membership.group.name} csoporthoz csatlakoztál!`,
+    subject: 'Csoporthoz csatlakoztál!',
     html: render(
       MembershipStatusEmail({
         groupName: membership.group.name,
@@ -110,7 +110,7 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
 
   singleSendEmail({
     to: membership.user.email,
-    subject: `${membership.group.name} csoporttagságod státusza megváltozott`,
+    subject: 'Csoporttagságod státusza megváltozott',
     html: render(
       MembershipStatusEmail({
         groupName: membership.group.name,
