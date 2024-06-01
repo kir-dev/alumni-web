@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { prismaClient } from '@/config/prisma.config';
-import { batchSendEmail } from '@/lib/email';
+import { batchSendEmail, singleSendEmail } from '@/lib/email';
+import { StatusMap } from '@/lib/group';
 import { groupAdminProcedure, privateProcedure, superAdminProcedure } from '@/trpc/trpc';
 import {
   CreateGroupDto,
@@ -16,6 +17,7 @@ import {
 } from '@/types/group.types';
 
 import GroupGeneralEmail from '../../emails/group-general';
+import MembershipStatusEmail from '../../emails/membership-status';
 
 export const getGroups = superAdminProcedure.query(async () => {
   return prismaClient.group.findMany();
@@ -54,12 +56,28 @@ export const updateGroup = groupAdminProcedure.input(UpdateGroupDto).mutation(as
 export const joinGroup = privateProcedure.input(JoinGroupDto).mutation(async (opts) => {
   if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
-  return prismaClient.membership.create({
+  const membership = await prismaClient.membership.create({
     data: {
       groupId: opts.input,
       userId: opts.ctx.session.user.id,
     },
+    include: {
+      group: true,
+    },
   });
+
+  singleSendEmail({
+    to: opts.ctx.session.user.email,
+    subject: `${membership.group.name} csoporthoz csatlakoztál!`,
+    html: render(
+      MembershipStatusEmail({
+        groupName: membership.group.name,
+        status: StatusMap[membership.status].label,
+      })
+    ),
+  });
+
+  return membership;
 });
 
 export const leaveGroup = privateProcedure.input(JoinGroupDto).mutation(async (opts) => {
@@ -74,15 +92,34 @@ export const leaveGroup = privateProcedure.input(JoinGroupDto).mutation(async (o
 });
 
 export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutation(async (opts) => {
-  return prismaClient.membership.updateMany({
+  const membership = await prismaClient.membership.update({
     where: {
-      groupId: opts.input.groupId,
-      userId: opts.input.userId,
+      userId_groupId: {
+        groupId: opts.input.groupId,
+        userId: opts.input.userId,
+      },
     },
     data: {
       status: opts.input.status,
     },
+    include: {
+      user: true,
+      group: true,
+    },
   });
+
+  singleSendEmail({
+    to: membership.user.email,
+    subject: `${membership.group.name} csoporttagságod státusza megváltozott`,
+    html: render(
+      MembershipStatusEmail({
+        groupName: membership.group.name,
+        status: StatusMap[membership.status].label,
+      })
+    ),
+  });
+
+  return membership;
 });
 
 export const deleteMembership = groupAdminProcedure.input(DeleteMembershipDto).mutation(async (opts) => {

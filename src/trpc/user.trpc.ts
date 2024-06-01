@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
-import { sendEmail } from '@/lib/email';
+import { singleSendEmail } from '@/lib/email';
 import { generateRandomString, hashPassword } from '@/lib/utils';
 import { privateProcedure, publicProcedure } from '@/trpc/trpc';
 import { PasswordResetDto, RegisterDto, UpdateUserProfileDto, UserProfileDto } from '@/types/user.types';
@@ -46,7 +46,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
     },
   });
 
-  sendEmail({
+  singleSendEmail({
     to: user.email,
     subject: 'Üdvözlünk az Almuni Weben 👋',
     html: render(
@@ -95,7 +95,7 @@ export const resetPassword = publicProcedure.input(PasswordResetDto).mutation(as
     },
   });
 
-  sendEmail({
+  singleSendEmail({
     to: user.email,
     subject: 'Jelszó visszaállítás',
     html: render(
@@ -236,7 +236,7 @@ async function createEmailVerificationSession(userId: string) {
     },
   });
 
-  sendEmail({
+  singleSendEmail({
     to: user.email,
     subject: 'E-mail cím megerősítése',
     html: render(

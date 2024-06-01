@@ -1,16 +1,16 @@
 'use client';
 
-import { Membership, MembershipStatus, User } from '@prisma/client';
-import type { VariantProps } from 'class-variance-authority';
+import { Membership, User } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { TbCheck, TbShieldMinus, TbShieldPlus, TbTrash, TbX } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
-import { Badge, badgeVariants } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { LoadingButton } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { StatusMap } from '@/lib/group';
 
 interface MemberListProps {
   memberships: (Membership & {
@@ -120,9 +120,3 @@ export function MembersList({ memberships, groupId }: MemberListProps) {
     </Card>
   );
 }
-
-const StatusMap: Record<MembershipStatus, { label: string; color: VariantProps<typeof badgeVariants>['variant'] }> = {
-  Approved: { label: 'Elfogadva', color: 'green' },
-  Pending: { label: 'Függőben', color: 'yellow' },
-  Rejected: { label: 'Elutasítva', color: 'red' },
-};
