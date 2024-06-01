@@ -22,13 +22,16 @@ import { TbTrashX } from 'react-icons/tb';
 
 import { BlockFieldProps } from '@/components/sites/editor/block-field-distributor';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 
 const MDXEditor = dynamic(() => import('./md-editor'), {
   ssr: false,
 });
 
-function ToolbarContents() {
+interface ToolbarContentsProps {
+  onDelete: () => void;
+}
+
+function ToolbarContents({ onDelete }: ToolbarContentsProps) {
   return (
     <>
       <BoldItalicUnderlineToggles />
@@ -37,6 +40,9 @@ function ToolbarContents() {
       <ListsToggle options={['number', 'bullet']} />
       <BlockTypeSelect />
       <UndoRedo />
+      <Button onClick={onDelete} size='icon' variant='destructiveOutline' title='Törlés'>
+        <TbTrashX />
+      </Button>
     </>
   );
 }
@@ -44,33 +50,23 @@ function ToolbarContents() {
 export function TextBlockField({ index, onChange, onDelete, value }: BlockFieldProps) {
   const ref = useRef<MDXEditorMethods>(null);
   return (
-    <Card>
-      <CardHeader>Szöveg</CardHeader>
-      <CardContent>
-        <MDXEditor
-          ref={ref}
-          plugins={[
-            headingsPlugin(),
-            listsPlugin(),
-            tablePlugin(),
-            linkPlugin(),
-            linkDialogPlugin(),
-            quotePlugin(),
-            thematicBreakPlugin(),
-            markdownShortcutPlugin(),
-            toolbarPlugin({
-              toolbarContents: ToolbarContents,
-            }),
-          ]}
-          markdown={value}
-          onChange={(value) => onChange(index, value)}
-        />
-      </CardContent>
-      <CardFooter className='justify-end'>
-        <Button variant='destructiveOutline' size='icon' onClick={() => onDelete(index)}>
-          <TbTrashX />
-        </Button>
-      </CardFooter>
-    </Card>
+    <MDXEditor
+      ref={ref}
+      plugins={[
+        headingsPlugin(),
+        listsPlugin(),
+        tablePlugin(),
+        linkPlugin(),
+        linkDialogPlugin(),
+        quotePlugin(),
+        thematicBreakPlugin(),
+        markdownShortcutPlugin(),
+        toolbarPlugin({
+          toolbarContents: () => ToolbarContents({ onDelete: () => onDelete(index) }),
+        }),
+      ]}
+      markdown={value}
+      onChange={(value) => onChange(index, value)}
+    />
   );
 }

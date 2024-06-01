@@ -46,7 +46,7 @@ ul{
     @apply text-blue-500 underline cursor-pointer;
 }
 
-.mdxeditor blockquote{
+blockquote{
     @apply pl-4 relative before:bg-slate-300 before:content-[''] before:block before:w-1 before:h-full before:absolute before:left-0 before:top-0 before:bottom-0 before:rounded-full;
 }
 

@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import Image from 'next/image';
 import React, { DragEventHandler, forwardRef, useState } from 'react';
 import { Control, Controller, ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { TbCircleCheckFilled, TbCircleXFilled, TbCloudUpload, TbFile } from 'react-icons/tb';
+import { TbCircleCheckFilled, TbCircleXFilled, TbCloudUpload, TbFile, TbLoader } from 'react-icons/tb';
 
 interface FileInputFieldProps<T extends FieldValues> {
   control: Control<T>;
@@ -35,6 +35,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
   ({ label, error, accept, className, value, name, onChange }, ref) => {
     const [blob, setBlob] = useState<PutBlobResult | null>(null);
     const [uploadError, setUploadError] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {
@@ -53,16 +54,21 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     };
 
     const handleFileSelect = (file: File) => {
+      setLoading(true);
       upload(file.name, file, {
         access: 'public',
         handleUploadUrl: '/api/files/upload',
       })
         .then((res) => {
           setBlob(res);
+          setUploadError(false);
           onChange(res.url);
         })
         .catch(() => {
           setUploadError(true);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     };
 
@@ -73,7 +79,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     return (
       <div className={className}>
         {label && <label>{label}</label>}
-        <label htmlFor={name}>
+        <label className='m-0' htmlFor={name}>
           <div
             onDrop={dropHandler}
             onDragOver={dragOverHandler}
@@ -90,13 +96,14 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               )}
             </div>
             <div
-              className={clsx('absolute right-1 top-1', {
+              className={clsx('absolute right-1 bottom-1', {
                 'text-green-500': Boolean(blob),
                 'text-red-500': uploadError,
               })}
             >
               {Boolean(blob) && <TbCircleCheckFilled size={30} />}
               {uploadError && <TbCircleXFilled size={30} />}
+              {loading && <TbLoader size={30} className='animate-spin' />}
             </div>
           </div>
         </label>

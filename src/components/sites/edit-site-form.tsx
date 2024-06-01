@@ -2,15 +2,16 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SiteBlock, StaticSite } from '@prisma/client';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { TbExternalLink } from 'react-icons/tb';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { AddBlockField } from '@/components/sites/editor/add-block-field';
 import { BlockFieldDistributor } from '@/components/sites/editor/block-field-distributor';
-import { Button } from '@/components/ui/button';
-import { TextField } from '@/components/ui/fields';
+import { Button, LoadingButton } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { EditSiteDto, StaticSiteBlock } from '@/types/site-editor.types';
 
@@ -76,11 +77,10 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField
-          control={form.control}
-          label='Cím'
-          name='title'
-          description='Speciális címek: Főoldal, Adatvédelem, Impresszum, Kapcsolat'
+        <input
+          placeholder='Oldal címe'
+          className='bg-transparent text-3xl font-bold text-primary-900 dark:text-primary-100 outline-none w-full'
+          {...form.register('title')}
         />
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
@@ -88,7 +88,17 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
           <Button variant='destructiveOutline' type='button' onClick={onDelete}>
             Oldal törlése
           </Button>
-          <Button type='submit'>Mentés</Button>
+          <div className='flex gap-2'>
+            <Button variant='outline' asChild>
+              <Link href={`/sites/${site.url}`}>
+                Oldal megtekintése
+                <TbExternalLink />
+              </Link>
+            </Button>
+            <LoadingButton isLoading={editSite.isPending} type='submit'>
+              Mentés
+            </LoadingButton>
+          </div>
         </div>
       </form>
     </Form>
