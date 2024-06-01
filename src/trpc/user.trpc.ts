@@ -6,14 +6,13 @@ import { z } from 'zod';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
+import EmailVerification from '@/emails/email-verification';
+import PasswordResetEmail from '@/emails/password-reset';
+import Welcome from '@/emails/welcome';
 import { singleSendEmail } from '@/lib/email';
 import { generateRandomString, hashPassword } from '@/lib/utils';
 import { privateProcedure, publicProcedure } from '@/trpc/trpc';
 import { PasswordResetDto, RegisterDto, UpdateUserProfileDto, UserProfileDto } from '@/types/user.types';
-
-import EmailVerification from '../../emails/email-verification';
-import PasswordResetEmail from '../../emails/password-reset';
-import Welcome from '../../emails/welcome';
 
 export const registerUser = publicProcedure.input(RegisterDto).mutation(async (opts): Promise<UserProfileDto> => {
   const { password, ...data } = opts.input;

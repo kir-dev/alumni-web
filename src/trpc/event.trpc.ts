@@ -3,6 +3,9 @@ import { TRPCError } from '@trpc/server';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
+import DeleteEventEmail from '@/emails/delete-event';
+import NewEventEmail from '@/emails/new-event';
+import UpdateEventEmail from '@/emails/update-event';
 import { batchSendEmail } from '@/lib/email';
 import { getEventDifference } from '@/lib/event';
 import { groupAdminProcedure, privateProcedure } from '@/trpc/trpc';
@@ -13,10 +16,6 @@ import {
   GetEventApplicationForUserDto,
   UpdateEventDto,
 } from '@/types/event.types';
-
-import DeleteEventEmail from '../../emails/delete-event';
-import NewEventEmail from '../../emails/new-event';
-import UpdateEventEmail from '../../emails/update-event';
 
 export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(async (opts) => {
   const event = await prismaClient.event.create({

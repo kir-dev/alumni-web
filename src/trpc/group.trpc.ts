@@ -3,6 +3,8 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { prismaClient } from '@/config/prisma.config';
+import GroupGeneralEmail from '@/emails/group-general';
+import MembershipStatusEmail from '@/emails/membership-status';
 import { batchSendEmail, singleSendEmail } from '@/lib/email';
 import { StatusMap } from '@/lib/group';
 import { groupAdminProcedure, privateProcedure, superAdminProcedure } from '@/trpc/trpc';
@@ -15,9 +17,6 @@ import {
   ToggleAdminDto,
   UpdateGroupDto,
 } from '@/types/group.types';
-
-import GroupGeneralEmail from '../../emails/group-general';
-import MembershipStatusEmail from '../../emails/membership-status';
 
 export const getGroups = superAdminProcedure.query(async () => {
   return prismaClient.group.findMany();

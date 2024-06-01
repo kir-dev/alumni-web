@@ -3,9 +3,8 @@ import { subYears } from 'date-fns';
 import { NextResponse } from 'next/server';
 
 import { prismaClient } from '@/config/prisma.config';
+import GeneralEmail from '@/emails/general';
 import { batchSendEmail } from '@/lib/email';
-
-import GeneralEmail from '../../../../emails/general';
 
 export async function GET() {
   await notifyOutdatedProfiles();
