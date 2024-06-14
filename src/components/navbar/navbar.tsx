@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link, { LinkProps } from 'next/link';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { TbChevronDown, TbMenu } from 'react-icons/tb';
