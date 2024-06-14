@@ -4,6 +4,9 @@ import crypto from 'crypto';
 import { format, formatRelative, isSameDay, isSameYear } from 'date-fns';
 import { hu } from 'date-fns/locale/hu';
 import { twMerge } from 'tailwind-merge';
+import resolveConfig from 'tailwindcss/resolveConfig';
+
+import tailwindConfig from '../../tailwind.config';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -96,4 +99,31 @@ export function generateRandomString(length: number): string {
     randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return randomPart;
+}
+
+const fullConfig = resolveConfig(tailwindConfig);
+
+export function generateGlobalThemePalette(baseColor: string) {
+  const colors = fullConfig.theme?.colors;
+  if (!colors) return '';
+  const colorScheme = colors[baseColor as keyof typeof colors];
+  if (!colorScheme) return '';
+  let text = ':root{\n';
+  Object.entries(colorScheme).forEach(([key, value]) => {
+    text += `--color-primary-${key}: ${value};\n`;
+  });
+  text += '}';
+  return text;
+}
+
+export function getAvailableColors(): { value: string; color: string }[] {
+  const colors = fullConfig.theme?.colors;
+  if (!colors) return [];
+  return Object.entries(colors)
+    .map(([key, value]) => ({ value: key, color: value[500] }))
+    .filter((color) => ['inherit', 'current', 'transparent', 'black', 'white'].indexOf(color.value) === -1)
+    .sort((a) => {
+      if (['primary', 'bme'].includes(a.value)) return -1;
+      return 1;
+    });
 }

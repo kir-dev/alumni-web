@@ -5,6 +5,7 @@ import Link, { LinkProps } from 'next/link';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { TbChevronDown, TbMenu } from 'react-icons/tb';
 
+import { Icon } from '@/components/icon/icon';
 import { ColorModeSelector } from '@/components/navbar/color-mode-selector';
 import { Button } from '@/components/ui/button';
 import {
@@ -45,7 +46,7 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
     >
       <div className='flex justify-between items-center container px-10 py-5'>
         <Link href='/' className='flex items-center gap-2'>
-          <Image src='/icon.png' alt='Sch' width={100} height={100} className='h-10 w-10' />
+          <Icon className='h-10 w-10' />
           <div className='text-xl text-primary-500 dark:text-primary-300'>Schönherz Alumni</div>
         </Link>
         <div className='flex z-10'>

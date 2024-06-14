@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/button';
 import { ColorPicker } from '@/components/ui/color-picker';
 import { SelectField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
@@ -21,6 +21,7 @@ export function CreateGroupForm() {
   const form = useForm<z.infer<typeof CreateGroupDto>>({
     resolver: zodResolver(CreateGroupDto),
     defaultValues: {
+      color: 'primary',
       parentGroupId: 'no-parent',
     },
   });
@@ -48,9 +49,9 @@ export function CreateGroupForm() {
         <TextAreaField control={form.control} name='description' label='Csoport leírása' />
         <ColorPicker control={form.control} name='color' label='Csoport színe' />
         <SelectField control={form.control} name='parentGroupId' label='Szülő csoport' options={options} />
-        <Button className='mt-5' type='submit'>
+        <LoadingButton isLoading={createGroup.isPending} className='mt-5' type='submit'>
           Létrehozás
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );

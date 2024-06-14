@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const CreateGroupDto = z.object({
   name: z.string(),
   description: z.string(),
-  color: z.string().regex(/^#[0-9A-F]{6}$/i),
+  color: z.string(),
   parentGroupId: z.string().optional(),
 });
 
@@ -12,10 +12,7 @@ export const UpdateGroupDto = z.object({
   data: z.object({
     name: z.string().optional(),
     description: z.string().optional(),
-    color: z
-      .string()
-      .regex(/^#[0-9A-F]{6}$/i)
-      .optional(),
+    color: z.string().optional(),
   }),
 });
 

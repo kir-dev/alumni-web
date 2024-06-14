@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/button';
 import { ColorPicker } from '@/components/ui/color-picker';
 import { TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
@@ -45,9 +45,9 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
         <TextField control={form.control} name='name' label='Csoport neve' />
         <TextAreaField control={form.control} name='description' label='Csoport leírása' />
         <ColorPicker control={form.control} name='color' label='Csoport színe' />
-        <Button className='mt-5' type='submit'>
+        <LoadingButton isLoading={updateGroup.isPending} className='mt-5' type='submit'>
           Mentés
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );

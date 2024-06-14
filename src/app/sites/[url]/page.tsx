@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { prismaClient } from '@/config/prisma.config';
 import { BlockMap } from '@/lib/static-site';
-import { getSuffixedTitle } from '@/lib/utils';
+import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
 
 interface SitePageProps {
   params: {
@@ -33,6 +33,7 @@ export default async function SitePage({ params }: SitePageProps) {
     },
     include: {
       siteBlocks: true,
+      group: true,
     },
   });
 
@@ -40,7 +41,9 @@ export default async function SitePage({ params }: SitePageProps) {
 
   return (
     <main className='space-y-10'>
+      {site.group?.color && <style>{generateGlobalThemePalette(site.group.color)}</style>}
       <h1>{site.title}</h1>
+      {site.group && <p>{site.group.name}</p>}
       {site.siteBlocks.map((block) => {
         const Renderer = BlockMap[block.type];
         return <Renderer key={block.id} content={block.content} />;

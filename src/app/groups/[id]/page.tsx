@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
-import { getSuffixedTitle } from '@/lib/utils';
+import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
 
 const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
 
@@ -102,6 +102,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
 
   return (
     <main>
+      {group.color && <style>{generateGlobalThemePalette(group.color)}</style>}
       <Card>
         <CardHeader>
           <CardTitle>{group.name}</CardTitle>
