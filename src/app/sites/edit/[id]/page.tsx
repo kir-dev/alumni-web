@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 
 import Providers from '@/components/providers';
-import { EditSiteForm } from '@/components/sites/edit-site-form';
+import { EditGlobalSite } from '@/components/sites/edit-global-site';
 import Forbidden from '@/components/sites/forbidden';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
@@ -37,7 +37,7 @@ export default async function EditSitePage({ params }: { params: { id: string } 
   return (
     <main>
       <Providers>
-        <EditSiteForm site={site} />
+        <EditGlobalSite site={site} />
       </Providers>
     </main>
   );

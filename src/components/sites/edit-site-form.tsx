@@ -1,14 +1,10 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SiteBlock, StaticSite } from '@prisma/client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { TbExternalLink } from 'react-icons/tb';
 import { z } from 'zod';
 
-import { trpc } from '@/_trpc/client';
 import { AddBlockField } from '@/components/sites/editor/add-block-field';
 import { BlockFieldDistributor } from '@/components/sites/editor/block-field-distributor';
 import { Button, LoadingButton } from '@/components/ui/button';
@@ -19,12 +15,13 @@ interface EditSiteFormProps {
   site: StaticSite & {
     siteBlocks: SiteBlock[];
   };
+  onSave: (input: z.infer<typeof EditSiteDto>) => void;
+  onDelete: () => void;
+  isLoading: boolean;
+  isDeleting: boolean;
 }
 
-export function EditSiteForm({ site }: EditSiteFormProps) {
-  const router = useRouter();
-  const editSite = trpc.editSite.useMutation();
-  const deleteSite = trpc.deleteSite.useMutation();
+export function EditSiteForm({ site, onSave, onDelete, isLoading, isDeleting }: EditSiteFormProps) {
   const form = useForm<z.infer<typeof EditSiteDto>>({
     defaultValues: {
       id: site.id,
@@ -60,19 +57,7 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
     form.setValue('blocks', [...blocks, newBlock]);
   };
 
-  const onSubmit = form.handleSubmit((data) => {
-    editSite.mutateAsync(data).then(() => {
-      router.push('/sites');
-      router.refresh();
-    });
-  });
-
-  const onDelete = () => {
-    deleteSite.mutateAsync(site.id).then(() => {
-      router.push('/sites');
-      router.refresh();
-    });
-  };
+  const onSubmit = form.handleSubmit(onSave);
 
   return (
     <Form {...form}>
@@ -85,9 +70,9 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
         <div className='flex justify-between gap-2 mt-10'>
-          <Button variant='destructiveOutline' type='button' onClick={onDelete}>
+          <LoadingButton isLoading={isDeleting} variant='destructiveOutline' type='button' onClick={onDelete}>
             Oldal törlése
-          </Button>
+          </LoadingButton>
           <div className='flex gap-2'>
             <Button variant='outline' asChild>
               <Link href={`/sites/${site.url}`}>
@@ -95,7 +80,7 @@ export function EditSiteForm({ site }: EditSiteFormProps) {
                 <TbExternalLink />
               </Link>
             </Button>
-            <LoadingButton isLoading={editSite.isPending} type='submit'>
+            <LoadingButton isLoading={isLoading} type='submit'>
               Mentés
             </LoadingButton>
           </div>

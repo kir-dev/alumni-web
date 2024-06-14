@@ -18,7 +18,14 @@ import {
   updateGroup,
 } from '@/trpc/group.trpc';
 import { createNews, deleteNews, updateNews } from '@/trpc/news.trpc';
-import { createSite, deleteSite, editSite } from '@/trpc/site-editor.trpc';
+import {
+  createGroupSite,
+  createSite,
+  deleteGroupSite,
+  deleteSite,
+  editGroupSite,
+  editSite,
+} from '@/trpc/site-editor.trpc';
 import { createTfa, removeTfa, verifyTfa } from '@/trpc/tfa.trpc';
 import { router } from '@/trpc/trpc';
 import {
@@ -54,8 +61,11 @@ export const appRouter = router({
   updateNews,
   deleteNews,
   createSite,
+  createGroupSite,
   editSite,
+  editGroupSite,
   deleteSite,
+  deleteGroupSite,
   createTfa,
   removeTfa,
   verifyTfa,

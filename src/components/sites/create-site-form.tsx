@@ -1,27 +1,41 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { trpc } from '@/_trpc/client';
 import { AddBlockField } from '@/components/sites/editor/add-block-field';
 import { BlockFieldDistributor } from '@/components/sites/editor/block-field-distributor';
-import { Button } from '@/components/ui/button';
-import { TextField } from '@/components/ui/fields';
-import { Form } from '@/components/ui/form';
+import { LoadingButton } from '@/components/ui/button';
+import { Form, FormMessage } from '@/components/ui/form';
+import { SpecialSiteSlugs } from '@/lib/static-site';
+import { slugify } from '@/lib/utils';
 import { CreateSiteDto, StaticSiteBlock } from '@/types/site-editor.types';
 
-export function CreateSiteForm() {
-  const router = useRouter();
-  const createSite = trpc.createSite.useMutation();
+interface CreateSiteFormProps {
+  onSave: (input: z.infer<typeof CreateSiteDto>) => void;
+  isLoading: boolean;
+  isTitleRestricted?: boolean;
+}
+
+export function CreateSiteForm({ onSave, isLoading, isTitleRestricted }: CreateSiteFormProps) {
   const form = useForm<z.infer<typeof CreateSiteDto>>({
     defaultValues: {
       title: '',
       blocks: [],
     },
-    resolver: zodResolver(CreateSiteDto),
+    resolver: zodResolver(
+      CreateSiteDto.refine(
+        (data) => {
+          if (isTitleRestricted) {
+            return !SpecialSiteSlugs.includes(slugify(data.title));
+          }
+          return true;
+        },
+        {
+          message: 'Ez a cím fenn van tartva. Kérlek válassz másikat.',
+          path: ['title'],
+        }
+      )
+    ),
   });
 
   const onAddBlock = (type: StaticSiteBlock['type']) => {
@@ -47,26 +61,23 @@ export function CreateSiteForm() {
     form.setValue('blocks', [...blocks, newBlock]);
   };
 
-  const onSubmit = form.handleSubmit((data) => {
-    createSite.mutateAsync(data).then(() => {
-      router.push('/sites');
-    });
-  });
+  const onSubmit = form.handleSubmit(onSave);
 
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
-        <TextField
-          control={form.control}
-          label='Cím'
-          name='title'
-          description='Speciális címek: Főoldal, Adatvédelem, Impresszum, Kapcsolat'
+        <input
+          placeholder='Oldal címe'
+          className='bg-transparent text-3xl font-bold text-primary-900 dark:text-primary-100 outline-none w-full'
+          {...form.register('title')}
         />
+        {form.formState.errors.title && <FormMessage>{form.formState.errors.title.message}</FormMessage>}
+
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
-        <Button className='mt-10' type='submit'>
+        <LoadingButton isLoading={isLoading} className='mt-10' type='submit'>
           Létrehozás
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );

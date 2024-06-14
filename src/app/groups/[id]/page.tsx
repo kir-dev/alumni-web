@@ -4,13 +4,14 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbCalendarPlus, TbEdit, TbUsersGroup } from 'react-icons/tb';
+import { TbBrowserPlus, TbCalendarPlus, TbEdit, TbTextPlus, TbUsersGroup } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { JoinButton } from '@/components/group/join-button';
 import { NewsListItem } from '@/components/group/news-list-item';
 import Providers from '@/components/providers';
+import { SiteListItem } from '@/components/sites/site-list-item';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authOptions } from '@/config/auth.config';
@@ -88,6 +89,13 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
           },
     },
   });
+
+  const staticSites = await prismaClient.staticSite.findMany({
+    where: {
+      groupId: params.id,
+    },
+  });
+
   const sortedEvents = events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
   const sortedNews = news.sort((a, b) => new Date(a.publishDate).getTime() - new Date(b.publishDate).getTime());
@@ -164,7 +172,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
         {canEdit && (
           <Button asChild>
             <Link href={`/groups/${group.id}/news/new`}>
-              <TbCalendarPlus />
+              <TbTextPlus />
               Új hír
             </Link>
           </Button>
@@ -183,6 +191,27 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
             {group.subGroups.map((subGroup) => (
               <GroupListItem group={subGroup} key={subGroup.id} />
             ))}
+          </div>
+        </>
+      )}
+      {canEdit && (
+        <>
+          <div className='flex gap-5 items-center mt-10'>
+            <h2>Statikus oldalak</h2>
+            {canEdit && (
+              <Button asChild>
+                <Link href={`/groups/${group.id}/sites/new`}>
+                  <TbBrowserPlus />
+                  Új statikus oldal
+                </Link>
+              </Button>
+            )}
+          </div>
+          <div className='mt-5'>
+            {staticSites.map((site) => (
+              <SiteListItem key={site.id} site={site} />
+            ))}
+            {staticSites.length === 0 && <p>Nincsenek statikus oldalak.</p>}
           </div>
         </>
       )}

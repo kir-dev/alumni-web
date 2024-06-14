@@ -13,6 +13,7 @@ export default async function Home() {
   const site = await prismaClient.staticSite.findFirst({
     where: {
       url: 'fooldal',
+      groupId: null,
     },
     include: {
       siteBlocks: true,

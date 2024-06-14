@@ -26,9 +26,10 @@ model Group {
   members Membership[]
   events  Event[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  News      News[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  News        News[]
+  staticSites StaticSite[]
 }
 
 model Membership {
@@ -37,8 +38,8 @@ model Membership {
   isAdmin Boolean          @default(false)
   status  MembershipStatus @default(Pending)
 
-  user  User  @relation(fields: [userId], references: [id])
-  group Group @relation(fields: [groupId], references: [id])
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,7 +64,7 @@ model Event {
   isPrivate Boolean @default(false)
 
   groupId String
-  group   Group  @relation(fields: [groupId], references: [id])
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
@@ -89,7 +90,7 @@ model News {
   content String
 
   groupId String
-  group   Group  @relation(fields: [groupId], references: [id])
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   publishDate DateTime
   isPrivate   Boolean  @default(false)
@@ -183,6 +184,8 @@ model StaticSite {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   siteBlocks SiteBlock[]
+  groupId    String?
+  group      Group?      @relation(fields: [groupId], references: [id], onDelete: SetNull)
 }
 
 model SiteBlock {

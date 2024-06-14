@@ -24,7 +24,11 @@ export default async function SitesPage() {
     return notFound();
   }
 
-  const sites = await prismaClient.staticSite.findMany();
+  const sites = await prismaClient.staticSite.findMany({
+    include: {
+      group: true,
+    },
+  });
 
   return (
     <main>
