@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { TbUserCancel, TbUserExclamation, TbUserMinus, TbUserPlus } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { Button, LoadingButton } from '@/components/ui/button';
 
 interface JoinButtonProps {
   membership: Membership | null;
@@ -17,7 +17,7 @@ export function JoinButton({ membership, groupId }: JoinButtonProps) {
   const joinGroup = trpc.joinGroup.useMutation();
   const leaveGroup = trpc.leaveGroup.useMutation();
 
-  const isPending = membership?.status === 'Pending';
+  const isPending = membership?.status === 'Pending' || membership?.status === 'Dependent';
   const isMember = membership?.status === 'Approved';
   const isRejected = membership?.status === 'Rejected';
 
@@ -31,19 +31,19 @@ export function JoinButton({ membership, groupId }: JoinButtonProps) {
 
   if (isPending) {
     return (
-      <Button onClick={onLeave} variant='outline'>
+      <LoadingButton isLoading={leaveGroup.isPending} onClick={onLeave} variant='outline'>
         <TbUserCancel />
         Jelentkezés visszavonása
-      </Button>
+      </LoadingButton>
     );
   }
 
   if (isMember) {
     return (
-      <Button onClick={onLeave} variant='outline'>
+      <LoadingButton isLoading={leaveGroup.isPending} onClick={onLeave} variant='outline'>
         <TbUserMinus />
         Kilépés
-      </Button>
+      </LoadingButton>
     );
   }
 
@@ -57,9 +57,9 @@ export function JoinButton({ membership, groupId }: JoinButtonProps) {
   }
 
   return (
-    <Button onClick={onJoin} variant='outline'>
+    <LoadingButton isLoading={joinGroup.isPending} onClick={onJoin} variant='outline'>
       <TbUserPlus />
       Csatlakozás
-    </Button>
+    </LoadingButton>
   );
 }

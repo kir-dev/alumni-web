@@ -8,7 +8,7 @@ import { ConfiguredTailwind } from './tailwind';
 
 interface MemberStatusEmailProps {
   groupName: string;
-  status: 'Elfogadva' | 'Függőben' | 'Elutasítva';
+  status: 'Elfogadva' | 'Függőben' | 'Elutasítva' | 'Szülő csoportra vár';
 }
 
 export default function MembershipStatusEmail({ groupName, status }: MemberStatusEmailProps) {

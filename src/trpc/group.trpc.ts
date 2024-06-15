@@ -1,8 +1,10 @@
+import { MembershipStatus, User } from '@prisma/client';
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { prismaClient } from '@/config/prisma.config';
+import GeneralEmail from '@/emails/general';
 import GroupGeneralEmail from '@/emails/group-general';
 import MembershipStatusEmail from '@/emails/membership-status';
 import { batchSendEmail, singleSendEmail } from '@/lib/email';
@@ -55,18 +57,53 @@ export const updateGroup = groupAdminProcedure.input(UpdateGroupDto).mutation(as
 export const joinGroup = privateProcedure.input(JoinGroupDto).mutation(async (opts) => {
   if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
-  const membership = await prismaClient.membership.create({
-    data: {
-      groupId: opts.input,
-      userId: opts.ctx.session.user.id,
-    },
-    include: {
-      group: true,
+  return await createMembership(opts.input, {
+    id: opts.ctx.session.user.id,
+    email: opts.ctx.session.user.email,
+  });
+});
+
+const createMembership = async (groupId: string, user: { id: string; email: string }) => {
+  const group = await prismaClient.group.findUnique({
+    where: {
+      id: groupId,
     },
   });
 
+  if (!group) throw new TRPCError({ code: 'NOT_FOUND' });
+
+  let isParentMember = false;
+
+  if (group.parentGroupId) {
+    const parentMembership = await prismaClient.membership.findFirst({
+      where: {
+        groupId: group.parentGroupId,
+        userId: user.id,
+      },
+    });
+    if (parentMembership) {
+      isParentMember = parentMembership.status === MembershipStatus.Approved;
+    } else {
+      await createMembership(group.parentGroupId, user);
+    }
+  }
+
+  const membership = await prismaClient.membership.create({
+    data: {
+      groupId,
+      userId: user.id,
+      status: !group.parentGroupId || isParentMember ? MembershipStatus.Pending : MembershipStatus.Dependent,
+    },
+    include: {
+      group: true,
+      user: true,
+    },
+  });
+
+  await sendJoinNotificationToGroupAdmins(groupId, membership.user);
+
   singleSendEmail({
-    to: opts.ctx.session.user.email,
+    to: user.email,
     subject: 'Csoporthoz csatlakoztál!',
     html: render(
       MembershipStatusEmail({
@@ -77,7 +114,7 @@ export const joinGroup = privateProcedure.input(JoinGroupDto).mutation(async (op
   });
 
   return membership;
-});
+};
 
 export const leaveGroup = privateProcedure.input(JoinGroupDto).mutation(async (opts) => {
   if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
@@ -93,6 +130,9 @@ export const leaveGroup = privateProcedure.input(JoinGroupDto).mutation(async (o
 export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutation(async (opts) => {
   const membership = await prismaClient.membership.update({
     where: {
+      status: {
+        in: [MembershipStatus.Pending, MembershipStatus.Rejected],
+      },
       userId_groupId: {
         groupId: opts.input.groupId,
         userId: opts.input.userId,
@@ -106,6 +146,21 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
       group: true,
     },
   });
+
+  if (opts.input.status === MembershipStatus.Approved) {
+    await prismaClient.membership.updateMany({
+      where: {
+        userId: opts.input.userId,
+        group: {
+          parentGroupId: opts.input.groupId,
+        },
+        status: MembershipStatus.Dependent,
+      },
+      data: {
+        status: MembershipStatus.Pending,
+      },
+    });
+  }
 
   singleSendEmail({
     to: membership.user.email,
@@ -182,3 +237,31 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
     ),
   });
 });
+
+async function sendJoinNotificationToGroupAdmins(groupId: string, user: User) {
+  const groupAdmins = await prismaClient.membership.findMany({
+    where: {
+      groupId,
+      isAdmin: true,
+    },
+    select: {
+      user: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+
+  const emails = groupAdmins.map((admin) => admin.user.email);
+
+  batchSendEmail({
+    to: emails,
+    subject: 'Új csatlakozási kérelem a csoportodhoz',
+    html: render(
+      GeneralEmail({
+        content: `${user.lastName} ${user.firstName} csatlakozni szeretne a csoportodhoz.`,
+      })
+    ),
+  });
+}

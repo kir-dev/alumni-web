@@ -2,8 +2,9 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { TbMailForward } from 'react-icons/tb';
+import { TbLoader, TbMailForward } from 'react-icons/tb';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
@@ -42,6 +43,7 @@ export default function SendEmail({ groupId }: SendEmailProps) {
     <Dialog>
       <Button variant='outline' asChild>
         <DialogTrigger>
+          {sendEmail.isPending && <TbLoader className='animate-spin' />}
           <TbMailForward /> E-mail küldése
         </DialogTrigger>
       </Button>
