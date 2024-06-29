@@ -44,6 +44,7 @@ export function RegisterForm() {
       <form onSubmit={onSubmit}>
         <TextField control={form.control} type='text' name='lastName' label='Vezetéknév' />
         <TextField control={form.control} type='text' name='firstName' label='Keresztnév' />
+        <TextField control={form.control} type='text' name='nickname' label='Becenév (nem kötelező)' />
         <TextField control={form.control} type='email' name='email' label='Email' />
         <TextField control={form.control} type='password' name='password' label='Jelszó' />
         <TextField control={form.control} type='tel' name='phone' label='Telefonszám' />

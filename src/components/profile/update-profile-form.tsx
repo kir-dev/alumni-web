@@ -34,6 +34,7 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
     defaultValues: {
       lastName: user.lastName,
       firstName: user.firstName,
+      nickname: user.nickname,
       email: user.email,
       phone: user.phone,
       address: user.address,
@@ -59,6 +60,7 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
             <DialogBody>
               <TextField control={form.control} name='lastName' label='Vezetéknév' />
               <TextField control={form.control} name='firstName' label='Keresztnév' />
+              <TextField control={form.control} name='nickname' label='Becenév (nem kötelező)' />
               <TextField control={form.control} name='email' label='E-mail cím' />
               <TextField control={form.control} name='phone' label='Telefonszám' autoComplete='tel' />
               <TextField control={form.control} name='address' label='Levelezési cím' />

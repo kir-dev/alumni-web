@@ -41,7 +41,8 @@ export function UserList({ users, currentUserId }: UserListProps) {
             {users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className='text-nowrap'>
-                  {user.lastName} {user.firstName} {user.isSuperAdmin && <Badge variant='outline'>Admin</Badge>}
+                  {user.lastName} {user.firstName} {user.nickname && ` (${user.nickname})`}{' '}
+                  {user.isSuperAdmin && <Badge variant='outline'>Admin</Badge>}
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell className='space-x-2 text-right text-nowrap'>

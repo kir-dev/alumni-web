@@ -104,6 +104,7 @@ model User {
   id            String    @id @default(uuid())
   firstName     String    @default("")
   lastName      String    @default("")
+  nickname      String    @default("")
   password      String?
   email         String    @unique
   emailVerified DateTime?

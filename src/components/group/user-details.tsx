@@ -30,6 +30,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
         <DialogHeader className='text-lg'>
           <DialogTitle>
             {user.lastName} {user.firstName}
+            {user.nickname && ` (${user.nickname})`}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className='space-y-4'>

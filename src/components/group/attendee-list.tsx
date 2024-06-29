@@ -31,7 +31,8 @@ export default function AttendeeList({ eventApplications }: AttendeeListProps) {
             {eventApplications.map((application) => (
               <TableRow key={application.user.id}>
                 <TableCell>
-                  {application.user.lastName} {application.user.firstName}{' '}
+                  {application.user.lastName} {application.user.firstName}
+                  {application.user.nickname && ` (${application.user.nickname})`}
                 </TableCell>
                 <TableCell>{application.user.email}</TableCell>
                 <TableCell>

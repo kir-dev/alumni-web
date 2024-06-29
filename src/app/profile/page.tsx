@@ -96,6 +96,7 @@ export default async function ProfilePage() {
           <div>
             <CardTitle>
               {user.firstName} {user.lastName}
+              {user.nickname && ` (${user.nickname})`}
             </CardTitle>
             <div className='mt-5'>
               <IconValueDisplay
