@@ -113,9 +113,6 @@ model User {
   phone   String @default("")
   address String @default("")
 
-  accounts Account[]
-  sessions Session[]
-
   Membership       Membership[]
   EventApplication EventApplication[]
 
@@ -137,14 +134,6 @@ model TfaToken {
   User User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Session {
-  id           String   @id @default(uuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model VerificationToken {
   token   String                @unique
   expires DateTime
@@ -158,25 +147,6 @@ model VerificationToken {
 enum VerificationTokenType {
   Email
   Password
-}
-
-model Account {
-  id                String  @id @default(uuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
 }
 
 model StaticSite {
