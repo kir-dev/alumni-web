@@ -29,6 +29,7 @@ import {
 import { createTfa, removeTfa, verifyTfa } from '@/trpc/tfa.trpc';
 import { router } from '@/trpc/trpc';
 import {
+  changePassword,
   deleteMyUser,
   getMyUser,
   getUserById,
@@ -46,6 +47,7 @@ export const appRouter = router({
   getUserById,
   getMyUser,
   deleteMyUser,
+  changePassword,
   getGroups,
   getGroup,
   createGroup,

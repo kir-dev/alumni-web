@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 const UpdateProfileForm = dynamic(() => import('@/components/profile/update-profile-form'), { ssr: false });
+const PasswordChangeDialog = dynamic(() => import('@/components/profile/password-change-dialog'), { ssr: false });
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -116,6 +117,7 @@ export default async function ProfilePage() {
             <SignOut />
             <Providers>
               <UpdateProfileForm user={user} />
+              <PasswordChangeDialog />
               <Tfa token={user.TfaToken} />
             </Providers>
           </div>

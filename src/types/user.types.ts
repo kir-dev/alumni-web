@@ -42,3 +42,14 @@ export const NewPasswordDto = z.object({
 });
 
 export type UserProfileDto = z.infer<typeof UpdateUserProfileDto>;
+
+export const ChangePasswordDto = z
+  .object({
+    oldPassword: z.string(),
+    newPassword: z.string().min(8, 'A jelszónak legalább 8 karakter hosszúnak kell lennie'),
+    newPasswordConfirmation: z.string(),
+  })
+  .refine((data) => data.newPassword === data.newPasswordConfirmation, {
+    message: 'A két jelszó nem egyezik meg',
+    path: ['newPasswordConfirmation'],
+  });

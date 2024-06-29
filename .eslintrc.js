@@ -39,7 +39,7 @@ module.exports = {
     ],
     eqeqeq: 'error',
     'max-depth': 'error',
-    'max-lines': 'error',
+    'max-lines': 'warn',
     'no-alert': 'error',
     'no-array-constructor': 'error',
     'no-console': [

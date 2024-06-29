@@ -12,7 +12,13 @@ import Welcome from '@/emails/welcome';
 import { singleSendEmail } from '@/lib/email';
 import { generateRandomString, hashPassword } from '@/lib/utils';
 import { privateProcedure, publicProcedure } from '@/trpc/trpc';
-import { PasswordResetDto, RegisterDto, UpdateUserProfileDto, UserProfileDto } from '@/types/user.types';
+import {
+  ChangePasswordDto,
+  PasswordResetDto,
+  RegisterDto,
+  UpdateUserProfileDto,
+  UserProfileDto,
+} from '@/types/user.types';
 
 export const registerUser = publicProcedure.input(RegisterDto).mutation(async (opts): Promise<UserProfileDto> => {
   const { password, ...data } = opts.input;
@@ -274,6 +280,31 @@ export const deleteMyUser = privateProcedure.mutation(async (opts) => {
   await prismaClient.user.delete({
     where: {
       id: opts.ctx.session.user.id,
+    },
+  });
+});
+
+export const changePassword = privateProcedure.input(ChangePasswordDto).mutation(async (opts) => {
+  if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
+
+  const user = await prismaClient.user.findUnique({
+    where: {
+      id: opts.ctx.session.user.id,
+    },
+  });
+
+  if (!user) throw new TRPCError({ code: 'NOT_FOUND', message: 'Felhasználó nem található' });
+
+  if (user.password !== hashPassword(opts.input.oldPassword)) {
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Hibás jelszó' });
+  }
+
+  await prismaClient.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      password: hashPassword(opts.input.newPassword),
     },
   });
 });
