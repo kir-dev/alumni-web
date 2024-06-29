@@ -1,6 +1,5 @@
 'use client';
 import { GroupDomain } from '@prisma/client';
-import { ListBlobResultBlob } from '@vercel/blob';
 import { TbCheck, TbX } from 'react-icons/tb';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -47,8 +46,4 @@ export function DomainList({ vercelDomains, groupDomains }: DomainListProps) {
       </CardContent>
     </Card>
   );
-}
-
-interface VercelDomainListProps {
-  domains: ListBlobResultBlob[];
 }
