@@ -5,8 +5,8 @@ export const RegisterDto = z.object({
   password: z
     .string({ required_error: 'Jelszó megadása kötelező' })
     .min(8, 'A jelszó legalább 8 karakter hosszú kell legyen'),
-  firstName: z.string({ required_error: 'Keresztnév megadása kötelező' }).min(1),
-  lastName: z.string({ required_error: 'Vezetéknév megadása kötelező' }).min(1),
+  firstName: z.string({ required_error: 'Keresztnév megadása kötelező' }).min(1, 'Keresztnév megadása kötelező'),
+  lastName: z.string({ required_error: 'Vezetéknév megadása kötelező' }).min(1, 'Vezetéknév megadása kötelező'),
   nickname: z.string().optional(),
   phone: z.string({ required_error: 'Telefonszám megadása kötelező' }).regex(/^\+?[0-9]+$/, 'Helytelen telefonszám'),
   address: z

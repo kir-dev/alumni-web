@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from 'react';
+import { HTMLInputTypeAttribute, ReactNode } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -152,7 +152,7 @@ export function DateField<TName extends FieldPath<TFieldValues>, TFieldValues ex
 interface CheckboxFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name: TName;
-  label: string;
+  label: ReactNode;
   description?: string;
 }
 
@@ -167,13 +167,17 @@ export function CheckboxField<TName extends FieldPath<TFieldValues>, TFieldValue
       control={control}
       name={name}
       render={({ field: { value, onChange, ...field }, fieldState }) => (
-        <FormItem className='items-center flex space-x-2'>
-          <Checkbox id={`${name}-checkbox`} checked={value} onCheckedChange={onChange} {...field} />
-          <div className='grid gap-1.5 leading-none'>
-            <FormLabel htmlFor={`${name}-checkbox`}>{label}</FormLabel>
-            {description && <FormDescription className='m-0'>{description}</FormDescription>}
-            {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
+        <FormItem>
+          <div className='flex space-x-2 items-center mt-5'>
+            <Checkbox id={`${name}-checkbox`} checked={value} onCheckedChange={onChange} {...field} />
+            <div>
+              <FormLabel className='m-0' htmlFor={`${name}-checkbox`}>
+                {label}
+              </FormLabel>
+              {description && <FormDescription className='m-0'>{description}</FormDescription>}
+            </div>
           </div>
+          {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
         </FormItem>
       )}
     />
