@@ -4,11 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@prisma/client';
 import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { Button } from '@/components/ui/button';
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import {
   Dialog,
   DialogClose,
@@ -27,6 +29,7 @@ interface UpdateProfileFormProps {
 }
 
 export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
+  const deleteMyUser = trpc.deleteMyUser.useMutation();
   const router = useRouter();
   const update = trpc.updateProfile.useMutation();
   const form = useForm<z.infer<typeof UpdateUserProfileDto>>({
@@ -45,6 +48,11 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
     await update.mutateAsync(data);
     router.refresh();
   });
+
+  const onDelete = async () => {
+    await deleteMyUser.mutateAsync();
+    await signOut();
+  };
 
   return (
     <Dialog>
@@ -65,8 +73,14 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
               <TextField control={form.control} name='phone' label='Telefonszám' autoComplete='tel' />
               <TextField control={form.control} name='address' label='Levelezési cím' />
             </DialogBody>
-            <DialogFooter>
-              <Button className='mt-5' type='submit' asChild>
+            <DialogFooter className='mt-5'>
+              <ConfirmationDialog
+                title='Felhasználóm törlése'
+                message='Biztosan törölni szeretnéd a felhasználódat? Ezzel az összes adataid törlésre kerülnek, és nem lesz lehetőséged visszaállítani azokat. Törlésre kerülnek a csoporttagságaid, jelentkezéseid is.'
+                onConfirm={onDelete}
+                trigger={<Button variant='destructiveOutline'>Felhasználóm törlése</Button>}
+              />
+              <Button type='submit' asChild>
                 <DialogClose>Mentés</DialogClose>
               </Button>
             </DialogFooter>

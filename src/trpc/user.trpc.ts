@@ -267,3 +267,13 @@ export const toggleSuperAdmin = privateProcedure.input(z.string()).mutation(asyn
     },
   });
 });
+
+export const deleteMyUser = privateProcedure.mutation(async (opts) => {
+  if (!opts.ctx.session?.user.id) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
+
+  await prismaClient.user.delete({
+    where: {
+      id: opts.ctx.session.user.id,
+    },
+  });
+});

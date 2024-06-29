@@ -39,7 +39,7 @@ export function ConfirmationDialog({
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button>{cancelText}</Button>
+            <Button variant='outline'>{cancelText}</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button onClick={onConfirm} variant='destructive'>
