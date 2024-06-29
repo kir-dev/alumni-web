@@ -1,3 +1,4 @@
+import { addDomain, checkDomain, deleteDomain } from '@/trpc/domain.trpc';
 import {
   createEvent,
   createEventApplication,
@@ -79,6 +80,9 @@ export const appRouter = router({
   sendEmail,
   toggleSuperAdmin,
   deleteEvent,
+  addDomain,
+  checkDomain,
+  deleteDomain,
 });
 
 export type AppRouter = typeof appRouter;

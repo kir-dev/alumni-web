@@ -1,5 +1,6 @@
 'use client';
 
+import { Group } from '@prisma/client';
 import Link, { LinkProps } from 'next/link';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { TbChevronDown, TbMenu } from 'react-icons/tb';
@@ -13,14 +14,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { cn, generateGlobalThemePalette } from '@/lib/utils';
 
 interface NavbarProps {
   isLoggedIn?: boolean;
   isAdmin?: boolean;
+  group?: Group;
 }
 
-export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
+export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [onTop, setOnTop] = useState(true);
 
@@ -43,10 +45,12 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
         'border-b bg-white shadow-sm dark:bg-slate-900 dark:shadow-slate-950 dark:border-0': !onTop,
       })}
     >
+      {group?.color && <style>{generateGlobalThemePalette(group.color)}</style>}
+
       <div className='flex justify-between items-center container px-10 py-5'>
         <Link href='/' className='flex items-center gap-2'>
           <Icon className='h-10 w-10' />
-          <div className='text-xl text-primary-500 dark:text-primary-300'>Schönherz Alumni</div>
+          <div className='text-xl text-primary-500 dark:text-primary-300'>{group?.name ?? 'Schönherz'} Alumni</div>
         </Link>
         <div className='flex z-10'>
           <div className='hidden md:flex'>
@@ -74,6 +78,9 @@ export function Navbar({ isLoggedIn, isAdmin }: NavbarProps) {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href='/admin/uploads'>Feltöltések</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href='/admin/domains'>Domének</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

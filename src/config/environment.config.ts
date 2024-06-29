@@ -13,3 +13,7 @@ export const EMAIL_USERNAME = env.get('EMAIL_USERNAME').required().asString();
 export const EMAIL_PASSWORD = env.get('EMAIL_PASSWORD').required().asString();
 export const EMAIL_FROM_NAME = env.get('EMAIL_FROM_NAME').required().asString();
 export const EMAIL_FROM_ADDRESS = env.get('EMAIL_FROM_ADDRESS').required().asString();
+
+export const VERCEL_PROJECT_ID = env.get('VERCEL_PROJECT_ID').required().asString();
+export const VERCEL_TEAM_ID = env.get('VERCEL_TEAM_ID').required().asString();
+export const VERCEL_API_TOKEN = env.get('VERCEL_API_TOKEN').required().asString();

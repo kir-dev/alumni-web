@@ -19,6 +19,7 @@ import { prismaClient } from '@/config/prisma.config';
 import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
 
 const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
+const DomainSettings = dynamic(() => import('@/components/group/domain-settings'), { ssr: false });
 
 interface GroupPageProps {
   params: {
@@ -51,6 +52,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
     include: {
       parentGroup: true,
       subGroups: true,
+      domain: true,
     },
   });
 
@@ -140,6 +142,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
               {canEdit && (
                 <Providers>
                   <SendEmail groupId={params.id} />
+                  <DomainSettings domain={group.domain} groupId={params.id} />
                 </Providers>
               )}
               {session && (

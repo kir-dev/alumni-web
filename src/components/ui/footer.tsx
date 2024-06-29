@@ -14,7 +14,7 @@ const FooterLinks: { label: string; href: string }[] = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className='bg-primary-500 dark:bg-slate-900 text-white text-center'>
+    <footer className='bg-primary-500 dark:bg-primary-900 text-white text-center'>
       <div className='flex justify-between items-center container p-10 flex-col md:flex-row gap-10'>
         <div>
           <div className='flex gap-2 items-center'>
