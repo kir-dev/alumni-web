@@ -6,10 +6,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button, LoadingButton } from '@/components/ui/button';
-import { CheckboxField, DateField, DateTimeField, TextAreaField, TextField } from '@/components/ui/fields';
+import { LoadingButton } from '@/components/ui/button';
+import { CheckboxField, DateTimeField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
-import { TimePicker } from '@/components/ui/time-picker';
 import { CreateNewsDto } from '@/types/news.types';
 
 interface CreateNewsFormProps {
