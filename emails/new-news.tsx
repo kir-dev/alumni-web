@@ -16,6 +16,7 @@ interface NewNewsEmailProps {
 }
 
 export default function NewNewsEmail({ news, newsLink, groupName }: NewNewsEmailProps) {
+  const contentParagraphs = news.content.split('\n');
   return (
     <Html>
       <Preview>Új hír a {groupName} csoportban!</Preview>
@@ -53,7 +54,9 @@ export default function NewNewsEmail({ news, newsLink, groupName }: NewNewsEmail
                 </Column>
               </Row>
             </Section>
-            <Text>{news.content}</Text>
+            {contentParagraphs.map((paragraph) => (
+              <Text key={paragraph}>{paragraph}</Text>
+            ))}
             <StyledButton href={newsLink}>Hír megnyitása</StyledButton>
             <Text>
               Üdvözlettel,

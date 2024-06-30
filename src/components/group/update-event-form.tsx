@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { Button } from '@/components/ui/button';
-import { CheckboxField, DateField, TextAreaField, TextField } from '@/components/ui/fields';
+import { CheckboxField, DateTimeField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { UpdateEventDto } from '@/types/event.types';
 
@@ -44,8 +44,8 @@ export function UpdateEventForm({ groupId, event }: CreateGroupFormProps) {
         <TextField control={form.control} name='name' label='Esemény neve' />
         <TextField control={form.control} name='location' label='Helyszín' />
         <TextAreaField control={form.control} name='description' label='Esemény leírása' />
-        <DateField control={form.control} name='startDate' label='Kezdés dátuma' />
-        <DateField control={form.control} name='endDate' label='Befejezés dátuma' />
+        <DateTimeField control={form.control} name='startDate' label='Kezdés dátuma' />
+        <DateTimeField control={form.control} name='endDate' label='Befejezés dátuma' />
         <CheckboxField
           control={form.control}
           name='isPrivate'

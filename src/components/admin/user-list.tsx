@@ -28,7 +28,7 @@ export function UserList({ users, currentUserId }: UserListProps) {
   };
   return (
     <Card className='mt-10'>
-      <CardContent className='p-0'>
+      <CardContent className='px-0'>
         <Table>
           <TableHeader>
             <TableRow>

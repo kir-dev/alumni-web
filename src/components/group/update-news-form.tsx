@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { LoadingButton } from '@/components/ui/button';
-import { CheckboxField, DateField, TextAreaField, TextField } from '@/components/ui/fields';
+import { CheckboxField, DateTimeField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { UpdateNewsDto } from '@/types/news.types';
 
@@ -40,7 +40,7 @@ export function UpdateNewsForm({ news }: UpdateNewsFormProps) {
       <form onSubmit={onSubmit}>
         <TextField control={form.control} name='title' label='Hír címe' />
         <TextAreaField control={form.control} name='content' label='Hír tartalma' />
-        <DateField control={form.control} name='publishDate' label='Publikálás dátuma (opcionális)' />
+        <DateTimeField control={form.control} name='publishDate' label='Publikálás dátuma (opcionális)' />
         <CheckboxField
           control={form.control}
           name='isPrivate'

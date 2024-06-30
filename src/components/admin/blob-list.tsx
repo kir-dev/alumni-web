@@ -12,7 +12,7 @@ interface BlobListProps {
 export function BlobList({ blobs }: BlobListProps) {
   return (
     <Card className='mt-10'>
-      <CardContent className='p-0'>
+      <CardContent className='px-0'>
         <Table>
           <TableHeader>
             <TableRow>

@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { Button } from '@/components/ui/button';
-import { CheckboxField, DateField, TextAreaField, TextField } from '@/components/ui/fields';
+import { Button, LoadingButton } from '@/components/ui/button';
+import { CheckboxField, DateField, DateTimeField, TextAreaField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
+import { TimePicker } from '@/components/ui/time-picker';
 import { CreateNewsDto } from '@/types/news.types';
 
 interface CreateNewsFormProps {
@@ -38,16 +39,16 @@ export function CreateNewsForm({ groupId }: CreateNewsFormProps) {
       <form onSubmit={onSubmit}>
         <TextField control={form.control} name='title' label='Hír címe' />
         <TextAreaField control={form.control} name='content' label='Hír tartalma' />
-        <DateField control={form.control} name='publishDate' label='Publikálás dátuma (opcionális)' />
+        <DateTimeField control={form.control} name='publishDate' label='Publikálás dátuma (opcionális)' />
         <CheckboxField
           control={form.control}
           name='isPrivate'
           label='Privát hír'
           description='Privát hír csak tagok számára elérhető'
         />
-        <Button className='mt-5' type='submit'>
+        <LoadingButton isLoading={createNews.isPending} className='mt-5' type='submit'>
           Létrehozás
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );
