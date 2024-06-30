@@ -8,6 +8,7 @@ import { getSuffixedTitle } from '@/lib/utils';
 interface SitePageProps {
   params: {
     url: string;
+    id: string;
   };
 }
 
@@ -15,22 +16,26 @@ export async function generateMetadata({ params }: SitePageProps): Promise<Metad
   const site = await prismaClient.staticSite.findFirst({
     where: {
       url: params.url,
-      groupId: null,
+      groupId: params.id,
+    },
+    include: {
+      group: true,
     },
   });
 
-  if (!site) return notFound();
+  if (!site || !site.group) return notFound();
 
   return {
     title: getSuffixedTitle(site.title),
-    description: 'Schönherz és a VIK Alumni oldala.',
+    description: `${site.group.name} oldala.`,
   };
 }
 
-export default async function GlobalSitePage({ params }: SitePageProps) {
+export default async function GroupSitePage({ params }: SitePageProps) {
   const site = await prismaClient.staticSite.findFirst({
     where: {
       url: params.url,
+      groupId: params.id,
     },
     include: {
       siteBlocks: true,
@@ -38,7 +43,7 @@ export default async function GlobalSitePage({ params }: SitePageProps) {
     },
   });
 
-  if (!site) return notFound();
+  if (!site || !site.group) return notFound();
 
   return <SitePage site={site} />;
 }

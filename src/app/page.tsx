@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 
 import { prismaClient } from '@/config/prisma.config';
+import { getDomainForHost } from '@/lib/server-utils';
 import { BlockMap } from '@/lib/static-site';
 import { getSuffixedTitle } from '@/lib/utils';
 
@@ -10,15 +11,19 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const site = await prismaClient.staticSite.findFirst({
-    where: {
-      url: 'fooldal',
-      groupId: null,
-    },
-    include: {
-      siteBlocks: true,
-    },
-  });
+  const site = await getHomeSiteForDomain();
+
+  if (!site) {
+    await prismaClient.staticSite.findFirst({
+      where: {
+        url: 'fooldal',
+        groupId: null,
+      },
+      include: {
+        siteBlocks: true,
+      },
+    });
+  }
 
   if (!site) return <main className='flex min-h-screen flex-col items-center justify-between p-24' />;
   return (
@@ -29,4 +34,22 @@ export default async function Home() {
       })}
     </main>
   );
+}
+
+async function getHomeSiteForDomain() {
+  const domain = await getDomainForHost();
+  if (!domain) return null;
+  return prismaClient.staticSite.findFirst({
+    where: {
+      url: 'fooldal',
+      group: {
+        domain: {
+          domain: domain.domain,
+        },
+      },
+    },
+    include: {
+      siteBlocks: true,
+    },
+  });
 }

@@ -1,3 +1,5 @@
+import { TRPCError } from '@trpc/server';
+
 import { prismaClient } from '@/config/prisma.config';
 import { slugify } from '@/lib/utils';
 import { groupAdminProcedure, superAdminProcedure } from '@/trpc/trpc';
@@ -11,6 +13,20 @@ import {
 } from '@/types/site-editor.types';
 
 export const createSite = superAdminProcedure.input(CreateSiteDto).mutation(async (opts) => {
+  const siteWithSameTitle = await prismaClient.staticSite.findFirst({
+    where: {
+      title: opts.input.title,
+      groupId: null,
+    },
+  });
+
+  if (siteWithSameTitle) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Ez a cím már foglalt. Kérlek válassz másikat.',
+    });
+  }
+
   return prismaClient.staticSite.create({
     data: {
       title: opts.input.title,
@@ -26,6 +42,20 @@ export const createSite = superAdminProcedure.input(CreateSiteDto).mutation(asyn
 });
 
 export const createGroupSite = groupAdminProcedure.input(CreateGroupSiteDto).mutation(async (opts) => {
+  const siteWithSameTitle = await prismaClient.staticSite.findFirst({
+    where: {
+      title: opts.input.title,
+      groupId: opts.input.groupId,
+    },
+  });
+
+  if (siteWithSameTitle) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Ez a cím már foglalt. Kérlek válassz másikat.',
+    });
+  }
+
   return prismaClient.staticSite.create({
     data: {
       title: opts.input.title,
@@ -42,6 +72,23 @@ export const createGroupSite = groupAdminProcedure.input(CreateGroupSiteDto).mut
 });
 
 export const editSite = superAdminProcedure.input(EditSiteDto).mutation(async (opts) => {
+  const siteWithSameTitle = await prismaClient.staticSite.findFirst({
+    where: {
+      id: {
+        not: opts.input.id,
+      },
+      title: opts.input.title,
+      groupId: null,
+    },
+  });
+
+  if (siteWithSameTitle) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Ez a cím már foglalt. Kérlek válassz másikat.',
+    });
+  }
+
   return prismaClient.staticSite.update({
     where: {
       id: opts.input.id,
@@ -61,6 +108,23 @@ export const editSite = superAdminProcedure.input(EditSiteDto).mutation(async (o
 });
 
 export const editGroupSite = superAdminProcedure.input(EditGroupSiteDto).mutation(async (opts) => {
+  const siteWithSameTitle = await prismaClient.staticSite.findFirst({
+    where: {
+      id: {
+        not: opts.input.id,
+      },
+      title: opts.input.title,
+      groupId: opts.input.groupId,
+    },
+  });
+
+  if (siteWithSameTitle) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Ez a cím már foglalt. Kérlek válassz másikat.',
+    });
+  }
+
   return prismaClient.staticSite.update({
     where: {
       id: opts.input.id,

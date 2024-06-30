@@ -14,15 +14,19 @@ export function SiteListItem({ site }: SiteListItemProps) {
   const link = site.groupId ? `/groups/${site.groupId}/sites/edit/${site.id}` : `/sites/edit/${site.id}`;
   return (
     <Link href={link}>
-      <Card className='mt-2'>
+      <Card className='mt-2 overflow-hidden'>
         <CardHeader className='flex-row justify-between items-center'>
           <div className='flex items-center space-x-2'>
             <CardTitle className='text-lg'>{site.title}</CardTitle>
-            {site.group && <Badge variant='outline'>{site.group.name}</Badge>}
+            {site.group && (
+              <Badge className='hidden md:block' variant='outline'>
+                {site.group.name}
+              </Badge>
+            )}
           </div>
           <div className='flex items-center space-x-2'>
             <Button variant='link' asChild>
-              <Link href={`/sites/${site.url}`} passHref>
+              <Link href={site.groupId ? `/groups/${site.groupId}/sites/${site.url}` : `/sites/${site.url}`} passHref>
                 Oldal megtekintése
                 <TbExternalLink />
               </Link>

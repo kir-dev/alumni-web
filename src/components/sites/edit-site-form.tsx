@@ -75,7 +75,7 @@ export function EditSiteForm({ site, onSave, onDelete, isLoading, isDeleting }: 
           </LoadingButton>
           <div className='flex gap-2'>
             <Button variant='outline' asChild>
-              <Link href={`/sites/${site.url}`}>
+              <Link href={site.groupId ? `/groups/${site.groupId}/sites/${site.url}` : `/sites/${site.url}`}>
                 Oldal megtekintése
                 <TbExternalLink />
               </Link>

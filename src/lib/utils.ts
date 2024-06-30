@@ -83,6 +83,10 @@ export function slugify(title: string) {
     .replace(/[^a-z0-9-]/g, '');
 }
 
+export function safeSlugify(title: string) {
+  return `${slugify(title)}-${generateRandomString(5)}`;
+}
+
 export function getSuffixedTitle(title: string, ...suffix: string[]): string {
   let suffixedTitle = title;
   suffix.forEach((s) => {
