@@ -11,6 +11,7 @@ import Rsvp from '@/components/group/rsvp';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
+import { UpdatedAt } from '@/components/ui/updated-at';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { getFormattedDateInterval, getSuffixedTitle } from '@/lib/utils';
@@ -122,6 +123,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
       <p>{getFormattedDateInterval(event.startDate, event.endDate)}</p>
       <IconValueDisplay className='text-slate-700 mt-5' icon={TbMapPin} value={event.location} type='address' />
       <p>{event.description}</p>
+      <UpdatedAt date={event.updatedAt} className='mt-5' />
       <Providers>
         <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />
         {canEdit && <AttendeeList eventApplications={applications} />}

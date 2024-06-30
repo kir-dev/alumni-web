@@ -7,6 +7,7 @@ import { getServerSession } from 'next-auth/next';
 import { DeleteNews } from '@/components/group/delete-news';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
+import { UpdatedAt } from '@/components/ui/updated-at';
 import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
 import { formatHu, getSuffixedTitle } from '@/lib/utils';
@@ -106,6 +107,7 @@ export default async function NewsDetailsPage({ params }: { params: { id: string
       <h1>{news.title}</h1>
       <p>{formatHu(news.publishDate, 'yyyy. MMMM dd. HH:mm')}</p>
       <p>{news.content}</p>
+      <UpdatedAt date={news.updatedAt} className='mt-5' />
       <Providers>
         {canEdit && (
           <div className='flex justify-end items-center gap-2 mt-5'>
