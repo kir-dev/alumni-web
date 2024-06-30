@@ -14,7 +14,7 @@ const FooterLinks: { label: string; href: string }[] = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className='bg-primary-500 dark:bg-primary-900 text-white text-center'>
+    <footer className='bg-slate-900 text-white text-center'>
       <div className='flex justify-between items-center container p-10 flex-col md:flex-row gap-10'>
         <div>
           <div className='flex gap-2 items-center'>
@@ -24,8 +24,8 @@ export function Footer() {
               </Button>
             ))}
           </div>
-          <hr className='border-primary-200 dark:border-slate-700 rounded-full my-2' />
-          <div className='text-primary-200 dark:text-slate-700'>
+          <hr className='border-slate-500 dark:border-slate-700 rounded-full my-2' />
+          <div className='text-slate-500 dark:text-slate-700'>
             Minden jog fenntartva &copy; 2024-{year} Schönherz & VIK Alumni
           </div>
         </div>

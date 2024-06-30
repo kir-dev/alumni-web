@@ -124,7 +124,7 @@ export function getAvailableColors(): { value: string; color: string }[] {
   const colors = fullConfig.theme?.colors;
   if (!colors) return [];
   return Object.entries(colors)
-    .map(([key, value]) => ({ value: key, color: value[500] }))
+    .map(([key, value]) => ({ value: key, color: key === 'primary' ? '#163b66' : value[500] }))
     .filter((color) => ['inherit', 'current', 'transparent', 'black', 'white'].indexOf(color.value) === -1)
     .sort((a) => {
       if (['primary', 'bme'].includes(a.value)) return -1;

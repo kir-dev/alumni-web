@@ -63,7 +63,7 @@ export default function SendEmail({ groupId }: SendEmailProps) {
                 description='Tipp: Használj sortöréseket új bekezdés létrehozásához.'
               />
             </DialogBody>
-            <DialogFooter>
+            <DialogFooter className='mt-5'>
               <Button type='reset' variant='outline' asChild>
                 <DialogClose>Mégse</DialogClose>
               </Button>
