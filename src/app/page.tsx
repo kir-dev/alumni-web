@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const site = await getHomeSiteForDomain();
+  let site = await getHomeSiteForDomain();
 
   if (!site) {
-    await prismaClient.staticSite.findFirst({
+    site = await prismaClient.staticSite.findFirst({
       where: {
         url: 'fooldal',
         groupId: null,
@@ -26,6 +26,7 @@ export default async function Home() {
   }
 
   if (!site) return <main className='flex min-h-screen flex-col items-center justify-between p-24' />;
+
   return (
     <main>
       {site.siteBlocks.map((block) => {
