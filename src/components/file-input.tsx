@@ -34,7 +34,7 @@ interface FileInputProps extends ControllerRenderProps {
 export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
   ({ label, error, accept, className, value, name, onChange }, ref) => {
     const [blob, setBlob] = useState<PutBlobResult | null>(null);
-    const [uploadError, setUploadError] = useState<boolean>(false);
+    const [uploadError, setUploadError] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,18 +54,18 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     };
 
     const handleFileSelect = (file: File) => {
-      setLoading(true);
+      if (!checkSize(file)) setUploadError('A fájl mérete nem lehet nagyobb, mint 10MB.');
       upload(file.name, file, {
         access: 'public',
         handleUploadUrl: '/api/files/upload',
       })
         .then((res) => {
           setBlob(res);
-          setUploadError(false);
+          setUploadError(undefined);
           onChange(res.url);
         })
         .catch(() => {
-          setUploadError(true);
+          setUploadError('Hiba történt a fájl feltöltése közben.');
         })
         .finally(() => {
           setLoading(false);
@@ -109,6 +109,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
         </label>
         <input ref={ref} id={name} type='file' onChange={onInputChange} className='hidden' accept={accept} />
         {error && <div className='text-red-500'>{error}</div>}
+        {uploadError && <div className='text-red-500'>{uploadError}</div>}
       </div>
     );
   }
@@ -134,4 +135,9 @@ function FilePreview({ url }: { url: string }) {
       )}
     </div>
   );
+}
+
+function checkSize(file: File) {
+  const size = file.size / 1024 / 1024;
+  return size < 5;
 }
