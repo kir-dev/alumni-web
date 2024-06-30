@@ -82,6 +82,9 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
                   <DropdownMenuItem asChild>
                     <Link href='/admin/domains'>Domének</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href='/admin/logs'>Audit napló</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}

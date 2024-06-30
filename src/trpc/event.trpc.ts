@@ -6,6 +6,7 @@ import { prismaClient } from '@/config/prisma.config';
 import DeleteEventEmail from '@/emails/delete-event';
 import NewEventEmail from '@/emails/new-event';
 import UpdateEventEmail from '@/emails/update-event';
+import { addAuditLog } from '@/lib/audit';
 import { batchSendEmail } from '@/lib/email';
 import { getEventDifference } from '@/lib/event';
 import { groupAdminProcedure, privateProcedure } from '@/trpc/trpc';
@@ -48,6 +49,11 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
         groupName: event.group.name,
       })
     ),
+  });
+  await addAuditLog({
+    userId: opts.ctx.session?.user.id,
+    action: `Esemény létrehozása: ${event.name}`,
+    groupId: event.groupId,
   });
 
   return event;
@@ -95,6 +101,11 @@ export const updateEvent = groupAdminProcedure.input(UpdateEventDto).mutation(as
       ),
     });
   }
+  await addAuditLog({
+    userId: opts.ctx.session?.user.id,
+    action: `Esemény frissítése: ${updatedEvent.name}`,
+    groupId: updatedEvent.groupId,
+  });
 
   return updatedEvent;
 });
@@ -170,5 +181,11 @@ export const deleteEvent = groupAdminProcedure.input(DeleteEventDto).mutation(as
     to: event.EventApplication.map(({ user }) => user.email),
     subject: 'Esemény törölve',
     html: render(DeleteEventEmail({ event, groupName: event.group.name })),
+  });
+
+  await addAuditLog({
+    userId: opts.ctx.session?.user.id,
+    action: `Esemény törlése: ${event.name}`,
+    groupId: event.groupId,
   });
 });

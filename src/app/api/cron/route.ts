@@ -1,5 +1,5 @@
 import { render } from '@react-email/render';
-import { addDays, subDays, subYears } from 'date-fns';
+import { addDays, subDays, subMonths, subYears } from 'date-fns';
 import { NextResponse } from 'next/server';
 
 import { SITE_URL } from '@/config/environment.config';
@@ -13,6 +13,7 @@ export async function GET() {
   await notifyOutdatedProfiles();
   await notifyPublishedNews();
   await notifyUpcomingEvents();
+  await cleanAuditLogs();
   return new NextResponse();
 }
 
@@ -116,5 +117,15 @@ async function notifyUpcomingEvents() {
         })
       ),
     });
+  });
+}
+
+async function cleanAuditLogs() {
+  await prismaClient.auditLog.deleteMany({
+    where: {
+      createdAt: {
+        lt: subMonths(new Date(), 1),
+      },
+    },
   });
 }

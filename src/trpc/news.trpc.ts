@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 
 import { prismaClient } from '@/config/prisma.config';
+import { addAuditLog } from '@/lib/audit';
 import { groupAdminProcedure } from '@/trpc/trpc';
 import { CreateNewsDto, DeleteNewsDto, UpdateNewsDto } from '@/types/news.types';
 
@@ -38,15 +39,11 @@ export const createNews = groupAdminProcedure.input(CreateNewsDto).mutation(asyn
     },
   });
 
-  // const emailRecipients = group.members.filter(({ user }) => Boolean(user.emailVerified)).map(({ user }) => user.email);
-
-  // batchSendEmail({
-  //   to: emailRecipients,
-  //   subject: news.title,
-  //   html: render(
-  //     NewNewsEmail({ news, newsLink: `${SITE_URL}/groups/${group.id}/news/${news.id}`, groupName: group.name })
-  //   ),
-  // });
+  await addAuditLog({
+    groupId,
+    action: `Hír létrehozása: ${news.title}`,
+    userId: opts.ctx.session?.user.id,
+  });
 
   return news;
 });
@@ -69,6 +66,12 @@ export const updateNews = groupAdminProcedure.input(UpdateNewsDto).mutation(asyn
     });
   }
 
+  await addAuditLog({
+    groupId,
+    action: `Hír módosítása: ${news.title}`,
+    userId: opts.ctx.session?.user.id,
+  });
+
   return news;
 });
 
@@ -80,5 +83,11 @@ export const deleteNews = groupAdminProcedure.input(DeleteNewsDto).mutation(asyn
       id: newsId,
       groupId,
     },
+  });
+
+  await addAuditLog({
+    groupId,
+    action: `Hír törlése: ${newsId}`,
+    userId: opts.ctx.session?.user.id,
   });
 });

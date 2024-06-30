@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 
 import { prismaClient } from '@/config/prisma.config';
+import { addAuditLog } from '@/lib/audit';
 import { slugify } from '@/lib/utils';
 import { groupAdminProcedure, superAdminProcedure } from '@/trpc/trpc';
 import {
@@ -27,7 +28,7 @@ export const createSite = superAdminProcedure.input(CreateSiteDto).mutation(asyn
     });
   }
 
-  return prismaClient.staticSite.create({
+  const created = await prismaClient.staticSite.create({
     data: {
       title: opts.input.title,
       url: slugify(opts.input.title),
@@ -39,6 +40,14 @@ export const createSite = superAdminProcedure.input(CreateSiteDto).mutation(asyn
       },
     },
   });
+
+  await addAuditLog({
+    action: `Oldal létrehozása: ${created.title}`,
+    userId: opts.ctx.session?.user.id,
+    groupId: null,
+  });
+
+  return created;
 });
 
 export const createGroupSite = groupAdminProcedure.input(CreateGroupSiteDto).mutation(async (opts) => {
@@ -56,7 +65,7 @@ export const createGroupSite = groupAdminProcedure.input(CreateGroupSiteDto).mut
     });
   }
 
-  return prismaClient.staticSite.create({
+  const created = await prismaClient.staticSite.create({
     data: {
       title: opts.input.title,
       url: slugify(opts.input.title),
@@ -69,6 +78,14 @@ export const createGroupSite = groupAdminProcedure.input(CreateGroupSiteDto).mut
       },
     },
   });
+
+  await addAuditLog({
+    action: `Oldal létrehozása: ${created.title}`,
+    userId: opts.ctx.session?.user.id,
+    groupId: opts.input.groupId,
+  });
+
+  return created;
 });
 
 export const editSite = superAdminProcedure.input(EditSiteDto).mutation(async (opts) => {
@@ -89,7 +106,7 @@ export const editSite = superAdminProcedure.input(EditSiteDto).mutation(async (o
     });
   }
 
-  return prismaClient.staticSite.update({
+  const edited = await prismaClient.staticSite.update({
     where: {
       id: opts.input.id,
     },
@@ -105,6 +122,14 @@ export const editSite = superAdminProcedure.input(EditSiteDto).mutation(async (o
       },
     },
   });
+
+  await addAuditLog({
+    action: `Oldal módosítása: ${edited.title}`,
+    userId: opts.ctx.session?.user.id,
+    groupId: null,
+  });
+
+  return edited;
 });
 
 export const editGroupSite = superAdminProcedure.input(EditGroupSiteDto).mutation(async (opts) => {
@@ -125,7 +150,7 @@ export const editGroupSite = superAdminProcedure.input(EditGroupSiteDto).mutatio
     });
   }
 
-  return prismaClient.staticSite.update({
+  const edited = await prismaClient.staticSite.update({
     where: {
       id: opts.input.id,
       groupId: opts.input.groupId,
@@ -142,9 +167,23 @@ export const editGroupSite = superAdminProcedure.input(EditGroupSiteDto).mutatio
       },
     },
   });
+
+  await addAuditLog({
+    action: `Oldal módosítása: ${edited.title}`,
+    userId: opts.ctx.session?.user.id,
+    groupId: opts.input.groupId,
+  });
+
+  return edited;
 });
 
 export const deleteSite = superAdminProcedure.input(DeleteSiteDto).mutation(async (opts) => {
+  await addAuditLog({
+    action: `Oldal törlése: ${opts.input}`,
+    userId: opts.ctx.session?.user.id,
+    groupId: null,
+  });
+
   return prismaClient.staticSite.delete({
     where: {
       id: opts.input,
@@ -153,6 +192,12 @@ export const deleteSite = superAdminProcedure.input(DeleteSiteDto).mutation(asyn
 });
 
 export const deleteGroupSite = groupAdminProcedure.input(DeleteGroupSiteDto).mutation(async (opts) => {
+  await addAuditLog({
+    action: `Oldal törlése: ${opts.input.id}`,
+    userId: opts.ctx.session?.user.id,
+    groupId: opts.input.groupId,
+  });
+
   return prismaClient.staticSite.delete({
     where: {
       id: opts.input.id,

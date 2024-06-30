@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { isAxiosError } from 'axios';
 
 import { prismaClient } from '@/config/prisma.config';
+import { addAuditLog } from '@/lib/audit';
 import { addVercelDomain, deleteVercelDomain, getDomainConfig } from '@/network/vercel.network';
 import { groupAdminProcedure } from '@/trpc/trpc';
 import { AddDomainDto, CheckDomainDto, DeleteDomainDto } from '@/types/domain.types';
@@ -22,6 +23,12 @@ export const addDomain = groupAdminProcedure.input(AddDomainDto).mutation(async 
 
   try {
     await addVercelDomain(opts.input.domain);
+
+    await addAuditLog({
+      action: `Domén hozzáadása: ${opts.input.domain}`,
+      userId: opts.ctx.session?.user.id,
+      groupId: opts.input.groupId,
+    });
 
     return prismaClient.groupDomain.create({
       data: {
@@ -88,6 +95,12 @@ export const deleteDomain = groupAdminProcedure.input(DeleteDomainDto).mutation(
 
   try {
     await deleteVercelDomain(domain.domain);
+
+    await addAuditLog({
+      action: `Domén törlése: ${opts.input.domain}`,
+      userId: opts.ctx.session?.user.id,
+      groupId: opts.input.groupId,
+    });
 
     return prismaClient.groupDomain.delete({
       where: {

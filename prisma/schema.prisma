@@ -31,6 +31,7 @@ model Group {
   News        News[]
   staticSites StaticSite[]
   domain      GroupDomain?
+  auditLog    AuditLog[]
 }
 
 model Membership {
@@ -131,6 +132,7 @@ model User {
   updatedAt         DateTime            @updatedAt
   TfaToken          TfaToken?
   VerificationToken VerificationToken[]
+  auditLog          AuditLog[]
 }
 
 model TfaToken {
@@ -183,4 +185,16 @@ enum SiteBlockType {
   Text
   Image
   ImageText
+}
+
+model AuditLog {
+  id     String @id @default(uuid())
+  action String
+
+  userId  String?
+  groupId String?
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  group   Group?  @relation(fields: [groupId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
 }

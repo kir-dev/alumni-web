@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
-import { TbBrowserPlus, TbCalendarPlus, TbEdit, TbTextPlus, TbUsersGroup } from 'react-icons/tb';
+import { TbBrowserPlus, TbCalendarPlus, TbEdit, TbNotes, TbTextPlus, TbUsersGroup } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
@@ -124,20 +124,26 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
             </div>
             <div className='flex flex-col gap-2'>
               {canEdit && (
-                <Button variant='outline' asChild>
-                  <Link href={`/groups/${group.id}/edit`}>
-                    <TbEdit />
-                    Szerkesztés
-                  </Link>
-                </Button>
-              )}
-              {canEdit && (
-                <Button variant='outline' asChild>
-                  <Link href={`/groups/${group.id}/members`}>
-                    <TbUsersGroup />
-                    Tagok kezelése
-                  </Link>
-                </Button>
+                <>
+                  <Button variant='outline' asChild>
+                    <Link href={`/groups/${group.id}/edit`}>
+                      <TbEdit />
+                      Szerkesztés
+                    </Link>
+                  </Button>
+                  <Button variant='outline' asChild>
+                    <Link href={`/groups/${group.id}/members`}>
+                      <TbUsersGroup />
+                      Tagok kezelése
+                    </Link>
+                  </Button>
+                  <Button variant='outline' asChild>
+                    <Link href={`/groups/${group.id}/logs`}>
+                      <TbNotes />
+                      Audit napló
+                    </Link>
+                  </Button>
+                </>
               )}
               {canEdit && (
                 <Providers>

@@ -7,6 +7,7 @@ import { prismaClient } from '@/config/prisma.config';
 import GeneralEmail from '@/emails/general';
 import GroupGeneralEmail from '@/emails/group-general';
 import MembershipStatusEmail from '@/emails/membership-status';
+import { addAuditLog } from '@/lib/audit';
 import { batchSendEmail, singleSendEmail } from '@/lib/email';
 import { StatusMap } from '@/lib/group';
 import { groupAdminProcedure, privateProcedure, superAdminProcedure } from '@/trpc/trpc';
@@ -46,12 +47,20 @@ export const createGroup = superAdminProcedure.input(CreateGroupDto).mutation(as
 export const updateGroup = groupAdminProcedure.input(UpdateGroupDto).mutation(async (opts) => {
   const { id, data } = opts.input;
 
-  return prismaClient.group.update({
+  const updated = await prismaClient.group.update({
     where: {
       id,
     },
     data,
   });
+
+  await addAuditLog({
+    groupId: id,
+    action: `Csoport frissítése: ${updated.name}`,
+    userId: opts.ctx.session?.user.id,
+  });
+
+  return updated;
 });
 
 export const joinGroup = privateProcedure.input(JoinGroupDto).mutation(async (opts) => {
@@ -173,16 +182,30 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
     ),
   });
 
+  await addAuditLog({
+    groupId: opts.input.groupId,
+    action: `Tagság státusz módosítása: ${membership.user.lastName} ${membership.user.firstName} - ${StatusMap[membership.status].label}`,
+    userId: opts.ctx.session?.user.id,
+  });
+
   return membership;
 });
 
 export const deleteMembership = groupAdminProcedure.input(DeleteMembershipDto).mutation(async (opts) => {
-  return prismaClient.membership.deleteMany({
+  const result = await prismaClient.membership.deleteMany({
     where: {
       groupId: opts.input.groupId,
       userId: opts.input.userId,
     },
   });
+
+  await addAuditLog({
+    groupId: opts.input.groupId,
+    action: `Tagság törlése: ${opts.input.userId}`,
+    userId: opts.ctx.session?.user.id,
+  });
+
+  return result;
 });
 
 export const toggleAdmin = groupAdminProcedure.input(ToggleAdminDto).mutation(async (opts) => {
@@ -191,9 +214,18 @@ export const toggleAdmin = groupAdminProcedure.input(ToggleAdminDto).mutation(as
       groupId: opts.input.groupId,
       userId: opts.input.userId,
     },
+    include: {
+      user: true,
+    },
   });
 
   if (!membership) throw new TRPCError({ code: 'NOT_FOUND' });
+
+  await addAuditLog({
+    groupId: opts.input.groupId,
+    userId: opts.ctx.session?.user.id,
+    action: `Admin jog módosítása: ${membership.user.lastName} ${membership.user.firstName} - ${membership.isAdmin ? 'Elvéve' : 'Hozzáadva'}`,
+  });
 
   return prismaClient.membership.updateMany({
     where: {
@@ -235,6 +267,12 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
         groupName: group.name,
       })
     ),
+  });
+
+  await addAuditLog({
+    groupId: opts.input.groupId,
+    action: `Email küldése: ${opts.input.subject}`,
+    userId: opts.ctx.session?.user.id,
   });
 });
 
