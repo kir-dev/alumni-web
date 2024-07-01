@@ -117,6 +117,8 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
     });
   }
 
+  const isPast = new Date() > event.endDate;
+
   return (
     <main>
       <h1>{event.name}</h1>
@@ -125,7 +127,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
       <p>{event.description}</p>
       <UpdatedAt date={event.updatedAt} className='mt-5' />
       <Providers>
-        <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />
+        <Rsvp className='mt-5' eventId={params.eventId} disabled={!session || isPast} />
         {canEdit && <AttendeeList eventApplications={applications} />}
         {canEdit && (
           <div className='flex justify-end items-center gap-2 mt-5'>

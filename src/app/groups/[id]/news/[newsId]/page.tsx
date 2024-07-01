@@ -88,19 +88,21 @@ export default async function NewsDetailsPage({ params }: { params: { id: string
     });
   }
 
+  const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
+
   const news = await prismaClient.news.findUnique({
     where: {
       id: params.newsId,
       isPrivate: membership ? undefined : false,
-      publishDate: {
-        lte: new Date(),
-      },
+      publishDate: canEdit
+        ? undefined
+        : {
+            lte: new Date(),
+          },
     },
   });
 
   if (!news) return notFound();
-
-  const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
 
   return (
     <main>

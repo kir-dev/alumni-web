@@ -172,7 +172,19 @@ export function DateTimeField<TName extends FieldPath<TFieldValues>, TFieldValue
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <div className='flex items-center flex-wrap space-x-2'>
-              <DatePicker value={value} onChange={onChange} onBlur={onBlur} disabled={disabled} name={name} />
+              <DatePicker
+                value={value}
+                onChange={(dateString) => {
+                  if (!dateString) return;
+                  const date = new Date(value ?? new Date());
+                  const newDate = new Date(dateString);
+                  newDate.setHours(date.getHours(), date.getMinutes());
+                  onChange(newDate.toISOString());
+                }}
+                onBlur={onBlur}
+                disabled={disabled}
+                name={name}
+              />
               <TimePicker
                 value={{
                   hour: value ? new Date(value).getHours() : 0,

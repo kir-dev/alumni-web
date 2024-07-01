@@ -1,5 +1,5 @@
 import { Event } from '@prisma/client';
-import { isPast } from 'date-fns';
+import { isAfter, isBefore, isPast } from 'date-fns';
 import Link from 'next/link';
 import { TbArchive, TbChevronRight, TbLock } from 'react-icons/tb';
 
@@ -14,6 +14,7 @@ export function EventListItem({ event }: EventListItemProps) {
   const dateString = getFormattedDateInterval(event.startDate, event.endDate);
 
   const isArchived = isPast(event.endDate);
+  const isCurrent = isAfter(event.endDate, new Date()) && isBefore(event.startDate, new Date());
 
   return (
     <Link href={`/groups/${event.groupId}/events/${event.id}`}>
@@ -24,6 +25,7 @@ export function EventListItem({ event }: EventListItemProps) {
             <div className='flex gap-1'>
               {event.isPrivate && <TbLock className='text-red-500 w-5 h-5' />}
               {isArchived && <TbArchive className='text-amber-800 w-5 h-5' />}
+              {isCurrent && <PulsingDot />}
               <TbChevronRight className='text-slate-500' />
             </div>
           </div>
@@ -31,5 +33,13 @@ export function EventListItem({ event }: EventListItemProps) {
         </CardHeader>
       </Card>
     </Link>
+  );
+}
+
+function PulsingDot() {
+  return (
+    <div className='bg-green-500 bg-opacity-10 flex items-center justify-center animate-pulse rounded-full w-5 h-5'>
+      <div className='w-3 h-3 rounded-full bg-green-500' />
+    </div>
   );
 }
