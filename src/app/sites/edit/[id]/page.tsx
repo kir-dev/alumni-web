@@ -1,12 +1,11 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 
 import Providers from '@/components/providers';
 import { EditGlobalSite } from '@/components/sites/edit-global-site';
 import Forbidden from '@/components/sites/forbidden';
-import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
+import { isSuperAdmin } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -15,9 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function EditSitePage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await isSuperAdmin();
 
-  if (!session || !session.user.isSuperAdmin) {
+  if (!userCanEdit) {
     return <Forbidden />;
   }
 

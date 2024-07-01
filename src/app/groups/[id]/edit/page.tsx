@@ -1,13 +1,11 @@
-import { Membership } from '@prisma/client';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 
 import { EditGroupForm } from '@/components/group/edit-group-form';
 import Providers from '@/components/providers';
 import Forbidden from '@/components/sites/forbidden';
-import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
+import { canEdit } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -16,7 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default async function EditGroupPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await canEdit(params.id);
+
+  if (!userCanEdit) {
+    return <Forbidden />;
+  }
 
   const group = await prismaClient.group.findUnique({
     where: {
@@ -26,23 +28,6 @@ export default async function EditGroupPage({ params }: { params: { id: string }
 
   if (!group) {
     return notFound();
-  }
-
-  let membership: Membership | null = null;
-
-  if (session) {
-    membership = await prismaClient.membership.findFirst({
-      where: {
-        groupId: params.id,
-        userId: session.user.id,
-      },
-    });
-  }
-
-  const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
-
-  if (!canEdit) {
-    return <Forbidden />;
   }
 
   return (

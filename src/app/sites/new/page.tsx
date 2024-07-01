@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
-import { getServerSession } from 'next-auth/next';
 
 import Providers from '@/components/providers';
 import { CreateGlobalSite } from '@/components/sites/create-global-site';
 import Forbidden from '@/components/sites/forbidden';
-import { authOptions } from '@/config/auth.config';
+import { isSuperAdmin } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -13,9 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function CreateSitePage() {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await isSuperAdmin();
 
-  if (!session || !session.user.isSuperAdmin) {
+  if (!userCanEdit) {
     return <Forbidden />;
   }
 

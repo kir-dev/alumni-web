@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 
 import { UpdateNewsForm } from '@/components/group/update-news-form';
 import Providers from '@/components/providers';
-import { authOptions } from '@/config/auth.config';
+import Forbidden from '@/components/sites/forbidden';
 import { prismaClient } from '@/config/prisma.config';
+import { canEdit } from '@/lib/server-utils';
 
 export const metadata: Metadata = {
   title: 'Hír szerkesztése',
@@ -13,32 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default async function UpdateNewsPage({ params }: { params: { id: string; newsId: string } }) {
-  const session = await getServerSession(authOptions);
-  if (!session) return notFound();
+  const userCanEdit = await canEdit(params.id);
 
-  const group = await prismaClient.group.findUnique({
-    where: {
-      id: params.id,
-    },
-  });
+  if (!userCanEdit) return <Forbidden />;
 
-  if (!group) return notFound();
-
-  const adminMembership = await prismaClient.membership.findFirst({
-    where: {
-      groupId: params.id,
-      userId: session.user.id,
-      isAdmin: true,
-    },
-  });
-
-  if (!adminMembership && !session.user.isSuperAdmin) return notFound();
-
-  const news = await prismaClient.news.findUnique({
-    where: {
-      id: params.newsId,
-    },
-  });
+  const news = await getNews(params.newsId);
 
   if (!news) return notFound();
 
@@ -50,4 +29,12 @@ export default async function UpdateNewsPage({ params }: { params: { id: string;
       </Providers>
     </main>
   );
+}
+
+async function getNews(newsId: string) {
+  return prismaClient.news.findUnique({
+    where: {
+      id: newsId,
+    },
+  });
 }

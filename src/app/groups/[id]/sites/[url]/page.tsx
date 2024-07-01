@@ -23,7 +23,10 @@ export async function generateMetadata({ params }: SitePageProps): Promise<Metad
     },
   });
 
-  if (!site || !site.group) return notFound();
+  if (!site || !site.group)
+    return {
+      title: 'Oldal nem található',
+    };
 
   return {
     title: getSuffixedTitle(site.title),

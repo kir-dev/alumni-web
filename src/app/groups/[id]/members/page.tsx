@@ -1,12 +1,11 @@
-import { Membership } from '@prisma/client';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 
 import { MembersList } from '@/components/group/members-list';
 import Providers from '@/components/providers';
-import { authOptions } from '@/config/auth.config';
+import Forbidden from '@/components/sites/forbidden';
 import { prismaClient } from '@/config/prisma.config';
+import { canEdit } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -15,7 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function GroupMembersPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await canEdit(params.id);
+
+  if (!userCanEdit) return <Forbidden />;
 
   const group = await prismaClient.group.findUnique({
     where: {
@@ -23,35 +24,9 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
     },
   });
 
-  if (!group) {
-    return notFound();
-  }
+  if (!group) return notFound();
 
-  let membership: Membership | null = null;
-
-  if (session) {
-    membership = await prismaClient.membership.findFirst({
-      where: {
-        groupId: params.id,
-        userId: session.user.id,
-      },
-    });
-  }
-
-  const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
-
-  if (!canEdit) {
-    return notFound();
-  }
-
-  const members = await prismaClient.membership.findMany({
-    where: {
-      groupId: params.id,
-    },
-    include: {
-      user: true,
-    },
-  });
+  const members = await getMembers(params.id);
 
   return (
     <main>
@@ -61,4 +36,15 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
       </Providers>
     </main>
   );
+}
+
+async function getMembers(groupId: string) {
+  return prismaClient.membership.findMany({
+    where: {
+      groupId,
+    },
+    include: {
+      user: true,
+    },
+  });
 }

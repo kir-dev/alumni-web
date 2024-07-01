@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 interface UserListProps {
   users: User[];
-  currentUserId: string;
+  currentUserId?: string;
 }
 
 const UserDetails = dynamic(() => import('@/components/group/user-details'), { ssr: false });

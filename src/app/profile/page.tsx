@@ -2,7 +2,6 @@ import { isBefore, subYears } from 'date-fns';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 import { TbHome, TbMailCheck, TbMailExclamation, TbMailX, TbPhone, TbUserExclamation } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
@@ -14,8 +13,8 @@ import Providers from '@/components/providers';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
-import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
+import { getSession } from '@/lib/server-utils';
 import { cn, getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -27,7 +26,7 @@ const UpdateProfileForm = dynamic(() => import('@/components/profile/update-prof
 const PasswordChangeDialog = dynamic(() => import('@/components/profile/password-change-dialog'), { ssr: false });
 
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   if (!session?.user?.email) {
     return redirect('/login');
   }
@@ -40,6 +39,10 @@ export default async function ProfilePage() {
       TfaToken: true,
     },
   });
+
+  if (!user) {
+    return notFound();
+  }
 
   const memberships = await prismaClient.membership.findMany({
     where: {
@@ -63,10 +66,6 @@ export default async function ProfilePage() {
       event: true,
     },
   });
-
-  if (!user) {
-    return notFound();
-  }
 
   const emailVerified = Boolean(user.emailVerified);
   const profileOutdated = isBefore(new Date(user.updatedAt), subYears(new Date(), 1));

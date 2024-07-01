@@ -1,13 +1,12 @@
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 
 import { EventFeedItemComponent } from '@/components/feed/event-feed-item';
 import { NewsFeedItemComponent } from '@/components/feed/news-feed-item';
-import { authOptions } from '@/config/auth.config';
 import { EventFeedItem, getFeed, NewsFeedItem } from '@/lib/feed';
+import { getSession } from '@/lib/server-utils';
 
 export default async function FeedPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   if (!session) {
     return notFound();
   }

@@ -1,12 +1,11 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { getServerSession } from 'next-auth/next';
 import { TbPlus } from 'react-icons/tb';
 
 import { GroupListItem } from '@/components/group/group-list-item';
 import { Button } from '@/components/ui/button';
-import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
+import { isSuperAdmin } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function GroupsPage() {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await isSuperAdmin();
 
   const groups = await prismaClient.group.findMany({
     where: {
@@ -27,7 +26,7 @@ export default async function GroupsPage() {
     <main>
       <div className='flex items-center justify-between'>
         <h1>Fő csoportok</h1>
-        {session && session.user.isSuperAdmin && (
+        {userCanEdit && (
           <Button asChild>
             <Link href='/groups/new'>
               <TbPlus /> Új csoport

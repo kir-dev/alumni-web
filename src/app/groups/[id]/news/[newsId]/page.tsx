@@ -1,15 +1,13 @@
-import { Membership } from '@prisma/client';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
 
 import { DeleteNews } from '@/components/group/delete-news';
 import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import { UpdatedAt } from '@/components/ui/updated-at';
-import { authOptions } from '@/config/auth.config';
 import { prismaClient } from '@/config/prisma.config';
+import { canEdit, isApprovedGroupMember } from '@/lib/server-utils';
 import { formatHu, getSuffixedTitle } from '@/lib/utils';
 
 interface NewsPageProps {
@@ -20,37 +18,10 @@ interface NewsPageProps {
 }
 
 export async function generateMetadata({ params }: NewsPageProps): Promise<Metadata> {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await canEdit(params.id);
+  const userIsMember = await isApprovedGroupMember(params.id);
 
-  const group = await prismaClient.group.findFirst({
-    where: {
-      id: params.id,
-    },
-  });
-
-  if (!group)
-    return {
-      title: 'Csoport nem található',
-      description: 'A csoport nem található.',
-    };
-
-  let membership: Membership | null = null;
-
-  if (session) {
-    membership = await prismaClient.membership.findFirst({
-      where: {
-        groupId: params.id,
-        userId: session.user.id,
-      },
-    });
-  }
-
-  const news = await prismaClient.news.findUnique({
-    where: {
-      id: params.newsId,
-      isPrivate: membership ? undefined : false,
-    },
-  });
+  const news = await getNews(params.newsId, userIsMember, userCanEdit);
 
   if (!news)
     return {
@@ -65,42 +36,10 @@ export async function generateMetadata({ params }: NewsPageProps): Promise<Metad
 }
 
 export default async function NewsDetailsPage({ params }: { params: { id: string; newsId: string } }) {
-  const session = await getServerSession(authOptions);
+  const userCanEdit = await canEdit(params.id);
+  const userIsMember = await isApprovedGroupMember(params.id);
 
-  const group = await prismaClient.group.findUnique({
-    where: {
-      id: params.id,
-    },
-  });
-
-  if (!group) {
-    return notFound();
-  }
-
-  let membership: Membership | null = null;
-
-  if (session) {
-    membership = await prismaClient.membership.findFirst({
-      where: {
-        groupId: params.id,
-        userId: session.user.id,
-      },
-    });
-  }
-
-  const canEdit = membership?.isAdmin || session?.user.isSuperAdmin;
-
-  const news = await prismaClient.news.findUnique({
-    where: {
-      id: params.newsId,
-      isPrivate: membership ? undefined : false,
-      publishDate: canEdit
-        ? undefined
-        : {
-            lte: new Date(),
-          },
-    },
-  });
+  const news = await getNews(params.newsId, userIsMember, userCanEdit);
 
   if (!news) return notFound();
 
@@ -111,7 +50,7 @@ export default async function NewsDetailsPage({ params }: { params: { id: string
       <p>{news.content}</p>
       <UpdatedAt date={news.updatedAt} className='mt-5' />
       <Providers>
-        {canEdit && (
+        {userCanEdit && (
           <div className='flex justify-end items-center gap-2 mt-5'>
             <DeleteNews groupId={params.id} newsId={params.newsId} />
             <Button asChild>
@@ -122,4 +61,18 @@ export default async function NewsDetailsPage({ params }: { params: { id: string
       </Providers>
     </main>
   );
+}
+
+async function getNews(newsId: string, isMember: boolean, isAdmin: boolean) {
+  return prismaClient.news.findUnique({
+    where: {
+      id: newsId,
+      isPrivate: isMember ? undefined : false,
+      publishDate: isAdmin
+        ? undefined
+        : {
+            lte: new Date(),
+          },
+    },
+  });
 }
