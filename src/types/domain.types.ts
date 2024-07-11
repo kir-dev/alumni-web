@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const AddDomainDto = z.object({
-  domain: z.string().regex(/^[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/i, 'Helytelen formátumú domén'),
+  domain: z
+    .string()
+    .regex(/^[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/i, 'Helytelen formátumú domén')
+    .refine((value) => !value.endsWith('kir-dev.hu'), 'A kir-dev.hu domén nem engedélyezett'),
   groupId: z.string(),
 });
 

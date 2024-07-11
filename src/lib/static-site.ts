@@ -11,4 +11,4 @@ export const BlockMap: Record<StaticSiteBlock['type'], FunctionComponent<{ conte
   ImageText: ImageTextRenderer,
 };
 
-export const SpecialSiteSlugs: string[] = ['adatvedelem', 'impresszum', 'kapcsolat'];
+export const SpecialSiteSlugs: string[] = ['adatvedelem', 'impresszum', 'kapcsolat', 'szolgaltatasok'];

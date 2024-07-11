@@ -14,7 +14,7 @@ export function ImageTextRenderer({ content }: ImageTextRendererProps) {
   }
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
-      <TextRenderer className='mt-0' content={parsedContent.text} />
+      <TextRenderer content={parsedContent.text} />
       <ImageRenderer content={parsedContent.image} />
     </div>
   );

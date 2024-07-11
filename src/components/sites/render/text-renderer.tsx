@@ -14,6 +14,12 @@ export async function TextRenderer({ content, className, ...props }: TextRendere
   const processedContent = await remark().use(remarkGfm).use(html).process(content);
   const contentHtml = processedContent.toString();
 
-  // eslint-disable-next-line react/no-danger
-  return <div className={cn('mdxcontent', className)} dangerouslySetInnerHTML={{ __html: contentHtml }} {...props} />;
+  return (
+    <div
+      className={cn('mdxcontent', className)}
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{ __html: contentHtml }}
+      {...props}
+    />
+  );
 }

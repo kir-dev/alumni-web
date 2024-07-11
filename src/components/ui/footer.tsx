@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 
 const FooterLinks: { label: string; href: string }[] = [
   { label: 'Kezdőlap', href: '/' },
+  { label: 'Szolgáltatások', href: '/sites/szolgaltatasok' },
   { label: 'Impresszum', href: '/sites/impresszum' },
   { label: 'Adatvédelem', href: '/sites/adatvedelem' },
   { label: 'Kapcsolat', href: '/sites/kapcsolat' },
@@ -17,7 +18,7 @@ export function Footer() {
     <footer className='bg-slate-900 text-white text-center'>
       <div className='flex justify-between items-center container p-10 flex-col md:flex-row gap-10'>
         <div>
-          <div className='flex gap-2 items-center'>
+          <div className='flex gap-2 items-center flex-wrap'>
             {FooterLinks.map(({ label, href }) => (
               <Button key={label} className='text-white p-0' variant='link' asChild>
                 <Link href={href}>{label}</Link>
