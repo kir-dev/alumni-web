@@ -5,7 +5,7 @@ import { UpdateEventForm } from '@/components/group/update-event-form';
 import Providers from '@/components/providers';
 import Forbidden from '@/components/sites/forbidden';
 import { prismaClient } from '@/config/prisma.config';
-import { canEdit } from '@/lib/server-utils';
+import { canEdit, getGroup } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -26,11 +26,15 @@ export default async function UpdateEventPage({ params }: { params: { id: string
 
   if (!event) return notFound();
 
+  const group = await getGroup(params.id);
+
+  if (!group) return notFound();
+
   return (
     <main>
       <h1>{event.name} szerkesztése</h1>
       <Providers>
-        <UpdateEventForm event={event} groupId={params.id} />
+        <UpdateEventForm event={event} groupId={params.id} group={group} />
       </Providers>
     </main>
   );

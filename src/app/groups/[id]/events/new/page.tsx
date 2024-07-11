@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { CreateEventForm } from '@/components/group/create-event-form';
 import Providers from '@/components/providers';
 import Forbidden from '@/components/sites/forbidden';
-import { canEdit } from '@/lib/server-utils';
+import { canEdit, getGroup } from '@/lib/server-utils';
 import { getSuffixedTitle } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -15,11 +16,15 @@ export default async function CreateEventPage({ params }: { params: { id: string
   const userCanEdit = await canEdit(params.id);
   if (!userCanEdit) return <Forbidden />;
 
+  const group = await getGroup(params.id);
+
+  if (!group) return notFound();
+
   return (
     <main>
       <h1>Új esemény</h1>
       <Providers>
-        <CreateEventForm groupId={params.id} />
+        <CreateEventForm groupId={params.id} group={group} />
       </Providers>
     </main>
   );

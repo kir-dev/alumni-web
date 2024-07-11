@@ -9,17 +9,19 @@ import {
   listsPlugin,
   ListsToggle,
   markdownShortcutPlugin,
-  MDXEditorMethods,
   quotePlugin,
   tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
+import { useChat } from 'ai/react';
 import dynamic from 'next/dynamic';
-import { useRef } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 import { TbTrashX } from 'react-icons/tb';
 
+import { ChatPopup } from '@/components/ai/chat-popup';
 import { BlockFieldProps } from '@/components/sites/editor/block-field-distributor';
 import { Button } from '@/components/ui/button';
 
@@ -29,9 +31,10 @@ const MDXEditor = dynamic(() => import('./md-editor'), {
 
 interface ToolbarContentsProps {
   onDelete: () => void;
+  onMessageChange: (value: string) => void;
 }
 
-function ToolbarContents({ onDelete }: ToolbarContentsProps) {
+function ToolbarContents({ onDelete, onMessageChange }: ToolbarContentsProps) {
   return (
     <>
       <BoldItalicUnderlineToggles />
@@ -40,6 +43,10 @@ function ToolbarContents({ onDelete }: ToolbarContentsProps) {
       <ListsToggle options={['number', 'bullet']} />
       <BlockTypeSelect />
       <UndoRedo />
+      <ChatPopup
+        onGenerate={onMessageChange}
+        context='Markdown formátumban generálj statikus oldal tartalmat, aláírással, cím nélkül.'
+      />
       <Button onClick={onDelete} size='icon' variant='destructiveOutline' title='Törlés'>
         <TbTrashX />
       </Button>
@@ -48,10 +55,9 @@ function ToolbarContents({ onDelete }: ToolbarContentsProps) {
 }
 
 export function TextBlockField({ index, onChange, onDelete, value }: BlockFieldProps) {
-  const ref = useRef<MDXEditorMethods>(null);
+  const [message, setMessage] = React.useState('');
   return (
     <MDXEditor
-      ref={ref}
       plugins={[
         headingsPlugin(),
         listsPlugin(),
@@ -62,9 +68,10 @@ export function TextBlockField({ index, onChange, onDelete, value }: BlockFieldP
         thematicBreakPlugin(),
         markdownShortcutPlugin(),
         toolbarPlugin({
-          toolbarContents: () => ToolbarContents({ onDelete: () => onDelete(index) }),
+          toolbarContents: () => ToolbarContents({ onDelete: () => onDelete(index), onMessageChange: setMessage }),
         }),
       ]}
+      value={message || value}
       markdown={value}
       onChange={(value) => onChange(index, value)}
     />
