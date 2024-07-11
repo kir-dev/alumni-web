@@ -15,10 +15,8 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { useChat } from 'ai/react';
 import dynamic from 'next/dynamic';
 import * as React from 'react';
-import { useEffect } from 'react';
 import { TbTrashX } from 'react-icons/tb';
 
 import { ChatPopup } from '@/components/ai/chat-popup';

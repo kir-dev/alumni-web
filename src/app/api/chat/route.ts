@@ -15,6 +15,7 @@ export async function POST(req: Request) {
   const data = new StreamData();
 
   const stream = result.toAIStream({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onFinal(_) {
       data.close();
     },
