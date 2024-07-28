@@ -3,6 +3,7 @@ import { type ClassValue, clsx } from 'clsx';
 import crypto from 'crypto';
 import { format, formatRelative, isSameDay, isSameYear } from 'date-fns';
 import { hu } from 'date-fns/locale/hu';
+import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { twMerge } from 'tailwind-merge';
 import resolveConfig from 'tailwindcss/resolveConfig';
 
@@ -17,11 +18,11 @@ export function hashPassword(password: string): string {
 }
 
 export function formatHu(date: string | number | Date, formatString: string): string {
-  return format(date, formatString, { locale: hu });
+  return formatInTimeZone(date, 'Europe/Budapest', formatString, { locale: hu });
 }
 
 export function formatRelativeHu(date: string | number | Date, baseDate: string | number | Date): string {
-  return formatRelative(date, baseDate, { locale: hu });
+  return formatRelative(toZonedTime(date, 'Europe/Budapest'), toZonedTime(baseDate, 'Europe/Budapest'), { locale: hu });
 }
 
 export function getFormattedDateInterval(start: string | number | Date, end: string | number | Date): string {

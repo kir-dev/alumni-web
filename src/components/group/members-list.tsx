@@ -59,7 +59,8 @@ export function MembersList({ memberships, groupId }: MemberListProps) {
             {memberships.map((membership) => (
               <TableRow key={membership.user.id}>
                 <TableCell className='text-nowrap'>
-                  {membership.user.lastName} {membership.user.firstName}{' '}
+                  {membership.user.lastName} {membership.user.firstName}
+                  {membership.user.nickname && ` (${membership.user.nickname})`}{' '}
                   {membership.isAdmin && <Badge variant='outline'>Admin</Badge>}
                 </TableCell>
                 <TableCell>{membership.user.email}</TableCell>

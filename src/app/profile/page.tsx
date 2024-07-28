@@ -95,7 +95,7 @@ export default async function ProfilePage() {
         <CardContent className='flex flex-col md:flex-row justify-between md:items-center gap-5 pt-5'>
           <div>
             <CardTitle>
-              {user.firstName} {user.lastName}
+              {user.lastName} {user.firstName}
               {user.nickname && ` (${user.nickname})`}
             </CardTitle>
             <div className='mt-5'>
