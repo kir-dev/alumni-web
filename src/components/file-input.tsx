@@ -4,13 +4,17 @@ import { clsx } from 'clsx';
 import Image from 'next/image';
 import React, { DragEventHandler, forwardRef, useState } from 'react';
 import { Control, Controller, ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { TbCircleCheckFilled, TbCircleXFilled, TbCloudUpload, TbFile, TbLoader } from 'react-icons/tb';
+import { TbCircleCheckFilled, TbCircleXFilled, TbCloudUpload, TbFile, TbLoader, TbTrash } from 'react-icons/tb';
+
+import { Button } from '@/components/ui/button';
+import { FormDescription, FormLabel, FormMessage } from '@/components/ui/form';
 
 interface FileInputFieldProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   accept?: string;
   label: string;
+  description?: string;
   error?: string;
 }
 
@@ -26,13 +30,14 @@ export function FileInputField<T extends FieldValues>({ control, name, ...props 
 
 interface FileInputProps extends ControllerRenderProps {
   label?: string;
+  description?: string;
   error?: string;
   accept?: string;
   className?: string;
 }
 
 export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
-  ({ label, error, accept, className, value, name, onChange }, ref) => {
+  ({ label, description, error, accept, className, value, name, onChange }, ref) => {
     const [blob, setBlob] = useState<PutBlobResult | null>(null);
     const [uploadError, setUploadError] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
@@ -81,7 +86,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
 
     return (
       <div className={className}>
-        {label && <label>{label}</label>}
+        {label && <FormLabel>{label}</FormLabel>}
         <label className='m-0' htmlFor={name}>
           <div
             onDrop={dropHandler}
@@ -99,7 +104,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               )}
             </div>
             <div
-              className={clsx('absolute right-1 bottom-1', {
+              className={clsx('absolute right-1 bottom-1 flex gap-1 items-center', {
                 'text-green-500': Boolean(blob),
                 'text-red-500': uploadError,
               })}
@@ -107,12 +112,25 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               {Boolean(blob) && <TbCircleCheckFilled className='bg-white rounded-full p-0.5' size={30} />}
               {uploadError && <TbCircleXFilled className='bg-white rounded-full p-0.5' size={30} />}
               {loading && <TbLoader size={30} className='animate-spin bg-white rounded-full p-0.5' />}
+              {Boolean(value) && (
+                <Button
+                  variant='destructiveOutline'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setBlob(null);
+                    onChange('');
+                  }}
+                >
+                  <TbTrash />
+                </Button>
+              )}
             </div>
           </div>
         </label>
         <input ref={ref} id={name} type='file' onChange={onInputChange} className='hidden' accept={accept} />
-        {error && <div className='text-red-500'>{error}</div>}
-        {uploadError && <div className='text-red-500'>{uploadError}</div>}
+        {description && <FormDescription>{description}</FormDescription>}
+        {error && <FormMessage>{error}</FormMessage>}
+        {uploadError && <FormMessage>{uploadError}</FormMessage>}
       </div>
     );
   }
@@ -123,14 +141,7 @@ FileInput.displayName = 'FileInput';
 function FilePreview({ url }: { url: string }) {
   const isImage = url.match(/(jpg|jpeg|png|gif)$/i)?.length ?? 0 > 0;
   return isImage ? (
-    <Image
-      src={url}
-      layout='fixed'
-      width={1500}
-      height={1000}
-      alt='preview'
-      className='rounded-md object-contain object-center'
-    />
+    <Image src={url} width={1500} height={1000} alt='preview' className='rounded-md object-contain object-center' />
   ) : (
     <TbFile size={40} />
   );

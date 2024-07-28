@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
+import { FileInputField } from '@/components/file-input';
 import { LoadingButton } from '@/components/ui/button';
 import { ColorPicker } from '@/components/ui/color-picker';
 import { TextAreaField, TextField } from '@/components/ui/fields';
@@ -29,6 +30,7 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
       name: group.name,
       description: group.description,
       color: group.color ?? undefined,
+      icon: group.icon ?? undefined,
     },
   });
 
@@ -45,6 +47,12 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
         <TextField control={form.control} name='name' label='Csoport neve' />
         <TextAreaField control={form.control} name='description' label='Csoport leírása' />
         <ColorPicker control={form.control} name='color' label='Csoport színe' />
+        <FileInputField
+          control={form.control}
+          name='icon'
+          label='Csoport ikonja (opcionális)'
+          description='Csoport ikonja csak doménnel rendelkező csoportok esetén jelenik meg a felső menüben.'
+        />
         <LoadingButton isLoading={updateGroup.isPending} className='mt-5' type='submit'>
           Mentés
         </LoadingButton>

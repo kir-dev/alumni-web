@@ -20,6 +20,7 @@ model Group {
   description   String
   color         String?
   parentGroupId String?
+  icon          String?
   parentGroup   Group?  @relation("ParentGroup", fields: [parentGroupId], references: [id])
   subGroups     Group[] @relation("ParentGroup")
 

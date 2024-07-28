@@ -5,6 +5,7 @@ export const CreateGroupDto = z.object({
   description: z.string(),
   color: z.string(),
   parentGroupId: z.string().optional(),
+  icon: z.string().optional(),
 });
 
 export const UpdateGroupDto = z.object({
@@ -13,6 +14,7 @@ export const UpdateGroupDto = z.object({
     name: z.string().optional(),
     description: z.string().optional(),
     color: z.string().optional(),
+    icon: z.string().optional(),
   }),
 });
 

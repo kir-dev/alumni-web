@@ -1,6 +1,7 @@
 'use client';
 
 import { Group } from '@prisma/client';
+import Image from 'next/image';
 import Link, { LinkProps } from 'next/link';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { TbChevronDown, TbMenu } from 'react-icons/tb';
@@ -49,7 +50,17 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
 
       <div className='flex justify-between items-center container px-10 py-5'>
         <Link href='/' className='flex items-center gap-2'>
-          <Icon className='h-10 w-10' />
+          {group?.icon ? (
+            <Image
+              src={group.icon}
+              alt='Icon'
+              width={100}
+              height={100}
+              className='w-8 h-8 object-contain object-center'
+            />
+          ) : (
+            <Icon className='w-8 h-8' />
+          )}
           <div className='text-xl text-primary-500 dark:text-primary-300'>{group?.name ?? 'Schönherz'} Alumni</div>
         </Link>
         <div className='flex z-10'>
