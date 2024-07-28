@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import crypto from 'crypto';
-import { format, formatRelative, isSameDay, isSameYear } from 'date-fns';
+import { formatRelative, isSameDay, isSameYear } from 'date-fns';
 import { hu } from 'date-fns/locale/hu';
 import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { twMerge } from 'tailwind-merge';
