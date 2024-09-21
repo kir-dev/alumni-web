@@ -7,6 +7,7 @@ import {
   EMAIL_HOST,
   EMAIL_PASSWORD,
   EMAIL_PORT,
+  EMAIL_REPLY_TO,
   EMAIL_SECURE,
   EMAIL_USERNAME,
 } from '@/config/environment.config';
@@ -28,5 +29,6 @@ export const EmailTransport = nodemailer.createTransport(
       name: EMAIL_FROM_NAME,
       address: EMAIL_FROM_ADDRESS,
     },
+    replyTo: EMAIL_REPLY_TO,
   }
 );
