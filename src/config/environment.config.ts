@@ -25,3 +25,5 @@ export const VERCEL_TEAM_ID = env.get('VERCEL_TEAM_ID').required().asString();
 export const VERCEL_API_TOKEN = env.get('VERCEL_API_TOKEN').required().asString();
 
 export const EMAIL_DISABLE = env.get('EMAIL_DISABLE').default('false').asBool();
+
+export const ANALYTICS_URL = env.get('ANALYTICS_URL').asString();
