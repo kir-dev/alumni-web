@@ -1,6 +1,6 @@
 import { render } from '@react-email/render';
 import { addDays, subDays, subMonths, subYears } from 'date-fns';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
@@ -9,7 +9,14 @@ import GeneralEmail from '@/emails/general';
 import NewNewsEmail from '@/emails/new-news';
 import { batchSendEmail } from '@/lib/email';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    console.warn('Unauthorized request to cron job');
+    return new Response('Unauthorized', {
+      status: 401,
+    });
+  }
   await notifyOutdatedProfiles();
   await notifyPublishedNews();
   await notifyUpcomingEvents();
