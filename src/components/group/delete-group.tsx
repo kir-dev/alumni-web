@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { TbTrash } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { LoadingButton } from '@/components/ui/button';
@@ -24,7 +25,8 @@ export default function DeleteGroup({ groupId }: DeleteGroupProps) {
     <ConfirmationDialog
       trigger={
         <LoadingButton isLoading={deleteGroup.isPending} variant='destructiveOutline'>
-          Törlés
+          <TbTrash />
+          Csoport törlése
         </LoadingButton>
       }
       title='Csoport törlése'
