@@ -8,6 +8,7 @@ import {
 } from '@/trpc/event.trpc';
 import {
   createGroup,
+  deleteGroup,
   deleteMembership,
   editMembership,
   getGroup,
@@ -53,6 +54,7 @@ export const appRouter = router({
   getGroup,
   createGroup,
   updateGroup,
+  deleteGroup,
   joinGroup,
   leaveGroup,
   editMembership,

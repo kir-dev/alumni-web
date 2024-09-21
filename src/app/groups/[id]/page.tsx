@@ -13,11 +13,12 @@ import { SiteListItem } from '@/components/sites/site-list-item';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
-import { canEdit, getGroup, getMembership, getSession, isApprovedGroupMember } from '@/lib/server-utils';
+import { canEdit, getGroup, getMembership, getSession, isApprovedGroupMember, isSuperAdmin } from '@/lib/server-utils';
 import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
 
 const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
 const DomainSettings = dynamic(() => import('@/components/group/domain-settings'), { ssr: false });
+const DeleteGroup = dynamic(() => import('@/components/group/delete-group'), { ssr: false });
 
 interface GroupPageProps {
   params: {
@@ -42,6 +43,7 @@ export async function generateMetadata({ params }: GroupPageProps): Promise<Meta
 export default async function GroupDetailPage({ params }: GroupPageProps) {
   const userCanEdit = await canEdit(params.id);
   const userIsMember = await isApprovedGroupMember(params.id);
+  const userIsSuperAdmin = await isSuperAdmin();
   const session = await getSession();
   const membership = await getMembership(params.id);
 
@@ -109,17 +111,16 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
                   </Button>
                 </>
               )}
-              {userCanEdit && (
-                <Providers>
-                  <SendEmail groupId={params.id} />
-                  <DomainSettings domain={group.domain} groupId={params.id} />
-                </Providers>
-              )}
-              {session && (
-                <Providers>
-                  <JoinButton membership={membership} groupId={params.id} />
-                </Providers>
-              )}
+              <Providers>
+                {userCanEdit && (
+                  <>
+                    <SendEmail groupId={params.id} />
+                    <DomainSettings domain={group.domain} groupId={params.id} />
+                  </>
+                )}
+                {session && <JoinButton membership={membership} groupId={params.id} />}
+                {userIsSuperAdmin && <DeleteGroup groupId={params.id} />}
+              </Providers>
             </div>
           </div>
         </CardContent>

@@ -303,3 +303,17 @@ async function sendJoinNotificationToGroupAdmins(groupId: string, user: User) {
     ),
   });
 }
+
+export const deleteGroup = superAdminProcedure.input(z.string()).mutation(async (opts) => {
+  const result = await prismaClient.group.delete({
+    where: {
+      id: opts.input,
+    },
+  });
+
+  await addAuditLog({
+    groupId: null,
+    action: `Csoport törlése: ${result.name}`,
+    userId: opts.ctx.session?.user.id,
+  });
+});
