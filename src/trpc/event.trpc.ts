@@ -1,3 +1,4 @@
+import { MembershipStatus } from '@prisma/client';
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 
@@ -29,6 +30,7 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
   const membersOfGroup = await prismaClient.membership.findMany({
     where: {
       groupId: event.groupId,
+      status: MembershipStatus.Approved,
     },
     include: {
       user: true,
@@ -132,6 +134,7 @@ export const createEventApplication = privateProcedure.input(CreateEventApplicat
           group: {
             members: {
               some: {
+                status: MembershipStatus.Approved,
                 userId: opts.ctx.session.user.id,
               },
             },

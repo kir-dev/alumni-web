@@ -16,12 +16,12 @@ export type NewsFeedItem = {
   news: News;
 };
 
-export function getFeed(userId: string): Promise<(EventFeedItem | NewsFeedItem)[]> {
-  return Promise.all([getEventFeedItems(userId), getNewsFeedItems(userId)]).then(([eventFeedItems, newsFeedItems]) => {
-    const feedItems = [...eventFeedItems, ...newsFeedItems];
-    feedItems.sort((a, b) => b.date.getTime() - a.date.getTime());
-    return feedItems;
-  });
+export async function getFeed(userId: string): Promise<(EventFeedItem | NewsFeedItem)[]> {
+  const results = await Promise.all([getEventFeedItems(userId), getNewsFeedItems(userId)]);
+  const [eventFeedItems, newsFeedItems] = results;
+  const feedItems = [...eventFeedItems, ...newsFeedItems];
+  feedItems.sort((a, b) => b.date.getTime() - a.date.getTime());
+  return feedItems;
 }
 
 async function getEventFeedItems(userId: string): Promise<EventFeedItem[]> {

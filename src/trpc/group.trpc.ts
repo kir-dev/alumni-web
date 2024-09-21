@@ -245,6 +245,9 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
     },
     include: {
       members: {
+        where: {
+          status: MembershipStatus.Approved,
+        },
         include: {
           user: {
             select: {

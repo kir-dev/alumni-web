@@ -1,3 +1,4 @@
+import { MembershipStatus } from '@prisma/client';
 import { render } from '@react-email/render';
 import { addDays, subDays, subMonths, subYears } from 'date-fns';
 import { NextRequest, NextResponse } from 'next/server';
@@ -57,6 +58,9 @@ async function notifyPublishedNews() {
       group: {
         include: {
           members: {
+            where: {
+              status: MembershipStatus.Approved,
+            },
             include: {
               user: {
                 select: {

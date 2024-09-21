@@ -70,6 +70,11 @@ export default async function ProfilePage() {
     include: {
       event: true,
     },
+    orderBy: {
+      event: {
+        startDate: 'asc',
+      },
+    },
   });
 
   const emailVerified = Boolean(user.emailVerified);
