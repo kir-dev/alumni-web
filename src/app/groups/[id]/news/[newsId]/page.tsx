@@ -43,11 +43,15 @@ export default async function NewsDetailsPage({ params }: { params: { id: string
 
   if (!news) return notFound();
 
+  const paragraphs = news.content.split('\n');
+
   return (
     <main>
       <h1>{news.title}</h1>
       <p>{formatHu(news.publishDate, 'yyyy. MMMM dd. HH:mm')}</p>
-      <p>{news.content}</p>
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
       <UpdatedAt date={news.updatedAt} className='mt-5' />
       <Providers>
         {userCanEdit && (
