@@ -51,7 +51,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
     },
     include: {
       parentGroup: true,
-      subGroups: true,
+      subGroups: { orderBy: { name: 'asc' } },
       domain: true,
     },
   });

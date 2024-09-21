@@ -51,6 +51,11 @@ export default async function ProfilePage() {
     include: {
       group: true,
     },
+    orderBy: {
+      group: {
+        name: 'asc',
+      },
+    },
   });
 
   const eventRegistrations = await prismaClient.eventApplication.findMany({

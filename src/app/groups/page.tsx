@@ -20,6 +20,9 @@ export default async function GroupsPage() {
     where: {
       parentGroupId: null,
     },
+    orderBy: {
+      name: 'asc',
+    },
   });
 
   return (
