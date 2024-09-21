@@ -1,8 +1,10 @@
 import { SendMailOptions } from 'nodemailer';
 
 import { EmailTransport } from '@/config/email.config';
+import { EMAIL_DISABLE } from '@/config/environment.config';
 
 export function singleSendEmail(options: SendMailOptions) {
+  if (EMAIL_DISABLE) return;
   EmailTransport.sendMail(options).catch((error) => {
     console.error(`Failed to send email to ${options.to}`, error);
   });
