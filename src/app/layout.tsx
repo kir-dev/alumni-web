@@ -2,7 +2,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Head from 'next/head';
+import Script from 'next/script';
 import React from 'react';
 
 import { NavbarWrapper } from '@/components/navbar/navbar-wrapper';
@@ -26,9 +26,7 @@ export default async function RootLayout({
 
   return (
     <html lang='hu'>
-      <Head>
-        {ANALYTICS_URL && <script defer data-domain={ANALYTICS_URL} src='https://visit.kir-dev.hu/js/script.js' />}
-      </Head>
+      {ANALYTICS_URL && <Script defer data-domain={ANALYTICS_URL} src='https://visit.kir-dev.hu/js/script.js' />}
       <body className={inter.className}>
         <NavbarWrapper group={domain?.group} />
         {children}
