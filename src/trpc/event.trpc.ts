@@ -41,7 +41,7 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
     .filter(({ user }) => Boolean(user.emailVerified))
     .map(({ user }) => user.email);
 
-  batchSendEmail({
+  await batchSendEmail({
     to: emailRecipients,
     subject: event.name,
     html: render(
@@ -92,7 +92,7 @@ export const updateEvent = groupAdminProcedure.input(UpdateEventDto).mutation(as
 
   const difference = getEventDifference(prevEvent, updatedEvent);
   if (Object.keys(difference).length > 0) {
-    batchSendEmail({
+    await batchSendEmail({
       to: emailRecipients,
       subject: 'Egy eseményedet frissítették',
       html: render(
@@ -180,7 +180,7 @@ export const deleteEvent = groupAdminProcedure.input(DeleteEventDto).mutation(as
     },
   });
 
-  batchSendEmail({
+  await batchSendEmail({
     to: event.EventApplication.map(({ user }) => user.email),
     subject: 'Esemény törölve',
     html: render(DeleteEventEmail({ event, groupName: event.group.name })),

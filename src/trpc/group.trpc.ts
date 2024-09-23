@@ -111,7 +111,7 @@ const createMembership = async (groupId: string, user: { id: string; email: stri
 
   await sendJoinNotificationToGroupAdmins(groupId, membership.user);
 
-  singleSendEmail({
+  await singleSendEmail({
     to: user.email,
     subject: 'Csoporthoz csatlakoztál!',
     html: render(
@@ -171,7 +171,7 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
     });
   }
 
-  singleSendEmail({
+  await singleSendEmail({
     to: membership.user.email,
     subject: 'Csoporttagságod státusza megváltozott',
     html: render(
@@ -261,7 +261,7 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
 
   if (!group) throw new TRPCError({ code: 'NOT_FOUND' });
 
-  batchSendEmail({
+  await batchSendEmail({
     to: group.members.map((member) => member.user.email),
     subject: opts.input.subject,
     html: render(
@@ -296,7 +296,7 @@ async function sendJoinNotificationToGroupAdmins(groupId: string, user: User) {
 
   const emails = groupAdmins.map((admin) => admin.user.email);
 
-  batchSendEmail({
+  await batchSendEmail({
     to: emails,
     subject: 'Új csatlakozási kérelem a csoportodhoz',
     html: render(

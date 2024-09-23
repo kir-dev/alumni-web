@@ -51,7 +51,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
     },
   });
 
-  singleSendEmail({
+  await singleSendEmail({
     to: user.email,
     subject: 'Üdvözlünk az Almuni Weben 👋',
     html: render(
@@ -100,7 +100,7 @@ export const resetPassword = publicProcedure.input(PasswordResetDto).mutation(as
     },
   });
 
-  singleSendEmail({
+  await singleSendEmail({
     to: user.email,
     subject: 'Jelszó visszaállítás',
     html: render(
@@ -241,7 +241,7 @@ async function createEmailVerificationSession(userId: string) {
     },
   });
 
-  singleSendEmail({
+  await singleSendEmail({
     to: user.email,
     subject: 'E-mail cím megerősítése',
     html: render(

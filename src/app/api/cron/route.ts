@@ -34,7 +34,7 @@ async function notifyOutdatedProfiles() {
     },
   });
 
-  batchSendEmail({
+  await batchSendEmail({
     to: outdatedProfiles.map((user) => user.email),
     subject: 'Profil frissítése',
     html: render(
@@ -74,19 +74,19 @@ async function notifyPublishedNews() {
     },
   });
 
-  newsFromPastDay.forEach(({ group, ...news }) => {
-    batchSendEmail({
-      to: group.members.map((member) => member.user.email),
+  for (const news of newsFromPastDay) {
+    await batchSendEmail({
+      to: news.group.members.map((member) => member.user.email),
       subject: news.title,
       html: render(
         NewNewsEmail({
-          groupName: group.name,
+          groupName: news.group.name,
           news,
           newsLink: `${SITE_URL}/news/${news.id}`,
         })
       ),
     });
-  });
+  }
 }
 
 async function notifyUpcomingEvents() {
@@ -116,8 +116,8 @@ async function notifyUpcomingEvents() {
     },
   });
 
-  upcomingEvents.forEach(({ EventApplication, ...event }) => {
-    batchSendEmail({
+  for (const { EventApplication, ...event } of upcomingEvents) {
+    await batchSendEmail({
       to: EventApplication.map((application) => application.user.email),
       subject: `${event.name} hamarosan kezdődik!`,
       html: render(
@@ -128,7 +128,7 @@ async function notifyUpcomingEvents() {
         })
       ),
     });
-  });
+  }
 }
 
 async function cleanAuditLogs() {
