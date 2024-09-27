@@ -3,7 +3,7 @@
 import { User } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { TbCircleCheck, TbCircleX, TbShieldMinus, TbShieldPlus } from 'react-icons/tb';
+import { TbCircleCheck, TbShieldMinus, TbShieldPlus } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Badge } from '@/components/ui/badge';

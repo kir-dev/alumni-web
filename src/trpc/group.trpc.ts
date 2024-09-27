@@ -111,16 +111,18 @@ const createMembership = async (groupId: string, user: { id: string; email: stri
 
   await sendJoinNotificationToGroupAdmins(groupId, membership.user);
 
-  await singleSendEmail({
-    to: user.email,
-    subject: 'Csoporthoz csatlakoztál!',
-    html: render(
-      MembershipStatusEmail({
-        groupName: membership.group.name,
-        status: StatusMap[membership.status].label,
-      })
-    ),
-  });
+  if (membership.user.emailVerified) {
+    await singleSendEmail({
+      to: user.email,
+      subject: 'Csoporthoz csatlakoztál!',
+      html: render(
+        MembershipStatusEmail({
+          groupName: membership.group.name,
+          status: StatusMap[membership.status].label,
+        })
+      ),
+    });
+  }
 
   return membership;
 };
@@ -171,16 +173,18 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
     });
   }
 
-  await singleSendEmail({
-    to: membership.user.email,
-    subject: 'Csoporttagságod státusza megváltozott',
-    html: render(
-      MembershipStatusEmail({
-        groupName: membership.group.name,
-        status: StatusMap[membership.status].label,
-      })
-    ),
-  });
+  if (membership.user.emailVerified) {
+    await singleSendEmail({
+      to: membership.user.email,
+      subject: 'Csoporttagságod státusza megváltozott',
+      html: render(
+        MembershipStatusEmail({
+          groupName: membership.group.name,
+          status: StatusMap[membership.status].label,
+        })
+      ),
+    });
+  }
 
   await addAuditLog({
     groupId: opts.input.groupId,
@@ -247,6 +251,12 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
       members: {
         where: {
           status: MembershipStatus.Approved,
+          enableGroupNotification: true,
+          user: {
+            NOT: {
+              emailVerified: null,
+            },
+          },
         },
         include: {
           user: {
@@ -284,6 +294,11 @@ async function sendJoinNotificationToGroupAdmins(groupId: string, user: User) {
     where: {
       groupId,
       isAdmin: true,
+      user: {
+        NOT: {
+          emailVerified: null,
+        },
+      },
     },
     select: {
       user: {

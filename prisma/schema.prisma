@@ -47,6 +47,10 @@ model Membership {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  enableEventNotification Boolean @default(true)
+  enableNewsNotification  Boolean @default(true)
+  enableGroupNotification Boolean @default(true)
+
   @@id([userId, groupId])
 }
 

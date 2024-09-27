@@ -53,7 +53,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
 
   await singleSendEmail({
     to: user.email,
-    subject: 'Üdvözlünk az Almuni Weben 👋',
+    subject: 'Üdvözlünk az Alumni Weben 👋',
     html: render(
       Welcome({
         name: user.firstName,

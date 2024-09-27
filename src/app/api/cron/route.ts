@@ -28,6 +28,9 @@ export async function GET(request: NextRequest) {
 async function notifyOutdatedProfiles() {
   const outdatedProfiles = await prismaClient.user.findMany({
     where: {
+      NOT: {
+        emailVerified: null,
+      },
       updatedAt: {
         lt: subYears(new Date(), 1),
       },
@@ -60,6 +63,7 @@ async function notifyPublishedNews() {
           members: {
             where: {
               status: MembershipStatus.Approved,
+              enableNewsNotification: true,
             },
             include: {
               user: {

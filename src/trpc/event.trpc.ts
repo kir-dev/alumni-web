@@ -31,15 +31,19 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
     where: {
       groupId: event.groupId,
       status: MembershipStatus.Approved,
+      enableEventNotification: true,
+      user: {
+        NOT: {
+          emailVerified: null,
+        },
+      },
     },
     include: {
       user: true,
     },
   });
 
-  const emailRecipients = membersOfGroup
-    .filter(({ user }) => Boolean(user.emailVerified))
-    .map(({ user }) => user.email);
+  const emailRecipients = membersOfGroup.map(({ user }) => user.email);
 
   await batchSendEmail({
     to: emailRecipients,
@@ -82,6 +86,11 @@ export const updateEvent = groupAdminProcedure.input(UpdateEventDto).mutation(as
   const attendees = await prismaClient.eventApplication.findMany({
     where: {
       eventId: id,
+      user: {
+        NOT: {
+          emailVerified: null,
+        },
+      },
     },
     include: {
       user: true,
@@ -165,6 +174,13 @@ export const deleteEvent = groupAdminProcedure.input(DeleteEventDto).mutation(as
     include: {
       group: true,
       EventApplication: {
+        where: {
+          user: {
+            NOT: {
+              emailVerified: null,
+            },
+          },
+        },
         include: {
           user: true,
         },
