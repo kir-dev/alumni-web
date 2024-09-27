@@ -3,13 +3,14 @@
 import { User } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { TbShieldMinus, TbShieldPlus } from 'react-icons/tb';
+import { TbCircleCheck, TbCircleX, TbShieldMinus, TbShieldPlus } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Badge } from '@/components/ui/badge';
 import { LoadingButton } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface UserListProps {
   users: User[];
@@ -44,7 +45,19 @@ export function UserList({ users, currentUserId }: UserListProps) {
                   {user.lastName} {user.firstName} {user.nickname && ` (${user.nickname})`}{' '}
                   {user.isSuperAdmin && <Badge variant='outline'>Admin</Badge>}
                 </TableCell>
-                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <TooltipProvider>
+                    {user.email}{' '}
+                    {user.emailVerified && (
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger>
+                          <TbCircleCheck size={20} className='text-green-500 inline' />
+                        </TooltipTrigger>
+                        <TooltipContent>Ellenőrizve</TooltipContent>
+                      </Tooltip>
+                    )}
+                  </TooltipProvider>
+                </TableCell>
                 <TableCell className='space-x-2 text-right text-nowrap'>
                   <UserDetails user={user} />
                   <LoadingButton
