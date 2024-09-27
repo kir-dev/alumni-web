@@ -41,3 +41,10 @@ export const SendEmailDto = z.object({
   subject: z.string({ required_error: 'Tárgy kötelező' }),
   content: z.string({ required_error: 'Tartalom kötelező' }),
 });
+
+export const UpdateNotificationSettingsDto = z.object({
+  groupId: z.string(),
+  enableGroupNotification: z.boolean().optional(),
+  enableEventNotification: z.boolean().optional(),
+  enableNewsNotification: z.boolean().optional(),
+});

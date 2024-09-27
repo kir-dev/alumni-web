@@ -33,6 +33,7 @@ async function notifyOutdatedProfiles() {
       },
       updatedAt: {
         lt: subYears(new Date(), 1),
+        gt: subDays(subYears(new Date(), 1), 1),
       },
     },
   });

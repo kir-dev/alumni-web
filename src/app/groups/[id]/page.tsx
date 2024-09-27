@@ -18,6 +18,7 @@ import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
 
 const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
 const DomainSettings = dynamic(() => import('@/components/group/domain-settings'), { ssr: false });
+const NotificationSettings = dynamic(() => import('@/components/group/notification-settings'), { ssr: false });
 const DeleteGroup = dynamic(() => import('@/components/group/delete-group'), { ssr: false });
 
 interface GroupPageProps {
@@ -119,6 +120,7 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
                   </>
                 )}
                 {session && <JoinButton membership={membership} groupId={params.id} />}
+                {membership && <NotificationSettings membership={membership} />}
                 {userIsSuperAdmin && <DeleteGroup groupId={params.id} />}
               </Providers>
             </div>

@@ -18,6 +18,7 @@ import {
   sendEmail,
   toggleAdmin,
   updateGroup,
+  updateNotificationPreferences,
 } from '@/trpc/group.trpc';
 import { createNews, deleteNews, updateNews } from '@/trpc/news.trpc';
 import {
@@ -85,6 +86,7 @@ export const appRouter = router({
   addDomain,
   checkDomain,
   deleteDomain,
+  updateNotificationPreferences,
 });
 
 export type AppRouter = typeof appRouter;

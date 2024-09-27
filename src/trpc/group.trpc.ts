@@ -19,6 +19,7 @@ import {
   SendEmailDto,
   ToggleAdminDto,
   UpdateGroupDto,
+  UpdateNotificationSettingsDto,
 } from '@/types/group.types';
 
 export const getGroups = superAdminProcedure.query(async () => {
@@ -335,3 +336,23 @@ export const deleteGroup = superAdminProcedure.input(z.string()).mutation(async 
     userId: opts.ctx.session?.user.id,
   });
 });
+
+export const updateNotificationPreferences = privateProcedure
+  .input(UpdateNotificationSettingsDto)
+  .mutation(async (opts) => {
+    if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+    return prismaClient.membership.update({
+      where: {
+        userId_groupId: {
+          groupId: opts.input.groupId,
+          userId: opts.ctx.session.user.id,
+        },
+      },
+      data: {
+        enableGroupNotification: opts.input.enableGroupNotification,
+        enableEventNotification: opts.input.enableEventNotification,
+        enableNewsNotification: opts.input.enableNewsNotification,
+      },
+    });
+  });
