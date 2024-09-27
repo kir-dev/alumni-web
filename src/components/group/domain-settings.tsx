@@ -65,7 +65,7 @@ export default function DomainSettings({ domain, groupId }: DomainSettingsProps)
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant={buttonVariant}>
+        <Button variant={buttonVariant} className='w-full'>
           <TbLink />
           Domén beállítása
         </Button>
