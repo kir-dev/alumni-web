@@ -38,22 +38,19 @@ export async function singleSendEmail(options: SendMailOptions) {
 
 type BatchSendEmailOptions = Omit<SendMailOptions, 'to'> & { to: string[] };
 export async function batchSendEmail(options: BatchSendEmailOptions) {
-  const { to, ...rest } = options;
   try {
-    await mailingAxios.post('/api/send-bulk', {
-      messages: to.map((email) => ({
-        from: {
-          name: EMAIL_FROM_NAME,
-          email: '',
-        },
-        to: email,
-        subject: rest.subject,
-        html: rest.html,
-        replyTo: EMAIL_REPLY_TO,
-      })),
+    await mailingAxios.post('/api/send-to-many', {
+      from: {
+        name: EMAIL_FROM_NAME,
+        email: '',
+      },
+      to: options.to,
+      subject: options.subject,
+      html: options.html,
+      replyTo: EMAIL_REPLY_TO,
       queue: EMAIL_QUEUE,
     });
   } catch (error) {
-    console.error(`Failed to send email to ${to.length} recipients`, error);
+    console.error(`Failed to send email to ${options.to.length} recipients`, error);
   }
 }
