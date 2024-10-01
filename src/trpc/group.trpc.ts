@@ -278,7 +278,6 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
     html: render(
       GroupGeneralEmail({
         content: opts.input.content,
-        groupName: group.name,
       })
     ),
   });

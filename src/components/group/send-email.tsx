@@ -4,10 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { TbLoader, TbMailForward } from 'react-icons/tb';
+import { TbLoader, TbMailForward, TbSend } from 'react-icons/tb';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -62,6 +63,13 @@ export default function SendEmail({ groupId }: SendEmailProps) {
                 label='Tartalom'
                 description='Tipp: Használj sortöréseket új bekezdés létrehozásához.'
               />
+              <Alert variant='warning' className='mt-5'>
+                <TbSend className='shrink-0' />
+                <AlertDescription>
+                  Az e-mail küldése minden elfogadott csoporttag számára értesítést fog jelenteni. Kérjük, nevezd meg a
+                  feladót a levélben!
+                </AlertDescription>
+              </Alert>
             </DialogBody>
             <DialogFooter className='mt-5'>
               <Button type='reset' variant='outline' asChild>
