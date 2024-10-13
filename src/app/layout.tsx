@@ -7,6 +7,7 @@ import React from 'react';
 
 import { NavbarWrapper } from '@/components/navbar/navbar-wrapper';
 import { Footer } from '@/components/ui/footer';
+import { Toaster } from '@/components/ui/toaster';
 import { ANALYTICS_URL } from '@/config/environment.config';
 import { getDomainForHost } from '@/lib/server-utils';
 
@@ -31,6 +32,7 @@ export default async function RootLayout({
         <NavbarWrapper group={domain?.group} />
         {children}
         <Footer />
+        <Toaster />
       </body>
     </html>
   );

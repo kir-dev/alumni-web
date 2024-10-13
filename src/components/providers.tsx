@@ -5,8 +5,21 @@ import { httpBatchLink } from '@trpc/client';
 import { PropsWithChildren } from 'react';
 
 import { trpc } from '@/_trpc/client';
+import { toast } from '@/hooks/use-toast';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      onError: (error) => {
+        toast({
+          title: 'Hiba történt',
+          description: error.message,
+          variant: 'destructive',
+        });
+      },
+    },
+  },
+});
 
 const trpcClient = trpc.createClient({
   links: [
