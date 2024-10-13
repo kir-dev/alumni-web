@@ -11,7 +11,7 @@ const MembershipCounter = dynamic(() => import('./membership-counter'), { ssr: f
 
 interface GroupListItemProps {
   group: Group;
-  approvedCount: number;
+  approvedCount?: number;
 }
 
 export function GroupListItem({ group, approvedCount }: GroupListItemProps) {
@@ -21,7 +21,7 @@ export function GroupListItem({ group, approvedCount }: GroupListItemProps) {
         <CardHeader className='flex-row justify-between items-center'>
           <CardTitle className='text-lg'>{group.name}</CardTitle>
           <div className='flex gap-2 items-center'>
-            <MembershipCounter approvedCount={approvedCount} />
+            {typeof approvedCount === 'number' && <MembershipCounter approvedCount={approvedCount} />}
             <TbChevronRight className='text-slate-500' />
           </div>
         </CardHeader>
