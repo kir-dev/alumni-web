@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import { initTRPC, TRPCError } from '@trpc/server';
 import { getServerSession } from 'next-auth/next';
 
@@ -14,6 +15,8 @@ export const createContext = async () => {
 
 const t = initTRPC.context<Awaited<ReturnType<typeof createContext>>>().create();
 const middleware = t.middleware;
+
+const sentryMiddleware = middleware(Sentry.trpcMiddleware({ attachRpcInput: true }));
 
 const isAuthorized = middleware(async (opts) => {
   if (!opts.ctx.session?.user?.email || !opts.ctx.session?.user?.id) {
@@ -66,7 +69,7 @@ const isGroupAdmin = middleware(async (opts) => {
 });
 
 export const router = t.router;
-export const publicProcedure = t.procedure;
-export const privateProcedure = t.procedure.use(isAuthorized);
-export const groupAdminProcedure = t.procedure.use(isAuthorized).use(isGroupAdmin);
-export const superAdminProcedure = t.procedure.use(isAuthorized).use(isSuperAdmin);
+export const publicProcedure = t.procedure.use(sentryMiddleware);
+export const privateProcedure = t.procedure.use(sentryMiddleware).use(isAuthorized);
+export const groupAdminProcedure = t.procedure.use(sentryMiddleware).use(isAuthorized).use(isGroupAdmin);
+export const superAdminProcedure = t.procedure.use(sentryMiddleware).use(isAuthorized).use(isSuperAdmin);
