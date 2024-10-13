@@ -1,7 +1,7 @@
 'use client';
 
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, PropsWithChildren } from 'react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -28,4 +28,19 @@ const TooltipContent = forwardRef<
 ));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+interface InlineTooltipProps extends PropsWithChildren {
+  content: string;
+}
+
+function InlineTooltip({ content, children }: InlineTooltipProps) {
+  return (
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipContent>{content}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+export { InlineTooltip, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };

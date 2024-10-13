@@ -1,3 +1,4 @@
+import { MembershipStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -15,6 +16,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prismaClient } from '@/config/prisma.config';
 import { canEdit, getGroup, getMembership, getSession, isApprovedGroupMember, isSuperAdmin } from '@/lib/server-utils';
 import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
+
+const MembershipCounter = dynamic(() => import('@/components/group/membership-counter'), { ssr: false });
 
 const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
 const DomainSettings = dynamic(() => import('@/components/group/domain-settings'), { ssr: false });
@@ -54,7 +57,20 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
     },
     include: {
       parentGroup: true,
-      subGroups: { orderBy: { name: 'asc' } },
+      subGroups: {
+        orderBy: { name: 'asc' },
+        include: {
+          _count: {
+            select: {
+              members: {
+                where: {
+                  status: MembershipStatus.Approved,
+                },
+              },
+            },
+          },
+        },
+      },
       domain: true,
     },
   });
@@ -62,6 +78,8 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
   if (!group) {
     return notFound();
   }
+
+  const membershipCount = await getMembershipCount(params.id);
 
   const events = await getSortedEvents(params.id, userIsMember);
 
@@ -74,7 +92,10 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
       {group.color && <style>{generateGlobalThemePalette(group.color)}</style>}
       <Card>
         <CardHeader>
-          <CardTitle>{group.name}</CardTitle>
+          <CardTitle>
+            {group.name}{' '}
+            <MembershipCounter approvedCount={membershipCount.approved} pendingCount={membershipCount.pending} />
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className='flex justify-between overflow-hidden gap-5 flex-col md:flex-row'>
@@ -166,7 +187,8 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
           <h2 className='mt-10'>Alcsoportok</h2>
           <div className='mt-5'>
             {group.subGroups.map((subGroup) => (
-              <GroupListItem group={subGroup} key={subGroup.id} />
+              // eslint-disable-next-line no-underscore-dangle
+              <GroupListItem group={subGroup} key={subGroup.id} approvedCount={subGroup._count.members} />
             ))}
           </div>
         </>
@@ -231,4 +253,17 @@ async function getSites(groupId: string) {
       groupId: groupId,
     },
   });
+}
+
+async function getMembershipCount(groupId: string) {
+  const memberships = await prismaClient.membership.findMany({
+    where: {
+      groupId: groupId,
+    },
+  });
+
+  return {
+    approved: memberships.filter((m) => m.status === MembershipStatus.Approved).length,
+    pending: memberships.filter((m) => m.status === MembershipStatus.Pending).length,
+  };
 }

@@ -1,3 +1,4 @@
+import { MembershipStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { TbPlus } from 'react-icons/tb';
@@ -23,6 +24,17 @@ export default async function GroupsPage() {
     orderBy: {
       name: 'asc',
     },
+    include: {
+      _count: {
+        select: {
+          members: {
+            where: {
+              status: MembershipStatus.Approved,
+            },
+          },
+        },
+      },
+    },
   });
 
   return (
@@ -39,7 +51,8 @@ export default async function GroupsPage() {
       </div>
       <div className='mt-10'>
         {groups.map((group) => (
-          <GroupListItem key={group.id} group={group} />
+          // eslint-disable-next-line no-underscore-dangle
+          <GroupListItem key={group.id} group={group} approvedCount={group._count.members} />
         ))}
       </div>
     </main>
