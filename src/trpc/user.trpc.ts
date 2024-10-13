@@ -23,6 +23,16 @@ import {
 export const registerUser = publicProcedure.input(RegisterDto).mutation(async (opts): Promise<UserProfileDto> => {
   const { password, ...data } = opts.input;
 
+  const existingUser = await prismaClient.user.findFirst({
+    where: {
+      email: data.email,
+    },
+  });
+
+  if (existingUser) {
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Ez az e-mail cím már regisztrálva van' });
+  }
+
   const user = await prismaClient.user.create({
     data: {
       ...data,

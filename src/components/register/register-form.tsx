@@ -23,7 +23,7 @@ const RegisterFormSchema = RegisterDto.merge(
 export function RegisterForm() {
   const [loginLoading, setLoginLoading] = useState(false);
   const router = useRouter();
-  const { mutateAsync, isPending, isError } = trpc.registerUser.useMutation();
+  const { mutateAsync, isPending, isError, error } = trpc.registerUser.useMutation();
 
   const form = useForm<z.infer<typeof RegisterFormSchema>>({
     defaultValues: {
@@ -72,7 +72,7 @@ export function RegisterForm() {
           label={
             <>
               Elfogadom az{' '}
-              <Link className='underline' href='/sites/adatvedelem'>
+              <Link className='underline' href='/sites/adatvedelem' target='_blank'>
                 adatvédelmi irányelveket
               </Link>
               .
@@ -82,7 +82,7 @@ export function RegisterForm() {
         <LoadingButton isLoading={isPending || loginLoading} className='mt-5' type='submit'>
           Regisztráció
         </LoadingButton>
-        {isError && <FormMessage>Hiba történt a regisztráció során</FormMessage>}
+        {isError && <FormMessage>{error?.message || 'Hiba történt a regisztráció során'}</FormMessage>}
       </form>
     </Form>
   );
