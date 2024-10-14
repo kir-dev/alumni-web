@@ -38,7 +38,7 @@ export default function NotificationSettings({ membership }: NotificationSetting
   };
   return (
     <Dialog onOpenChange={onOpenChange}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant='outline' className='w-full'>
           <TbBellCog />
           Értesítések
