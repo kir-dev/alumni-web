@@ -53,7 +53,7 @@ async function notifyOutdatedProfiles() {
 async function notifyPublishedNews() {
   const newsFromPastDay = await prismaClient.news.findMany({
     where: {
-      createdAt: {
+      publishDate: {
         gt: subDays(new Date(), 1),
         lt: new Date(),
       },
