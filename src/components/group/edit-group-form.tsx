@@ -35,7 +35,7 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await updateGroup.mutateAsync({ id: group.id, data }).then((data) => {
+    await updateGroup.mutateAsync({ groupId: group.id, data }).then((data) => {
       router.push(`/groups/${data.id}`);
       router.refresh();
     });

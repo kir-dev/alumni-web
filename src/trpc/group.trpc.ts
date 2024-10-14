@@ -46,17 +46,17 @@ export const createGroup = superAdminProcedure.input(CreateGroupDto).mutation(as
 });
 
 export const updateGroup = groupAdminProcedure.input(UpdateGroupDto).mutation(async (opts) => {
-  const { id, data } = opts.input;
+  const { groupId, data } = opts.input;
 
   const updated = await prismaClient.group.update({
     where: {
-      id,
+      id: groupId,
     },
     data,
   });
 
   await addAuditLog({
-    groupId: id,
+    groupId: groupId,
     action: `Csoport frissítése: ${updated.name}`,
     userId: opts.ctx.session?.user.id,
   });

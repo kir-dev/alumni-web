@@ -9,7 +9,7 @@ export const CreateGroupDto = z.object({
 });
 
 export const UpdateGroupDto = z.object({
-  id: z.string(),
+  groupId: z.string(),
   data: z.object({
     name: z.string().optional(),
     description: z.string().optional(),
