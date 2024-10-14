@@ -42,6 +42,8 @@ const isSuperAdmin = middleware(async (opts) => {
 
 const isGroupAdmin = middleware(async (opts) => {
   const isSuperAdmin = opts.ctx.session?.user?.isSuperAdmin;
+  // eslint-disable-next-line no-console
+  console.debug(opts.input);
   const groupId =
     typeof opts.input === 'object'
       ? (
@@ -59,6 +61,10 @@ const isGroupAdmin = middleware(async (opts) => {
   });
 
   if (!membership?.isAdmin && !isSuperAdmin) {
+    // eslint-disable-next-line no-console
+    console.debug(
+      `User ${opts.ctx.session?.user?.id} is not an admin of group ${groupId}, (group admin: ${membership?.isAdmin}, super admin: ${isSuperAdmin})`
+    );
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Forbidden',
