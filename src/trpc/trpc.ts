@@ -42,29 +42,39 @@ const isSuperAdmin = middleware(async (opts) => {
 
 const isGroupAdmin = middleware(async (opts) => {
   const isSuperAdmin = opts.ctx.session?.user?.isSuperAdmin;
-  // eslint-disable-next-line no-console
-  console.debug(opts.input);
+
+  if (isSuperAdmin) {
+    return opts.next();
+  }
+
+  const input = await opts.getRawInput();
+
   const groupId =
-    typeof opts.input === 'object'
+    typeof input === 'object'
       ? (
-          opts.input as {
+          input as {
             groupId: string | undefined;
           }
         ).groupId
       : undefined;
 
+  if (!groupId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'A kérésben szereplő csoport nem azonosítható.',
+      cause: 'groupId is missing',
+    });
+  }
+
   const membership = await prismaClient.membership.findFirst({
     where: {
       userId: opts.ctx.session?.user?.id,
       groupId: groupId,
+      isAdmin: true,
     },
   });
 
-  if (!membership?.isAdmin && !isSuperAdmin) {
-    // eslint-disable-next-line no-console
-    console.debug(
-      `User ${opts.ctx.session?.user?.id} is not an admin of group ${groupId}, (group admin: ${membership?.isAdmin}, super admin: ${isSuperAdmin})`
-    );
+  if (!membership) {
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Forbidden',
