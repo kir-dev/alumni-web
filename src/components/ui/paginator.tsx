@@ -34,7 +34,7 @@ export function Paginator({ currentPage, totalCount, pageSize, onPageChange }: P
 
   return (
     <Pagination className='mt-5'>
-      <PaginationPrevious onClick={onPrevious} />
+      <PaginationPrevious onClick={onPrevious} disabled={currentPage === 1} />
       {pagination.items.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Fragment key={index}>
@@ -47,7 +47,7 @@ export function Paginator({ currentPage, totalCount, pageSize, onPageChange }: P
           )}
         </Fragment>
       ))}
-      <PaginationNext onClick={onNext} />
+      <PaginationNext onClick={onNext} disabled={currentPage === pagination.items.length} />
     </Pagination>
   );
 }

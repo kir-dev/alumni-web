@@ -26,7 +26,7 @@ export function UserList({ currentUserId }: UserListProps) {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(50);
+  const [limit, setLimit] = useState(1);
 
   const users = trpc.getUsers.useQuery({
     limit,
@@ -41,6 +41,11 @@ export function UserList({ currentUserId }: UserListProps) {
     await toggleSuperAdmin.mutateAsync(userId);
     router.refresh();
   };
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, limit]);
+
   return (
     <>
       <div className='flex gap-2 mt-5 items-center w-full'>
