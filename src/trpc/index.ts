@@ -36,6 +36,7 @@ import {
   deleteMyUser,
   getMyUser,
   getUserById,
+  getUsers,
   newPassword,
   registerUser,
   requestEmailVerification,
@@ -87,6 +88,7 @@ export const appRouter = router({
   checkDomain,
   deleteDomain,
   updateNotificationPreferences,
+  getUsers,
 });
 
 export type AppRouter = typeof appRouter;

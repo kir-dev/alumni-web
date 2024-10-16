@@ -53,3 +53,9 @@ export const ChangePasswordDto = z
     message: 'A két jelszó nem egyezik meg',
     path: ['newPasswordConfirmation'],
   });
+
+export const UserQuery = z.object({
+  name: z.string().optional(),
+  page: z.number().int().positive().default(1),
+  limit: z.number().int().positive().default(10),
+});

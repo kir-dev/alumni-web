@@ -11,13 +11,14 @@ import PasswordResetEmail from '@/emails/password-reset';
 import Welcome from '@/emails/welcome';
 import { singleSendEmail } from '@/lib/email';
 import { generateRandomString, hashPassword } from '@/lib/utils';
-import { privateProcedure, publicProcedure } from '@/trpc/trpc';
+import { privateProcedure, publicProcedure, superAdminProcedure } from '@/trpc/trpc';
 import {
   ChangePasswordDto,
   PasswordResetDto,
   RegisterDto,
   UpdateUserProfileDto,
   UserProfileDto,
+  UserQuery,
 } from '@/types/user.types';
 
 export const registerUser = publicProcedure.input(RegisterDto).mutation(async (opts): Promise<UserProfileDto> => {
@@ -317,4 +318,62 @@ export const changePassword = privateProcedure.input(ChangePasswordDto).mutation
       password: hashPassword(opts.input.newPassword),
     },
   });
+});
+
+export const getUsers = superAdminProcedure.input(UserQuery).query(async ({ input }) => {
+  const result = await prismaClient.user.findMany({
+    skip: (input.page - 1) * input.limit,
+    take: input.limit,
+    where: {
+      OR: [
+        {
+          firstName: {
+            contains: input.name,
+          },
+        },
+        {
+          lastName: {
+            contains: input.name,
+          },
+        },
+        {
+          email: {
+            contains: input.name,
+          },
+        },
+      ],
+    },
+  });
+
+  const totalCount = await prismaClient.user.count({
+    where: {
+      OR: [
+        {
+          firstName: {
+            contains: input.name,
+          },
+        },
+        {
+          lastName: {
+            contains: input.name,
+          },
+        },
+        {
+          email: {
+            contains: input.name,
+          },
+        },
+      ],
+    },
+  });
+
+  const maxPage = Math.max(Math.ceil(totalCount / input.limit), 1);
+  const page = Math.min(input.page, maxPage);
+
+  return {
+    result,
+    totalCount,
+    maxPage,
+    page,
+  };
 });
