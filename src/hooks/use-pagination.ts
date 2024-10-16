@@ -48,5 +48,6 @@ export const usePagination = (props: PaginationProps) => {
 
   return {
     items,
+    maxPage,
   };
 };

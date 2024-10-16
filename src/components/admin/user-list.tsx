@@ -26,7 +26,7 @@ export function UserList({ currentUserId }: UserListProps) {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(50);
 
   const users = trpc.getUsers.useQuery({
     limit,

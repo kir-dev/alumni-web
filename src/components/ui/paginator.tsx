@@ -29,7 +29,7 @@ export function Paginator({ currentPage, totalCount, pageSize, onPageChange }: P
   };
 
   const onNext = () => {
-    onPageChange(Math.min(pagination.items.length, currentPage + 1));
+    onPageChange(Math.min(pagination.maxPage, currentPage + 1));
   };
 
   return (
@@ -47,7 +47,7 @@ export function Paginator({ currentPage, totalCount, pageSize, onPageChange }: P
           )}
         </Fragment>
       ))}
-      <PaginationNext onClick={onNext} disabled={currentPage === pagination.items.length} />
+      <PaginationNext onClick={onNext} disabled={currentPage === pagination.maxPage} />
     </Pagination>
   );
 }
