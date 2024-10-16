@@ -394,8 +394,13 @@ export const importUsers = superAdminProcedure.input(ImportUsersDto).mutation(as
     return existingUsers.map((user) => user.email);
   }
 
+  const usersWithPassword = input.map((user) => ({
+    ...user,
+    password: hashPassword(generateRandomString(16)),
+  }));
+
   await prismaClient.user.createMany({
-    data: input,
+    data: usersWithPassword,
   });
 
   return [];
