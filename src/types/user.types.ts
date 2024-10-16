@@ -59,3 +59,16 @@ export const UserQuery = z.object({
   page: z.number().int().positive().default(1),
   limit: z.number().int().positive().default(10),
 });
+
+export const ImportUserDto = z.object({
+  email: z.string({ required_error: 'Email cím megadása kötelező' }).email('Helytelen email cím'),
+  firstName: z.string({ required_error: 'Keresztnév megadása kötelező' }),
+  lastName: z.string({ required_error: 'Vezetéknév megadása kötelező' }),
+  nickname: z.string().optional(),
+  phone: z
+    .string({ required_error: 'Telefonszám megadása kötelező' })
+    .regex(/(^\+?[0-9]+$)|^$/, 'Helytelen telefonszám'),
+  address: z.string({ required_error: 'Levelezési cím megadása kötelező' }),
+});
+
+export const ImportUsersDto = z.array(ImportUserDto);

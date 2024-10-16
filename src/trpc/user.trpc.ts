@@ -14,6 +14,7 @@ import { generateRandomString, hashPassword } from '@/lib/utils';
 import { privateProcedure, publicProcedure, superAdminProcedure } from '@/trpc/trpc';
 import {
   ChangePasswordDto,
+  ImportUsersDto,
   PasswordResetDto,
   RegisterDto,
   UpdateUserProfileDto,
@@ -376,4 +377,26 @@ export const getUsers = superAdminProcedure.input(UserQuery).query(async ({ inpu
     maxPage,
     page,
   };
+});
+
+export const importUsers = superAdminProcedure.input(ImportUsersDto).mutation(async ({ input }) => {
+  const existingUsers = await prismaClient.user.findMany({
+    where: {
+      email: {
+        in: input.map((user) => user.email),
+      },
+    },
+  });
+
+  const existingEmails = new Set(existingUsers.map((user) => user.email));
+
+  if (existingEmails.size > 0) {
+    return existingUsers.map((user) => user.email);
+  }
+
+  await prismaClient.user.createMany({
+    data: input,
+  });
+
+  return [];
 });
