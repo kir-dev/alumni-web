@@ -12,14 +12,26 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useDebounce } from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 
-export function Search() {
+const SearchTreshold = 3;
+
+interface SearchProps {
+  isLoggedIn?: boolean;
+}
+
+export function Search({ isLoggedIn }: SearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState(false);
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
   const publicSearch = trpc.publicSearch.useQuery(debouncedSearch, {
-    enabled: debouncedSearch.length > 0,
+    enabled: debouncedSearch.length >= SearchTreshold && !isLoggedIn,
   });
+  const privateSearch = trpc.privateSearch.useQuery(debouncedSearch, {
+    enabled: debouncedSearch.length >= SearchTreshold && isLoggedIn,
+  });
+
+  const isLoading = publicSearch.isLoading || privateSearch.isLoading;
+  const data = publicSearch.data || privateSearch.data;
 
   useEffect(() => {
     const keybinding = (e: KeyboardEvent) => {
@@ -79,11 +91,11 @@ export function Search() {
           </div>
           {focused && (
             <>
-              {!debouncedSearch && <p className='text-center py-2'>Gépelj a kereséshez!</p>}
-              {debouncedSearch && (
+              {debouncedSearch.length < SearchTreshold && <p className='text-center py-2'>Gépelj a kereséshez!</p>}
+              {debouncedSearch.length >= SearchTreshold && (
                 <div className='space-y-2 p-2 overflow-auto'>
-                  {publicSearch.isLoading && [1, 2, 3].map((i) => <Skeleton className='h-20' key={i} />)}
-                  {publicSearch.data?.news.map((news) => (
+                  {isLoading && [1, 2, 3].map((i) => <Skeleton className='h-20' key={i} />)}
+                  {data?.news.map((news) => (
                     <NewsListItem
                       news={{
                         ...news,
@@ -92,7 +104,7 @@ export function Search() {
                       key={news.id}
                     />
                   ))}
-                  {publicSearch.data?.events.map((event) => (
+                  {data?.events.map((event) => (
                     <EventListItem
                       event={{
                         ...event,
@@ -102,7 +114,7 @@ export function Search() {
                       key={event.id}
                     />
                   ))}
-                  {publicSearch.data?.groups.map((group) => <GroupListItem group={group} key={group.id} />)}
+                  {data?.groups.map((group) => <GroupListItem group={group} key={group.id} />)}
                 </div>
               )}
             </>

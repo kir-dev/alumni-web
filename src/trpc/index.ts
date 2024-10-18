@@ -21,7 +21,7 @@ import {
   updateNotificationPreferences,
 } from '@/trpc/group.trpc';
 import { createNews, deleteNews, updateNews } from '@/trpc/news.trpc';
-import { publicSearch } from '@/trpc/search.trpc';
+import { privateSearch, publicSearch } from '@/trpc/search.trpc';
 import {
   createGroupSite,
   createSite,
@@ -93,6 +93,7 @@ export const appRouter = router({
   getUsers,
   importUsers,
   publicSearch,
+  privateSearch,
 });
 
 export type AppRouter = typeof appRouter;

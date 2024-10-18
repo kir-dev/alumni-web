@@ -67,7 +67,7 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
         </Link>
         <div className='hidden lg:block flex-1'>
           <Providers>
-            <Search />
+            <Search isLoggedIn={isLoggedIn} />
           </Providers>
         </div>
         <div className='flex z-10'>
@@ -135,7 +135,7 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
       >
         <div className='mb-5'>
           <Providers>
-            <Search />
+            <Search isLoggedIn={isLoggedIn} />
           </Providers>
         </div>
         {isLoggedIn && <MobileNavItem href='/feed'>Hírfolyam</MobileNavItem>}
