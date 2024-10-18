@@ -8,6 +8,8 @@ import { TbChevronDown, TbMenu } from 'react-icons/tb';
 
 import { Icon } from '@/components/icon/icon';
 import { ColorModeSelector } from '@/components/navbar/color-mode-selector';
+import { Search } from '@/components/navbar/search';
+import Providers from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -48,7 +50,7 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
     >
       {group?.color && <style>{generateGlobalThemePalette(group.color)}</style>}
 
-      <div className='flex justify-between items-center container px-10 py-5'>
+      <div className='flex justify-between items-center container px-10 py-5 gap-5'>
         <Link href='/' className='flex items-center gap-2'>
           {group?.icon ? (
             <Image
@@ -63,8 +65,13 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
           )}
           <div className='text-xl text-primary-500 dark:text-primary-300'>{group?.name ?? 'Schönherz'} Alumni</div>
         </Link>
+        <div className='hidden lg:block flex-1'>
+          <Providers>
+            <Search />
+          </Providers>
+        </div>
         <div className='flex z-10'>
-          <div className='hidden md:flex'>
+          <div className='hidden lg:flex'>
             {isLoggedIn && (
               <Button variant='link' asChild>
                 <Link href='/feed'>Hírfolyam</Link>
@@ -113,7 +120,7 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
           <Button
             size='icon'
             variant='outline'
-            className='ml-2 md:hidden'
+            className='ml-2 lg:hidden'
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-label='Menü'
           >
@@ -122,13 +129,19 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
         </div>
       </div>
       <div
-        className={cn('md:hidden px-10', {
+        className={cn('lg:hidden px-10', {
           hidden: !menuOpen,
         })}
       >
+        <div className='mb-5'>
+          <Providers>
+            <Search />
+          </Providers>
+        </div>
         {isLoggedIn && <MobileNavItem href='/feed'>Hírfolyam</MobileNavItem>}
         <MobileNavItem href='/groups'>Csoportok</MobileNavItem>
         {isLoggedIn && isAdmin && <MobileNavItem href='/sites'>Statikus oldalak</MobileNavItem>}
+        {isLoggedIn && isAdmin && <MobileNavItem href='/admin/users'>Felhasználók</MobileNavItem>}
         {isLoggedIn ? (
           <MobileNavItem href='/profile'>Profil</MobileNavItem>
         ) : (

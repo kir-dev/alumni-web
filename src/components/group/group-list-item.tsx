@@ -10,7 +10,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 const MembershipCounter = dynamic(() => import('./membership-counter'), { ssr: false });
 
 interface GroupListItemProps {
-  group: Group;
+  group: Pick<Group, 'id' | 'name'>;
   approvedCount?: number;
 }
 

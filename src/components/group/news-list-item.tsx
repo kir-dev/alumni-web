@@ -6,7 +6,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { formatHu } from '@/lib/utils';
 
 interface NewsListItemProps {
-  news: News;
+  news: Pick<News, 'publishDate' | 'id' | 'groupId' | 'title' | 'isPrivate'>;
 }
 
 export function NewsListItem({ news }: NewsListItemProps) {

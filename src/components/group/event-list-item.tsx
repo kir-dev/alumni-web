@@ -7,7 +7,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { getFormattedDateInterval } from '@/lib/utils';
 
 interface EventListItemProps {
-  event: Event;
+  event: Pick<Event, 'id' | 'name' | 'startDate' | 'endDate' | 'groupId' | 'isPrivate'>;
 }
 
 export function EventListItem({ event }: EventListItemProps) {
