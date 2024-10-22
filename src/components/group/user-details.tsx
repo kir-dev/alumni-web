@@ -15,7 +15,7 @@ import {
 import { IconValueDisplay } from '@/components/ui/icon-value-display';
 
 interface UserDetailsProps {
-  user: User;
+  user: Pick<User, 'firstName' | 'lastName' | 'nickname' | 'email' | 'phone'>;
 }
 
 export default function UserDetails({ user }: UserDetailsProps) {

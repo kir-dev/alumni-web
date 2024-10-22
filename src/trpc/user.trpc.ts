@@ -1,4 +1,5 @@
 import { VerificationTokenType } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import { addMinutes } from 'date-fns';
@@ -322,52 +323,46 @@ export const changePassword = privateProcedure.input(ChangePasswordDto).mutation
 });
 
 export const getUsers = superAdminProcedure.input(UserQuery).query(async ({ input }) => {
+  const query: Prisma.UserWhereInput = {
+    OR: [
+      {
+        firstName: {
+          contains: input.name,
+        },
+      },
+      {
+        lastName: {
+          contains: input.name,
+        },
+      },
+      {
+        email: {
+          contains: input.name,
+        },
+      },
+    ],
+    isSuperAdmin: input.isAdministrator ? true : undefined,
+  };
+
   const result = await prismaClient.user.findMany({
     skip: (input.page - 1) * input.limit,
     take: input.limit,
     orderBy: input.sort ? { [input.sort.field]: input.sort.order } : undefined,
-    where: {
-      OR: [
-        {
-          firstName: {
-            contains: input.name,
-          },
-        },
-        {
-          lastName: {
-            contains: input.name,
-          },
-        },
-        {
-          email: {
-            contains: input.name,
-          },
-        },
-      ],
-      isSuperAdmin: input.isAdministrator ? true : undefined,
+    where: query,
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      nickname: true,
+      email: true,
+      emailVerified: true,
+      phone: true,
+      isSuperAdmin: true,
     },
   });
 
   const totalCount = await prismaClient.user.count({
-    where: {
-      OR: [
-        {
-          firstName: {
-            contains: input.name,
-          },
-        },
-        {
-          lastName: {
-            contains: input.name,
-          },
-        },
-        {
-          email: {
-            contains: input.name,
-          },
-        },
-      ],
-    },
+    where: query,
   });
 
   const maxPage = Math.max(Math.ceil(totalCount / input.limit), 1);

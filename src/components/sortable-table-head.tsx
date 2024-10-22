@@ -13,7 +13,7 @@ interface SortableTableHeaderProps extends PropsWithChildren {
   onSort: (sortOrder: SortOrder) => void;
 }
 
-export function SortableTableHeader({ children, sortDirection, onSort }: SortableTableHeaderProps) {
+export function SortableTableHead({ children, sortDirection, onSort }: SortableTableHeaderProps) {
   return (
     <TableHead className='group/item'>
       {children}

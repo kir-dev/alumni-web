@@ -13,6 +13,7 @@ import {
   editMembership,
   getGroup,
   getGroups,
+  getMembers,
   joinGroup,
   leaveGroup,
   sendEmail,
@@ -94,6 +95,7 @@ export const appRouter = router({
   importUsers,
   publicSearch,
   privateSearch,
+  getMembers,
 });
 
 export type AppRouter = typeof appRouter;

@@ -8,7 +8,7 @@ import { TbCircleCheck, TbShieldMinus, TbShieldPlus, TbUserSearch } from 'react-
 
 import { trpc } from '@/_trpc/client';
 import { AdminFilter } from '@/components/admin-filter';
-import { SortableTableHeader } from '@/components/sortable-table-header';
+import { SortableTableHead } from '@/components/sortable-table-head';
 import { Badge } from '@/components/ui/badge';
 import { LoadingButton } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -79,20 +79,20 @@ export function UserList({ currentUserId }: UserListProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <SortableTableHeader
+                <SortableTableHead
                   column='lastName'
                   sortDirection={sortColumn === 'lastName' ? sortDirection : undefined}
                   onSort={onSort('lastName')}
                 >
                   Név
-                </SortableTableHeader>
-                <SortableTableHeader
+                </SortableTableHead>
+                <SortableTableHead
                   column='email'
                   sortDirection={sortColumn === 'email' ? sortDirection : undefined}
                   onSort={onSort('email')}
                 >
                   Email
-                </SortableTableHeader>
+                </SortableTableHead>
                 <TableHead />
               </TableRow>
             </TableHeader>
@@ -117,14 +117,7 @@ export function UserList({ currentUserId }: UserListProps) {
                     </TooltipProvider>
                   </TableCell>
                   <TableCell className='space-x-2 text-right text-nowrap'>
-                    <UserDetails
-                      user={{
-                        ...user,
-                        emailVerified: user.emailVerified ? new Date(user.emailVerified) : null,
-                        createdAt: new Date(user.createdAt),
-                        updatedAt: new Date(user.updatedAt),
-                      }}
-                    />
+                    <UserDetails user={user} />
                     <LoadingButton
                       disabled={currentUserId === user.id}
                       isLoading={toggleSuperAdmin.isPending}

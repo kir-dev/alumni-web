@@ -1,4 +1,6 @@
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+import SortOrder = Prisma.SortOrder;
 
 export const CreateGroupDto = z.object({
   name: z.string(),
@@ -47,4 +49,18 @@ export const UpdateNotificationSettingsDto = z.object({
   enableGroupNotification: z.boolean().optional(),
   enableEventNotification: z.boolean().optional(),
   enableNewsNotification: z.boolean().optional(),
+});
+
+export const MemberQuery = z.object({
+  groupId: z.string(),
+  name: z.string().optional(),
+  page: z.number().int().positive().default(1),
+  limit: z.number().int().positive().default(10),
+  sort: z
+    .object({
+      field: z.string(),
+      order: z.nativeEnum(SortOrder),
+    })
+    .optional(),
+  isAdministrator: z.boolean().optional(),
 });

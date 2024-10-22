@@ -1,4 +1,4 @@
-import { MembershipStatus, User } from '@prisma/client';
+import { MembershipStatus, Prisma, User } from '@prisma/client';
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
@@ -16,6 +16,7 @@ import {
   DeleteMembershipDto,
   EditMembershipDto,
   JoinGroupDto,
+  MemberQuery,
   SendEmailDto,
   ToggleAdminDto,
   UpdateGroupDto,
@@ -355,3 +356,65 @@ export const updateNotificationPreferences = privateProcedure
       },
     });
   });
+
+export const getMembers = groupAdminProcedure.input(MemberQuery).query(async ({ input }) => {
+  const query: Prisma.MembershipWhereInput = {
+    groupId: input.groupId,
+    isAdmin: input.isAdministrator ? true : undefined,
+    user: {
+      OR: [
+        {
+          firstName: {
+            contains: input.name,
+          },
+        },
+        {
+          lastName: {
+            contains: input.name,
+          },
+        },
+        {
+          email: {
+            contains: input.name,
+          },
+        },
+      ],
+    },
+  };
+
+  const result = await prismaClient.membership.findMany({
+    skip: (input.page - 1) * input.limit,
+    take: input.limit,
+    where: query,
+    orderBy: {
+      user: input.sort ? { [input.sort.field]: input.sort.order } : undefined,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          nickname: true,
+          email: true,
+          emailVerified: true,
+          phone: true,
+        },
+      },
+    },
+  });
+
+  const totalCount = await prismaClient.membership.count({
+    where: query,
+  });
+
+  const maxPage = Math.max(Math.ceil(totalCount / input.limit), 1);
+  const page = Math.min(input.page, maxPage);
+
+  return {
+    result,
+    totalCount,
+    maxPage,
+    page,
+  };
+});
