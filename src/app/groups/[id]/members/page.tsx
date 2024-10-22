@@ -26,25 +26,12 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
 
   if (!group) return notFound();
 
-  const members = await getMembers(params.id);
-
   return (
     <main>
       <h1>{group.name} tagjai</h1>
       <Providers>
-        <MembersList memberships={members} groupId={params.id} />
+        <MembersList groupId={params.id} />
       </Providers>
     </main>
   );
-}
-
-async function getMembers(groupId: string) {
-  return prismaClient.membership.findMany({
-    where: {
-      groupId,
-    },
-    include: {
-      user: true,
-    },
-  });
 }
