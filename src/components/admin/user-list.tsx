@@ -1,21 +1,25 @@
 'use client';
 
+import { Prisma } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { TbCircleCheck, TbShieldMinus, TbShieldPlus, TbUserSearch } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
+import { AdminFilter } from '@/components/admin-filter';
+import { SortableTableHeader } from '@/components/sortable-table-header';
 import { Badge } from '@/components/ui/badge';
 import { LoadingButton } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { PageSizeDropdown } from '@/components/ui/page-size-dropdown';
 import { Paginator } from '@/components/ui/paginator';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useDebounce } from '@/hooks/use-debounce';
+import SortOrder = Prisma.SortOrder;
 
 interface UserListProps {
   currentUserId?: string;
@@ -25,6 +29,9 @@ const UserDetails = dynamic(() => import('@/components/group/user-details'), { s
 
 export function UserList({ currentUserId }: UserListProps) {
   const [search, setSearch] = useState('');
+  const [sortColumn, setSortColumn] = useState('createdAt');
+  const [sortDirection, setSortDirection] = useState<SortOrder>('desc');
+  const [adminFilter, setAdminFilter] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
@@ -33,6 +40,11 @@ export function UserList({ currentUserId }: UserListProps) {
     limit,
     page,
     name: debouncedSearch,
+    sort: {
+      field: sortColumn,
+      order: sortDirection,
+    },
+    isAdministrator: adminFilter,
   });
 
   const router = useRouter();
@@ -47,6 +59,11 @@ export function UserList({ currentUserId }: UserListProps) {
     setPage(1);
   }, [debouncedSearch, limit]);
 
+  const onSort = (column: string) => (sortOrder: SortOrder) => {
+    setSortColumn(column);
+    setSortDirection(sortOrder);
+  };
+
   return (
     <>
       <div className='flex gap-2 mt-5 items-center w-full'>
@@ -54,6 +71,7 @@ export function UserList({ currentUserId }: UserListProps) {
           <TbUserSearch className='text-slate-400 mx-4' />
           <Input onChange={(e) => setSearch(e.target.value)} placeholder='Keresés' />
         </div>
+        <AdminFilter isAdmin={adminFilter} onToggleAdmin={setAdminFilter} />
         <PageSizeDropdown limit={limit} setLimit={setLimit} />
       </div>
       <Card className='mt-5'>
@@ -61,8 +79,20 @@ export function UserList({ currentUserId }: UserListProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Név</TableHead>
-                <TableHead>Email</TableHead>
+                <SortableTableHeader
+                  column='lastName'
+                  sortDirection={sortColumn === 'lastName' ? sortDirection : undefined}
+                  onSort={onSort('lastName')}
+                >
+                  Név
+                </SortableTableHeader>
+                <SortableTableHeader
+                  column='email'
+                  sortDirection={sortColumn === 'email' ? sortDirection : undefined}
+                  onSort={onSort('email')}
+                >
+                  Email
+                </SortableTableHeader>
                 <TableHead />
               </TableRow>
             </TableHeader>
@@ -127,22 +157,5 @@ export function UserList({ currentUserId }: UserListProps) {
         onPageChange={(page) => setPage(page)}
       />
     </>
-  );
-}
-
-function PageSizeDropdown({ limit, setLimit }: { limit: number; setLimit: (limit: number) => void }) {
-  return (
-    <Select value={String(limit)} onValueChange={(value) => setLimit(Number(value))}>
-      <SelectTrigger className='w-20'>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {[10, 20, 50, 100].map((value) => (
-          <SelectItem key={value} onClick={() => setLimit(value)} value={String(value)}>
-            {value}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
   );
 }

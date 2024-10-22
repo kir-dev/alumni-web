@@ -325,6 +325,7 @@ export const getUsers = superAdminProcedure.input(UserQuery).query(async ({ inpu
   const result = await prismaClient.user.findMany({
     skip: (input.page - 1) * input.limit,
     take: input.limit,
+    orderBy: input.sort ? { [input.sort.field]: input.sort.order } : undefined,
     where: {
       OR: [
         {
@@ -343,6 +344,7 @@ export const getUsers = superAdminProcedure.input(UserQuery).query(async ({ inpu
           },
         },
       ],
+      isSuperAdmin: input.isAdministrator ? true : undefined,
     },
   });
 

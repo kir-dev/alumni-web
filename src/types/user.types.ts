@@ -1,4 +1,6 @@
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+import SortOrder = Prisma.SortOrder;
 
 export const RegisterDto = z.object({
   email: z.string({ required_error: 'Email cím megadása kötelező' }).email('Helytelen email cím'),
@@ -58,6 +60,13 @@ export const UserQuery = z.object({
   name: z.string().optional(),
   page: z.number().int().positive().default(1),
   limit: z.number().int().positive().default(10),
+  sort: z
+    .object({
+      field: z.string(),
+      order: z.nativeEnum(SortOrder),
+    })
+    .optional(),
+  isAdministrator: z.boolean().optional(),
 });
 
 export const ImportUserDto = z.object({
