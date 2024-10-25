@@ -8,7 +8,7 @@ import React from 'react';
 import { NavbarWrapper } from '@/components/navbar/navbar-wrapper';
 import { Footer } from '@/components/ui/footer';
 import { Toaster } from '@/components/ui/toaster';
-import { ANALYTICS_URL } from '@/config/environment.config';
+import { ANALYTICS_URL, GOOGLE_SITE_VERIFICATION } from '@/config/environment.config';
 import { getDomainForHost } from '@/lib/server-utils';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,6 +16,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Schönherz Alumni Információs Rendszer',
   description: 'Schönherz Alumni Információs Rendszer',
+  verification: {
+    google: GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default async function RootLayout({
