@@ -19,6 +19,22 @@ export const metadata: Metadata = {
   verification: {
     google: GOOGLE_SITE_VERIFICATION,
   },
+  keywords: [
+    'Schönherz',
+    'Alumni',
+    'Információs',
+    'Rendszer',
+    'sch',
+    'bme vik',
+    'bme',
+    'vik',
+    'események',
+    'hírek',
+    'egyetem',
+    'alumni',
+    'közösség',
+    'jelentkezés',
+  ],
 };
 
 export default async function RootLayout({
