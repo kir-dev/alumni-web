@@ -18,13 +18,13 @@ interface EventNotificationEmailProps {
 export default function EventNotificationEmail({ eventLink, event, groupName }: EventNotificationEmailProps) {
   return (
     <Html>
-      <Preview>Közeleg a(z) ${groupName} csoport eseménye!</Preview>
+      <Preview>Közeleg a(z) {groupName} csoport eseménye!</Preview>
       <ConfiguredTailwind>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
           <Section className='bg-white p-10 rounded-lg max-w-lg'>
             <Text className='font-bold'>Kedves csoporttársunk 👋</Text>
-            <Text>Emlékeztetni szeretnénk, hogy a(z) ${event.name} eseményünk közeleg!</Text>
+            <Text>Emlékeztetni szeretnénk, hogy a(z) {event.name} eseményünk közeleg!</Text>
             <Section>
               <Row className='p-2 bg-slate-100 rounded-xl'>
                 <Column className='w-[30px] h-[30px] rounded-md bg-white p-2 text-center'>
