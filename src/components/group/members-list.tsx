@@ -89,7 +89,7 @@ export function MembersList({ groupId }: MemberListProps) {
         <PageSizeDropdown limit={limit} setLimit={setLimit} />
       </div>
       <Card className='mt-10'>
-        <CardContent className='px-0'>
+        <CardContent className='p-0'>
           <Table>
             <TableHeader>
               <TableRow>

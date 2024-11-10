@@ -75,7 +75,7 @@ export function UserList({ currentUserId }: UserListProps) {
         <PageSizeDropdown limit={limit} setLimit={setLimit} />
       </div>
       <Card className='mt-5'>
-        <CardContent className='px-0 pb-0'>
+        <CardContent className='p-0'>
           <Table>
             <TableHeader>
               <TableRow>

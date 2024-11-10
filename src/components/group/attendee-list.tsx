@@ -18,7 +18,7 @@ export default function AttendeeList({ eventApplications }: AttendeeListProps) {
       <CardHeader className='flex items-center justify-between flex-row'>
         <CardTitle>Jelentkezések</CardTitle>
       </CardHeader>
-      <CardContent className='px-0'>
+      <CardContent className='p-0'>
         <Table>
           <TableHeader>
             <TableRow>

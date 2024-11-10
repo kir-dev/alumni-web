@@ -15,7 +15,7 @@ interface AuditLogListProps {
 export function AuditLogList({ auditLogs }: AuditLogListProps) {
   return (
     <Card className='mt-10'>
-      <CardContent className='px-0'>
+      <CardContent className='p-0'>
         <Table>
           <TableHeader>
             <TableRow>
