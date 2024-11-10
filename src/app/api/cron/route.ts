@@ -57,6 +57,7 @@ async function notifyPublishedNews() {
         gt: subDays(new Date(), 1),
         lt: new Date(),
       },
+      shouldNotify: true,
     },
     include: {
       group: {

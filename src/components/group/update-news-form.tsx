@@ -55,6 +55,12 @@ export function UpdateNewsForm({ news, group }: UpdateNewsFormProps) {
           label='Privát hír'
           description='Privát hír csak tagok számára elérhető'
         />
+        <CheckboxField
+          control={form.control}
+          name='shouldNotify'
+          label='Értesítés a tagoknak'
+          description='Amennyiben be van jelölve, az értesítés a tagoknak küldésre kerül a publikálási dátum utáni ütemezéskor.'
+        />
         <LoadingButton isLoading={updateNews.isPending} className='mt-5' type='submit'>
           Mentés
         </LoadingButton>

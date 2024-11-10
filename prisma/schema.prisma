@@ -110,8 +110,9 @@ model News {
   groupId String
   group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
-  publishDate DateTime
-  isPrivate   Boolean  @default(false)
+  publishDate  DateTime
+  isPrivate    Boolean  @default(false)
+  shouldNotify Boolean  @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

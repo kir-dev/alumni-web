@@ -1,12 +1,12 @@
 import { News } from '@prisma/client';
 import Link from 'next/link';
-import { TbChevronRight, TbClock, TbLock } from 'react-icons/tb';
+import { TbBellCheck, TbChevronRight, TbClock, TbLock } from 'react-icons/tb';
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatHu } from '@/lib/utils';
 
 interface NewsListItemProps {
-  news: Pick<News, 'publishDate' | 'id' | 'groupId' | 'title' | 'isPrivate'>;
+  news: Pick<News, 'publishDate' | 'id' | 'groupId' | 'title' | 'isPrivate' | 'shouldNotify'>;
 }
 
 export function NewsListItem({ news }: NewsListItemProps) {
@@ -23,6 +23,7 @@ export function NewsListItem({ news }: NewsListItemProps) {
             <div className='flex gap-1'>
               {news.isPrivate && <TbLock className='text-red-500 w-5 h-5' />}
               {isUpcoming && <TbClock className='text-slate-500 w-5 h-5' />}
+              {isUpcoming && news.shouldNotify && <TbBellCheck className='text-slate-500 w-5 h-5' />}
               <TbChevronRight className='text-slate-500' />
             </div>
           </div>

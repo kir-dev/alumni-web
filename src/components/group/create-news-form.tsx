@@ -28,6 +28,7 @@ export function CreateNewsForm({ groupId, group }: CreateNewsFormProps) {
     resolver: zodResolver(CreateNewsDto),
     defaultValues: {
       isPrivate: false,
+      shouldNotify: true,
       groupId,
     },
   });
@@ -53,6 +54,12 @@ export function CreateNewsForm({ groupId, group }: CreateNewsFormProps) {
           name='isPrivate'
           label='Privát hír'
           description='Privát hír csak tagok számára elérhető'
+        />
+        <CheckboxField
+          control={form.control}
+          name='shouldNotify'
+          label='Értesítés a tagoknak'
+          description='Amennyiben be van jelölve, az értesítés a tagoknak küldésre kerül a publikálási dátum utáni ütemezéskor.'
         />
         <LoadingButton isLoading={createNews.isPending} className='mt-5' type='submit'>
           Létrehozás

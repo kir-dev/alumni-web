@@ -8,6 +8,7 @@ export const CreateNewsDto = z.object({
     .min(3, 'A tartalomnak legalább 3 karakter hosszúnak kell lennie'),
   publishDate: z.string().datetime().optional(),
   isPrivate: z.boolean().optional(),
+  shouldNotify: z.boolean().optional(),
 });
 
 export const UpdateNewsDto = z.object({
@@ -19,6 +20,7 @@ export const UpdateNewsDto = z.object({
     .min(3, 'A tartalomnak legalább 3 karakter hosszúnak kell lennie'),
   publishDate: z.string().datetime().optional(),
   isPrivate: z.boolean().optional(),
+  shouldNotify: z.boolean().optional(),
 });
 
 export const DeleteNewsDto = z.object({
