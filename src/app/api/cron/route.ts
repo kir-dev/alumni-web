@@ -8,6 +8,7 @@ import { prismaClient } from '@/config/prisma.config';
 import EventNotificationEmail from '@/emails/event-notification';
 import GeneralEmail from '@/emails/general';
 import NewNewsEmail from '@/emails/new-news';
+import { addAuditLog } from '@/lib/audit';
 import { batchSendEmail } from '@/lib/email';
 
 export async function GET(request: NextRequest) {
@@ -18,14 +19,17 @@ export async function GET(request: NextRequest) {
       status: 401,
     });
   }
-  await notifyOutdatedProfiles();
-  await notifyPublishedNews();
-  await notifyUpcomingEvents();
+  const counts = await Promise.all([notifyOutdatedProfiles(), notifyPublishedNews(), notifyUpcomingEvents()]);
+  await addAuditLog({
+    userId: null,
+    groupId: null,
+    action: `CronJob - elavult profilok értesítés: ${counts[0]}, publikált hírek értesítés: ${counts[1]}, közelgő események értesítés: ${counts[2]}`,
+  });
   await cleanAuditLogs();
   return new NextResponse();
 }
 
-async function notifyOutdatedProfiles() {
+async function notifyOutdatedProfiles(): Promise<number> {
   const outdatedProfiles = await prismaClient.user.findMany({
     where: {
       NOT: {
@@ -48,9 +52,11 @@ async function notifyOutdatedProfiles() {
       })
     ),
   });
+
+  return outdatedProfiles.length;
 }
 
-async function notifyPublishedNews() {
+async function notifyPublishedNews(): Promise<number> {
   const newsFromPastDay = await prismaClient.news.findMany({
     where: {
       publishDate: {
@@ -93,9 +99,11 @@ async function notifyPublishedNews() {
       ),
     });
   }
+
+  return newsFromPastDay.length;
 }
 
-async function notifyUpcomingEvents() {
+async function notifyUpcomingEvents(): Promise<number> {
   const upcomingEvents = await prismaClient.event.findMany({
     where: {
       startDate: {
@@ -135,9 +143,11 @@ async function notifyUpcomingEvents() {
       ),
     });
   }
+
+  return upcomingEvents.length;
 }
 
-async function cleanAuditLogs() {
+async function cleanAuditLogs(): Promise<void> {
   await prismaClient.auditLog.deleteMany({
     where: {
       createdAt: {
