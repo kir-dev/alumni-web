@@ -87,6 +87,8 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
 
   const staticSites = userCanEdit ? await getSites(params.id) : [];
 
+  const descriptionParagraphs = group.description.split('\n');
+
   return (
     <main>
       {group.color && <style>{generateGlobalThemePalette(group.color)}</style>}
@@ -108,7 +110,10 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
                   </Link>
                 </p>
               )}
-              <p>{group.description}</p>
+              {descriptionParagraphs.map((paragraph, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <p key={index}>{paragraph}</p>
+              ))}
             </div>
             <div className='flex flex-col gap-2'>
               {userCanEdit && (
