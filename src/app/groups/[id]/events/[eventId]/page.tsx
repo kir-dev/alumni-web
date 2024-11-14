@@ -85,12 +85,17 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
   const isPast = new Date() > event.endDate;
 
+  const descriptionParagraphs = event.description.split('\n');
+
   return (
     <main>
       <h1>{event.name}</h1>
       <p>{getFormattedDateInterval(event.startDate, event.endDate)}</p>
       <IconValueDisplay className='text-slate-700 mt-5' icon={TbMapPin} value={event.location} type='address' />
-      <p>{event.description}</p>
+      {descriptionParagraphs.map((paragraph, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <p key={index}>{paragraph}</p>
+      ))}
       <UpdatedAt date={event.updatedAt} className='mt-5' />
       <Providers>
         {!isPast && <Rsvp className='mt-5' eventId={params.eventId} disabled={!session} />}
