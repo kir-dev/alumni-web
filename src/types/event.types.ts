@@ -38,6 +38,8 @@ export const GetEventApplicationForUserDto = z.string();
 
 export const CreateEventApplicationDto = z.string();
 
+export const DeleteEventApplicationDto = z.string();
+
 export type Difference<T> = {
   [P in keyof T]?: {
     before: T[P];

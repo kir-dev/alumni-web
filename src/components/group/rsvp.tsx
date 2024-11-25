@@ -1,6 +1,6 @@
 'use client';
 
-import { TbCheck, TbCircle } from 'react-icons/tb';
+import { TbCheck } from 'react-icons/tb';
 
 import { trpc } from '@/_trpc/client';
 import { Button, ButtonProps } from '@/components/ui/button';
@@ -13,31 +13,39 @@ interface RsvpProps extends Omit<ButtonProps, 'onClick'> {
 export default function Rsvp({ eventId, disabled, ...props }: RsvpProps) {
   const eventApplication = trpc.getEventApplicationForUser.useQuery(eventId);
   const createEventApplication = trpc.createEventApplication.useMutation();
+  const deleteEventApplication = trpc.deleteEventApplication.useMutation();
 
-  const isDisabled = !eventApplication.isSuccess || Boolean(eventApplication.data) || disabled;
+  const isDisabled = !eventApplication.isSuccess || disabled;
 
-  const handleClick = async () => {
-    if (isDisabled) return;
-    await createEventApplication.mutateAsync(eventId).then(() => {
+  const handleApplication = () => {
+    createEventApplication.mutateAsync(eventId).then(() => {
       eventApplication.refetch();
     });
   };
 
-  if (eventApplication.isLoading && !disabled) return null;
+  const handleDelete = () => {
+    deleteEventApplication.mutateAsync(eventId).then(() => {
+      eventApplication.refetch();
+    });
+  };
+
+  if (isDisabled)
+    return (
+      <Button disabled {...props}>
+        Jelentkezés
+      </Button>
+    );
+
+  if (!eventApplication.data)
+    return (
+      <Button onClick={handleApplication} {...props}>
+        Jelentkezés
+      </Button>
+    );
 
   return (
-    <Button onClick={handleClick} disabled={isDisabled} {...props}>
-      {disabled && 'Jelentkezz be a jelentkezéshez!'}
-      {!disabled && eventApplication.data && (
-        <>
-          <TbCheck /> Jelentkeztél
-        </>
-      )}
-      {!disabled && !isDisabled && (
-        <>
-          <TbCircle /> Jelentkezés
-        </>
-      )}
+    <Button onClick={handleDelete} {...props}>
+      <TbCheck /> Jelentkeztél
     </Button>
   );
 }

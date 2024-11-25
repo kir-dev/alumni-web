@@ -3,6 +3,7 @@ import {
   createEvent,
   createEventApplication,
   deleteEvent,
+  deleteEventApplication,
   getEventApplicationForUser,
   updateEvent,
 } from '@/trpc/event.trpc';
@@ -69,6 +70,7 @@ export const appRouter = router({
   updateEvent,
   getEventApplicationForUser,
   createEventApplication,
+  deleteEventApplication,
   createNews,
   updateNews,
   deleteNews,

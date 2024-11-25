@@ -14,6 +14,7 @@ import { groupAdminProcedure, privateProcedure } from '@/trpc/trpc';
 import {
   CreateEventApplicationDto,
   CreateEventDto,
+  DeleteEventApplicationDto,
   DeleteEventDto,
   GetEventApplicationForUserDto,
   UpdateEventDto,
@@ -162,6 +163,19 @@ export const createEventApplication = privateProcedure.input(CreateEventApplicat
     data: {
       userId: opts.ctx.session.user.id,
       eventId: event.id,
+    },
+  });
+});
+
+export const deleteEventApplication = privateProcedure.input(DeleteEventApplicationDto).mutation(async (opts) => {
+  if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+  return prismaClient.eventApplication.delete({
+    where: {
+      userId_eventId: {
+        eventId: opts.input,
+        userId: opts.ctx.session.user.id,
+      },
     },
   });
 });
