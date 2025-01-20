@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function RegisterLoadingPage() {
   return (
-    <main>
+    <main className='max-w-lg'>
       <h1>Regisztráció</h1>
       <div className='mt-10 space-y-5'>
         {Array.from({ length: 6 }).map((_, index) => (
