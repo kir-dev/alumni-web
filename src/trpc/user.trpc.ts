@@ -1,5 +1,4 @@
-import { VerificationTokenType } from '@prisma/client';
-import { Prisma } from '@prisma/client';
+import { Prisma, VerificationTokenType } from '@prisma/client';
 import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import { addMinutes } from 'date-fns';
@@ -39,6 +38,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
   const user = await prismaClient.user.create({
     data: {
       ...data,
+      graduationDate: data.graduationDate ? new Date(data.graduationDate) : null,
       password: hashPassword(password),
     },
     select: {
@@ -47,6 +47,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
       lastName: true,
       phone: true,
       address: true,
+      graduationDate: true,
       id: true,
     },
   });
@@ -74,7 +75,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
       })
     ),
   });
-  return user;
+  return { ...user, graduationDate: user.graduationDate?.toISOString() ?? null };
 });
 
 export const requestEmailVerification = privateProcedure.mutation(async (opts) => {
@@ -185,13 +186,17 @@ export const updateProfile = privateProcedure
       where: {
         id: opts.ctx.session.user.id,
       },
-      data: opts.input,
+      data: {
+        ...opts.input,
+        graduationDate: opts.input.graduationDate ? new Date(opts.input.graduationDate) : null,
+      },
       select: {
         email: true,
         firstName: true,
         lastName: true,
         phone: true,
         address: true,
+        graduationDate: true,
       },
     });
 
@@ -199,7 +204,7 @@ export const updateProfile = privateProcedure
       await createEmailVerificationSession(opts.ctx.session.user.id);
     }
 
-    return user;
+    return { ...user, graduationDate: user.graduationDate?.toISOString() ?? null };
   });
 
 export const getUserById = privateProcedure.input(z.string()).query(async (opts) => {

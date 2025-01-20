@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { TextField } from '@/components/ui/fields';
+import { DateField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { UpdateUserProfileDto } from '@/types/user.types';
 
@@ -41,6 +41,9 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
       email: user.email,
       phone: user.phone,
       address: user.address,
+      graduationDate: user.graduationDate
+        ? new Date(new Date(user.graduationDate).setUTCHours(0, 0, 0, 0)).toISOString()
+        : undefined,
     },
   });
 
@@ -72,6 +75,7 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
               <TextField control={form.control} name='email' label='E-mail cím' />
               <TextField control={form.control} name='phone' label='Telefonszám' autoComplete='tel' />
               <TextField control={form.control} name='address' label='Levelezési cím' />
+              <DateField control={form.control} name='graduationDate' label='Felsőfokú végzettség dátuma' clearable />
             </DialogBody>
             <DialogFooter className='mt-5'>
               <ConfirmationDialog

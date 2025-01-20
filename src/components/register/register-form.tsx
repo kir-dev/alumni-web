@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { LoadingButton } from '@/components/ui/button';
-import { CheckboxField, TextField } from '@/components/ui/fields';
+import { CheckboxField, DateField, TextField } from '@/components/ui/fields';
 import { Form, FormMessage } from '@/components/ui/form';
 import { RegisterDto } from '@/types/user.types';
 
@@ -66,6 +66,7 @@ export function RegisterForm() {
         <TextField control={form.control} type='password' name='password' label='Jelszó' />
         <TextField control={form.control} type='tel' name='phone' label='Telefonszám' />
         <TextField control={form.control} type='text' name='address' label='Levelezési cím' />
+        <DateField control={form.control} name='graduationDate' label='Felsőfokú végzettség dátuma' clearable />
         <CheckboxField
           control={form.control}
           name='gdpr'

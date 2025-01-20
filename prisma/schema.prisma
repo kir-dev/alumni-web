@@ -119,14 +119,15 @@ model News {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  firstName     String    @default("")
-  lastName      String    @default("")
-  nickname      String    @default("")
-  password      String?
-  email         String    @unique
-  emailVerified DateTime?
-  isSuperAdmin  Boolean   @default(false)
+  id             String    @id @default(uuid())
+  firstName      String    @default("")
+  lastName       String    @default("")
+  nickname       String    @default("")
+  password       String?
+  email          String    @unique
+  emailVerified  DateTime?
+  isSuperAdmin   Boolean   @default(false)
+  graduationDate DateTime?
 
   phone   String @default("")
   address String @default("")

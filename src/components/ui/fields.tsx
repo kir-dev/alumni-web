@@ -124,6 +124,7 @@ interface DateFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues ext
   name: TName;
   label: string;
   description?: string;
+  clearable?: boolean;
 }
 
 export function DateField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
@@ -131,6 +132,7 @@ export function DateField<TName extends FieldPath<TFieldValues>, TFieldValues ex
   name,
   label,
   description,
+  clearable = false,
 }: DateFieldProps<TName, TFieldValues>) {
   return (
     <FormField
@@ -140,7 +142,14 @@ export function DateField<TName extends FieldPath<TFieldValues>, TFieldValues ex
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <DatePicker value={value} onChange={onChange} onBlur={onBlur} disabled={disabled} name={name} />
+            <DatePicker
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              disabled={disabled}
+              name={name}
+              clearable={clearable}
+            />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
