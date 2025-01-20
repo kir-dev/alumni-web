@@ -44,8 +44,8 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
 
   return (
     <nav
-      className={cn('sticky top-0 z-10 transition-colors', {
-        'border-b bg-white shadow-sm dark:bg-slate-900 dark:shadow-slate-950 dark:border-0': !onTop,
+      className={cn('sticky top-0 z-10 transition-[background-color]', {
+        'border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm': !onTop,
       })}
     >
       {group?.color && <style>{generateGlobalThemePalette(group.color)}</style>}
