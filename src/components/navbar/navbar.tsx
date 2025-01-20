@@ -111,9 +111,14 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
                 <Link href='/profile'>Profil</Link>
               </Button>
             ) : (
-              <Button variant='link' asChild>
-                <Link href='/login'>Bejelentkezés</Link>
-              </Button>
+              <>
+                <Button variant='link' asChild>
+                  <Link href='/login'>Bejelentkezés</Link>
+                </Button>
+                <Button variant='link' asChild>
+                  <Link href='/register'>Regisztráció</Link>
+                </Button>
+              </>
             )}
           </div>
           <ColorModeSelector />
@@ -145,7 +150,10 @@ export function Navbar({ isLoggedIn, isAdmin, group }: NavbarProps) {
         {isLoggedIn ? (
           <MobileNavItem href='/profile'>Profil</MobileNavItem>
         ) : (
-          <MobileNavItem href='/login'>Bejelentkezés</MobileNavItem>
+          <>
+            <MobileNavItem href='/login'>Bejelentkezés</MobileNavItem>
+            <MobileNavItem href='/register'>Regisztráció</MobileNavItem>
+          </>
         )}
       </div>
     </nav>
