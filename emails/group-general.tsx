@@ -22,7 +22,7 @@ export default function GroupGeneralEmail({ content }: GroupGeneralEmailProps) {
               <Text key={index}>{paragraph}</Text>
             ))}
           </Section>
-          <Footer />
+          <Footer canUnsubscribe />
         </Body>
       </ConfiguredTailwind>
     </Html>

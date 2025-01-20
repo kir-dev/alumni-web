@@ -63,7 +63,7 @@ export default function NewEventEmail({ eventLink, event, groupName }: NewEventE
               {groupName} & Schönherz Alumni
             </Text>
           </Section>
-          <Footer />
+          <Footer canUnsubscribe />
         </Body>
       </ConfiguredTailwind>
     </Html>

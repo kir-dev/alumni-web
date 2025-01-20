@@ -64,7 +64,7 @@ export default function NewNewsEmail({ news, newsLink, groupName }: NewNewsEmail
               {groupName} & Schönherz Alumni
             </Text>
           </Section>
-          <Footer />
+          <Footer canUnsubscribe />
         </Body>
       </ConfiguredTailwind>
     </Html>
