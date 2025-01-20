@@ -20,7 +20,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <main>
+    <main className='max-w-lg'>
       <h1>Bejelentkezés</h1>
       <Providers>
         <LoginForm />

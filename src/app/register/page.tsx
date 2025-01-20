@@ -19,7 +19,7 @@ export default async function RegisterPage() {
   }
 
   return (
-    <main>
+    <main className='max-w-lg'>
       <h1>Regisztráció</h1>
       <Providers>
         <RegisterForm />
