@@ -42,11 +42,13 @@ async function run() {
       name: faker.commerce.department(),
       description: faker.lorem.sentence(),
       parentGroupId: schId.id,
+      legacyMaillist: [],
     });
     groups.push({
       name: faker.commerce.department(),
       description: faker.lorem.sentence(),
       parentGroupId: vikId.id,
+      legacyMaillist: [],
     });
   }
   await prisma.group.createMany({ data: groups });
