@@ -2,23 +2,13 @@
 # yarn lockfile v1
 
 
-"@ai-sdk/openai@^1.1.0":
+"@ai-sdk/openai@1.1.9":
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-1.1.9.tgz#8ea8a7403b70fafcefe0dbfe9e4170148e5109ce"
   integrity sha512-t/CpC4TLipdbgBJTMX/otzzqzCMBSPQwUOkYPGbT/jyuC86F+YO9o+LS0Ty2pGUE1kyT+B3WmJ318B16ZCg4hw==
   dependencies:
     "@ai-sdk/provider" "1.0.7"
     "@ai-sdk/provider-utils" "2.1.6"
-
-"@ai-sdk/provider-utils@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/provider-utils/-/provider-utils-2.1.0.tgz#40f060252a192a31063300dd277a04df0eba604e"
-  integrity sha512-rBUabNoyB25PBUjaiMSk86fHNSCqTngNZVvXxv8+6mvw47JX5OexW+ZHRsEw8XKTE8+hqvNFVzctaOrRZ2i9Zw==
-  dependencies:
-    "@ai-sdk/provider" "1.0.4"
-    eventsource-parser "^3.0.0"
-    nanoid "^3.3.8"
-    secure-json-parse "^2.7.0"
 
 "@ai-sdk/provider-utils@2.1.6":
   version "2.1.6"
@@ -30,13 +20,6 @@
     nanoid "^3.3.8"
     secure-json-parse "^2.7.0"
 
-"@ai-sdk/provider@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-1.0.4.tgz#fe041f09e053235922ab9706be29fedf63c53bd0"
-  integrity sha512-lJi5zwDosvvZER3e/pB8lj1MN3o3S7zJliQq56BRr4e9V3fcRyFtwP0JRxaRS5vHYX3OJ154VezVoQNrk0eaKw==
-  dependencies:
-    json-schema "^0.4.0"
-
 "@ai-sdk/provider@1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-1.0.7.tgz#66e07407678153b514aebf3f1c3c035e5e833380"
@@ -44,23 +27,23 @@
   dependencies:
     json-schema "^0.4.0"
 
-"@ai-sdk/react@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/react/-/react-1.1.0.tgz#7059fb3981818667856d3f9afff312e429c0d6b8"
-  integrity sha512-U5lBbLyf1pw79xsk5dgHSkBv9Jta3xzWlOLpxsmHlxh1X94QOH3e1gm+nioQ/JvTuHLm23j2tz3i4MpMdchwXQ==
+"@ai-sdk/react@1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/react/-/react-1.1.10.tgz#df5b2a539b7a902e685318799d839d91fba3867d"
+  integrity sha512-RTkEVYKq7qO6Ct3XdVTgbaCTyjX+q1HLqb+t2YvZigimzMCQbHkpZCtt2H2Fgpt1UOTqnAAlXjEAgTW3X60Y9g==
   dependencies:
-    "@ai-sdk/provider-utils" "2.1.0"
-    "@ai-sdk/ui-utils" "1.1.0"
+    "@ai-sdk/provider-utils" "2.1.6"
+    "@ai-sdk/ui-utils" "1.1.10"
     swr "^2.2.5"
     throttleit "2.1.0"
 
-"@ai-sdk/ui-utils@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/ui-utils/-/ui-utils-1.1.0.tgz#4c31029bae0d06fd2c2530dd214eff434c5a3787"
-  integrity sha512-ETXwdHaHwzC7NIehbthDFGwsTFk+gNtRL/lm85nR4WDFvvYQptoM/7wTANs0p0H7zumB3Ep5hKzv0Encu8vSRw==
+"@ai-sdk/ui-utils@1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/ui-utils/-/ui-utils-1.1.10.tgz#694689e371c1f79005d8a0651d4e49d2b7586004"
+  integrity sha512-x+A1Nfy8RTSatdCe+7nRpHAZVzPFB6H+r+2JKoapSvrwsu9mw2pAbmFgV8Zaj94TsmUdTlO0/j97e63f+yYuWg==
   dependencies:
-    "@ai-sdk/provider" "1.0.4"
-    "@ai-sdk/provider-utils" "2.1.0"
+    "@ai-sdk/provider" "1.0.7"
+    "@ai-sdk/provider-utils" "2.1.6"
     zod-to-json-schema "^3.24.1"
 
 "@alloc/quick-lru@^5.2.0":
@@ -2946,15 +2929,15 @@ agent-base@6:
   dependencies:
     debug "4"
 
-ai@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/ai/-/ai-4.1.0.tgz#3150a91da72fb9dd7df25a781554f9a77114ca4a"
-  integrity sha512-95nI9hBSSAKPrMnpJbaB3yqvh+G8BS4/EtFz3HR0HgEDJpxC0R6JAlB8+B/BXHd/roNGBrS08Z3Zain/6OFSYA==
+ai@4.1.26:
+  version "4.1.26"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-4.1.26.tgz#a62ca37e810c7b98dca08c9eca3fcdc12af86698"
+  integrity sha512-Mww6mJbGwmMK0qAKR67WfVK1WyaUjfFlPZ2rhUUmDns3WhI+DVgMM7gLmuo0rA+I5qq69g7YE1OCgUwMRKKjMw==
   dependencies:
-    "@ai-sdk/provider" "1.0.4"
-    "@ai-sdk/provider-utils" "2.1.0"
-    "@ai-sdk/react" "1.1.0"
-    "@ai-sdk/ui-utils" "1.1.0"
+    "@ai-sdk/provider" "1.0.7"
+    "@ai-sdk/provider-utils" "2.1.6"
+    "@ai-sdk/react" "1.1.10"
+    "@ai-sdk/ui-utils" "1.1.10"
     "@opentelemetry/api" "1.9.0"
     jsondiffpatch "0.6.0"
 
@@ -7457,6 +7440,7 @@ strict-event-emitter@^0.4.3:
   integrity sha512-12KWeb+wixJohmnwNFerbyiBrAlq5qJLwIt38etRtKtmmHyDSoGlIqFE9wx+4IwG0aDjI7GV8tc8ZccjWZZtTg==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -7558,6 +7542,7 @@ stringify-entities@^4.0.0:
     character-entities-legacy "^3.0.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
