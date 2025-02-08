@@ -49,6 +49,8 @@ import {
   updateProfile,
 } from '@/trpc/user.trpc';
 
+import { setLegacyMailList, unsubscribeFromLegacyMailList } from './legacy-mail-list.trpc';
+
 export const appRouter = router({
   registerUser,
   updateProfile,
@@ -98,6 +100,8 @@ export const appRouter = router({
   publicSearch,
   privateSearch,
   getMembers,
+  setLegacyMailList,
+  unsubscribeFromLegacyMailList,
 });
 
 export type AppRouter = typeof appRouter;

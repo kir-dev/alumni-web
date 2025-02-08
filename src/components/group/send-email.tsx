@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { TbLoader, TbMailForward, TbSend } from 'react-icons/tb';
+import { TbInfoCircle, TbLoader, TbMailForward, TbSend } from 'react-icons/tb';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
@@ -25,9 +25,10 @@ import { SendEmailDto } from '@/types/group.types';
 
 interface SendEmailProps {
   groupId: string;
+  legacyMaillistLength: number;
 }
 
-export default function SendEmail({ groupId }: SendEmailProps) {
+export default function SendEmail({ groupId, legacyMaillistLength }: SendEmailProps) {
   const sendEmail = trpc.sendEmail.useMutation();
   const form = useForm<z.infer<typeof SendEmailDto>>({
     resolver: zodResolver(SendEmailDto),
@@ -70,6 +71,15 @@ export default function SendEmail({ groupId }: SendEmailProps) {
                   feladót a levélben!
                 </AlertDescription>
               </Alert>
+              {legacyMaillistLength > 0 && (
+                <Alert variant='info' className='mt-5'>
+                  <TbInfoCircle className='shrink-0' />
+                  <AlertDescription>
+                    A levél további {legacyMaillistLength} e-mail címre is küldve lesz, akik a hagyaték levelezési
+                    listában szerepelnek.
+                  </AlertDescription>
+                </Alert>
+              )}
             </DialogBody>
             <DialogFooter className='mt-5'>
               <Button type='reset' variant='outline' asChild>

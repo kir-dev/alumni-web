@@ -13,9 +13,10 @@ interface NewEventEmailProps {
   groupName: string;
   event: Event;
   eventLink: string;
+  groupId?: string;
 }
 
-export default function NewEventEmail({ eventLink, event, groupName }: NewEventEmailProps) {
+export default function NewEventEmail({ eventLink, event, groupName, groupId }: NewEventEmailProps) {
   return (
     <Html>
       <Preview>Új esemény a {groupName} csoportban!</Preview>
@@ -63,7 +64,7 @@ export default function NewEventEmail({ eventLink, event, groupName }: NewEventE
               {groupName} & Schönherz Alumni
             </Text>
           </Section>
-          <Footer canUnsubscribe />
+          <Footer canUnsubscribe groupId={groupId} />
         </Body>
       </ConfiguredTailwind>
     </Html>

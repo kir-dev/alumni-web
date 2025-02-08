@@ -274,11 +274,12 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
   if (!group) throw new TRPCError({ code: 'NOT_FOUND' });
 
   await batchSendEmail({
-    to: group.members.map((member) => member.user.email),
+    to: Array.from(new Set([...group.members.map((member) => member.user.email), ...(group.legacyMaillist ?? [])])),
     subject: opts.input.subject,
     html: render(
       GroupGeneralEmail({
         content: opts.input.content,
+        groupId: opts.input.groupId,
       })
     ),
   });

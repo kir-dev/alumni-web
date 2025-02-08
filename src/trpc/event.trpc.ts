@@ -44,13 +44,16 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
     },
   });
 
-  const emailRecipients = membersOfGroup.map(({ user }) => user.email);
+  const emailRecipients = Array.from(
+    new Set([...membersOfGroup.map(({ user }) => user.email), ...(event.group.legacyMaillist ?? [])])
+  );
 
   await batchSendEmail({
     to: emailRecipients,
     subject: event.name,
     html: render(
       NewEventEmail({
+        groupId: event.groupId,
         eventLink: `${SITE_URL}/groups/${event.groupId}/events/${event.id}`,
         event,
         groupName: event.group.name,

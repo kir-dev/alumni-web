@@ -15,14 +15,15 @@ datasource db {
 }
 
 model Group {
-  id            String  @id @default(uuid())
-  name          String
-  description   String
-  color         String?
-  parentGroupId String?
-  icon          String?
-  parentGroup   Group?  @relation("ParentGroup", fields: [parentGroupId], references: [id])
-  subGroups     Group[] @relation("ParentGroup")
+  id             String   @id @default(uuid())
+  name           String
+  description    String
+  color          String?
+  parentGroupId  String?
+  icon           String?
+  legacyMaillist String[] @default([])
+  parentGroup    Group?   @relation("ParentGroup", fields: [parentGroupId], references: [id])
+  subGroups      Group[]  @relation("ParentGroup")
 
   members Membership[]
   events  Event[]

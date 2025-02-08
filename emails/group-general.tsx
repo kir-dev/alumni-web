@@ -6,9 +6,10 @@ import { ConfiguredTailwind } from './tailwind';
 
 interface GroupGeneralEmailProps {
   content: string;
+  groupId?: string;
 }
 
-export default function GroupGeneralEmail({ content }: GroupGeneralEmailProps) {
+export default function GroupGeneralEmail({ content, groupId }: GroupGeneralEmailProps) {
   const contentParagraphs = content.split('\n');
   return (
     <Html>
@@ -22,7 +23,7 @@ export default function GroupGeneralEmail({ content }: GroupGeneralEmailProps) {
               <Text key={index}>{paragraph}</Text>
             ))}
           </Section>
-          <Footer canUnsubscribe />
+          <Footer canUnsubscribe groupId={groupId} />
         </Body>
       </ConfiguredTailwind>
     </Html>

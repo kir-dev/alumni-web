@@ -88,13 +88,16 @@ async function notifyPublishedNews(): Promise<number> {
 
   for (const news of newsFromPastDay) {
     await batchSendEmail({
-      to: news.group.members.map((member) => member.user.email),
+      to: Array.from(
+        new Set([...news.group.members.map((member) => member.user.email), ...(news.group.legacyMaillist ?? [])])
+      ),
       subject: news.title,
       html: render(
         NewNewsEmail({
           groupName: news.group.name,
           news,
           newsLink: `${SITE_URL}/news/${news.id}`,
+          groupId: news.group.id,
         })
       ),
     });

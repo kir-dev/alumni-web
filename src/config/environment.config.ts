@@ -26,3 +26,5 @@ export const EMAIL_DISABLE = env.get('EMAIL_DISABLE').default('false').asBool();
 export const ANALYTICS_URL = env.get('ANALYTICS_URL').asString();
 
 export const GOOGLE_SITE_VERIFICATION = env.get('GOOGLE_SITE_VERIFICATION').asString();
+
+export const LEGACY_MAIL_LIST_ENABLED = env.get('LEGACY_MAIL_LIST_ENABLED').default('').asString().split(',');

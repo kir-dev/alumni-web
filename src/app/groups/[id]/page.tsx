@@ -13,6 +13,7 @@ import Providers from '@/components/providers';
 import { SiteListItem } from '@/components/sites/site-list-item';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LEGACY_MAIL_LIST_ENABLED } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
 import { canEdit, getGroup, getMembership, getSession, isApprovedGroupMember, isSuperAdmin } from '@/lib/server-utils';
 import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
@@ -23,6 +24,7 @@ const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: 
 const DomainSettings = dynamic(() => import('@/components/group/domain-settings'), { ssr: false });
 const NotificationSettings = dynamic(() => import('@/components/group/notification-settings'), { ssr: false });
 const DeleteGroup = dynamic(() => import('@/components/group/delete-group'), { ssr: false });
+const LegacyMailList = dynamic(() => import('@/components/group/legacy-mail-list'), { ssr: false });
 
 interface GroupPageProps {
   params: {
@@ -50,6 +52,8 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
   const userIsSuperAdmin = await isSuperAdmin();
   const session = await getSession();
   const membership = await getMembership(params.id);
+
+  const legacyMailListEnabled = LEGACY_MAIL_LIST_ENABLED.includes(params.id);
 
   const group = await prismaClient.group.findUnique({
     where: {
@@ -141,8 +145,9 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
               <Providers>
                 {userCanEdit && (
                   <>
-                    <SendEmail groupId={params.id} />
+                    <SendEmail groupId={params.id} legacyMaillistLength={group.legacyMaillist.length} />
                     <DomainSettings domain={group.domain} groupId={params.id} />
+                    {legacyMailListEnabled && <LegacyMailList groupId={params.id} maillist={group.legacyMaillist} />}
                   </>
                 )}
                 {session && <JoinButton membership={membership} groupId={params.id} />}

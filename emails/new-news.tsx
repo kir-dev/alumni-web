@@ -11,11 +11,12 @@ import { ConfiguredTailwind } from './tailwind';
 
 interface NewNewsEmailProps {
   groupName: string;
+  groupId?: string;
   news: News;
   newsLink: string;
 }
 
-export default function NewNewsEmail({ news, newsLink, groupName }: NewNewsEmailProps) {
+export default function NewNewsEmail({ news, newsLink, groupName, groupId }: NewNewsEmailProps) {
   const contentParagraphs = news.content.split('\n');
   return (
     <Html>
@@ -64,7 +65,7 @@ export default function NewNewsEmail({ news, newsLink, groupName }: NewNewsEmail
               {groupName} & Schönherz Alumni
             </Text>
           </Section>
-          <Footer canUnsubscribe />
+          <Footer canUnsubscribe groupId={groupId} />
         </Body>
       </ConfiguredTailwind>
     </Html>
