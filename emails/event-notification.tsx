@@ -22,7 +22,7 @@ export default function EventNotificationEmail({ eventLink, event, groupName }: 
       <ConfiguredTailwind>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
-          <Section className='bg-white p-10 rounded-lg max-w-lg'>
+          <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves csoporttársunk 👋</Text>
             <Text>Emlékeztetni szeretnénk, hogy a(z) {event.name} eseményünk közeleg!</Text>
             <Section>

@@ -17,7 +17,7 @@ export default function GroupGeneralEmail({ content, groupId }: GroupGeneralEmai
       <ConfiguredTailwind>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
-          <Section className='bg-white p-10 rounded-lg max-w-lg'>
+          <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             {contentParagraphs.map((paragraph, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Text key={index}>{paragraph}</Text>
