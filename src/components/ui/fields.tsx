@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { TimePicker } from '@/components/ui/time-picker';
 
+import { TextDatePicker } from './text-date-picker';
+
 interface TextFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name: TName;
@@ -245,6 +247,49 @@ export function CheckboxField<TName extends FieldPath<TFieldValues>, TFieldValue
               {description && <FormDescription className='m-0'>{description}</FormDescription>}
             </div>
           </div>
+          {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
+        </FormItem>
+      )}
+    />
+  );
+}
+
+interface TextDatePickerFieldProps<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name: TName;
+  label: string;
+  description?: string;
+  fields?: {
+    year?: boolean;
+    month?: boolean;
+    day?: boolean;
+  };
+}
+
+export function TextDatePickerField<TName extends FieldPath<TFieldValues>, TFieldValues extends FieldValues>({
+  control,
+  name,
+  label,
+  description,
+  fields,
+}: TextDatePickerFieldProps<TName, TFieldValues>) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <TextDatePicker
+              value={field.value}
+              onChange={field.onChange}
+              name={name}
+              onBlur={field.onBlur}
+              fields={fields}
+            />
+          </FormControl>
+          {description && <FormDescription>{description}</FormDescription>}
           {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
         </FormItem>
       )}

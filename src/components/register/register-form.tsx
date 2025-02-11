@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
 import { Button, LoadingButton } from '@/components/ui/button';
-import { CheckboxField, DateField, TextField } from '@/components/ui/fields';
+import { CheckboxField, TextDatePickerField, TextField } from '@/components/ui/fields';
 import { Form, FormMessage } from '@/components/ui/form';
 import { RegisterDto } from '@/types/user.types';
 
@@ -83,7 +83,12 @@ export function RegisterForm() {
         <TextField control={form.control} type='password' name='confirmPassword' label='Jelszó megerősítése' />
         <TextField control={form.control} type='tel' name='phone' label='Telefonszám' />
         <TextField control={form.control} type='text' name='address' label='Levelezési cím' />
-        <DateField control={form.control} name='graduationDate' label='Felsőfokú végzettség dátuma' clearable />
+        <TextDatePickerField
+          control={form.control}
+          name='graduationDate'
+          label='Felsőfokú végzettség dátuma'
+          fields={{ year: true, month: true, day: false }}
+        />
         <CheckboxField
           control={form.control}
           name='gdpr'

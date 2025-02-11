@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { DateField, TextField } from '@/components/ui/fields';
+import { TextDatePickerField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { UpdateUserProfileDto } from '@/types/user.types';
 
@@ -75,7 +75,12 @@ export default function UpdateProfileForm({ user }: UpdateProfileFormProps) {
               <TextField control={form.control} name='email' label='E-mail cím' />
               <TextField control={form.control} name='phone' label='Telefonszám' autoComplete='tel' />
               <TextField control={form.control} name='address' label='Levelezési cím' />
-              <DateField control={form.control} name='graduationDate' label='Felsőfokú végzettség dátuma' clearable />
+              <TextDatePickerField
+                control={form.control}
+                name='graduationDate'
+                label='Felsőfokú végzettség dátuma'
+                fields={{ year: true, month: true, day: false }}
+              />
             </DialogBody>
             <DialogFooter className='mt-5'>
               <ConfirmationDialog
