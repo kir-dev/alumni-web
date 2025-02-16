@@ -367,16 +367,19 @@ export const getMembers = groupAdminProcedure.input(MemberQuery).query(async ({ 
         {
           firstName: {
             contains: input.name,
+            mode: 'insensitive',
           },
         },
         {
           lastName: {
             contains: input.name,
+            mode: 'insensitive',
           },
         },
         {
           email: {
             contains: input.name,
+            mode: 'insensitive',
           },
         },
       ],
