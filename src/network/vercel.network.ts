@@ -36,16 +36,19 @@ export async function getVercelDomains(): Promise<VercelDomain[]> {
 }
 
 export async function deleteVercelDomain(domain: string): Promise<void> {
-  await axios.delete(`https://api.vercel.com/v6/domains/${domain}?&teamId=${VERCEL_TEAM_ID}`, {
-    headers: {
-      Authorization: `Bearer ${VERCEL_API_TOKEN}`,
-    },
-  });
+  await axios.delete(
+    `https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains/${domain}?&teamId=${VERCEL_TEAM_ID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${VERCEL_API_TOKEN}`,
+      },
+    }
+  );
 }
 
 export async function getDomainConfig(domain: string): Promise<DomainConfig> {
   const apiResponse = await axios.get<DomainConfig>(
-    `https://api.vercel.com/v6/domains/${domain}/config?&teamId=${VERCEL_TEAM_ID}`,
+    `https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains/${domain}/config?&teamId=${VERCEL_TEAM_ID}`,
     {
       headers: {
         Authorization: `Bearer ${VERCEL_API_TOKEN}`,
