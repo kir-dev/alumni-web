@@ -5,15 +5,16 @@ import { addHours } from 'date-fns';
 import { getFormattedDateInterval } from '@/lib/utils';
 
 import { Footer } from './footer';
+import { GroupDisplay } from './group-display';
 import { Header } from './header';
 import { ConfiguredTailwind } from './tailwind';
 
 interface DeleteEventEmailProps {
   event: Event;
-  groupName: string;
+  group: { id: string; name: string };
 }
 
-export default function DeleteEventEmail({ event, groupName }: DeleteEventEmailProps) {
+export default function DeleteEventEmail({ event, group }: DeleteEventEmailProps) {
   return (
     <Html>
       <Preview>Törölve: {event.name}</Preview>
@@ -65,8 +66,9 @@ export default function DeleteEventEmail({ event, groupName }: DeleteEventEmailP
             <Text>
               Üdvözlettel,
               <br />
-              {groupName} & Schönherz Alumni
+              Schönherz Alumni
             </Text>
+            <GroupDisplay group={group} />
           </Section>
           <Footer />
         </Body>
@@ -76,7 +78,10 @@ export default function DeleteEventEmail({ event, groupName }: DeleteEventEmailP
 }
 
 DeleteEventEmail.PreviewProps = {
-  groupName: 'Schönherz Alumni',
+  group: {
+    name: 'Schönherz Alumni',
+    id: '1',
+  },
   event: {
     name: 'Találkozó',
     description: 'Közös találkozó a régi iskolatársakkal.',

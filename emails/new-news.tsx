@@ -6,27 +6,27 @@ import { formatHu } from '@/lib/utils';
 
 import { StyledButton } from './button';
 import { Footer } from './footer';
+import { GroupDisplay } from './group-display';
 import { Header } from './header';
 import { ConfiguredTailwind } from './tailwind';
 
 interface NewNewsEmailProps {
-  groupName: string;
-  groupId?: string;
+  group: { id: string; name: string };
   news: News;
   newsLink: string;
   htmlContent: string;
 }
 
-export default function NewNewsEmail({ news, newsLink, groupName, groupId, htmlContent }: NewNewsEmailProps) {
+export default function NewNewsEmail({ news, newsLink, group, htmlContent }: NewNewsEmailProps) {
   return (
     <Html>
-      <Preview>Új hír a {groupName} csoportban!</Preview>
+      <Preview>Új hír a {group.name} csoportban!</Preview>
       <ConfiguredTailwind>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves csoporttársunk 👋</Text>
-            <Text>Új hírt publikáltunk a {groupName} csoportban.</Text>
+            <Text>Új hírt publikáltunk a {group.name} csoportban.</Text>
             <Section>
               <Row className='p-2 bg-slate-100 rounded-xl'>
                 <Column className='w-[30px] h-[30px] rounded-md bg-white p-2 text-center'>
@@ -61,10 +61,11 @@ export default function NewNewsEmail({ news, newsLink, groupName, groupId, htmlC
             <Text>
               Üdvözlettel,
               <br />
-              {groupName} & Schönherz Alumni
+              Schönherz Alumni
             </Text>
+            <GroupDisplay group={group} />
           </Section>
-          <Footer canUnsubscribe groupId={groupId} />
+          <Footer canUnsubscribe groupId={group.id} />
         </Body>
       </ConfiguredTailwind>
     </Html>
@@ -72,7 +73,10 @@ export default function NewNewsEmail({ news, newsLink, groupName, groupId, htmlC
 }
 
 NewNewsEmail.PreviewProps = {
-  groupName: 'Schönherz Alumni',
+  group: {
+    name: 'Schönherz Alumni',
+    id: '1',
+  },
   news: {
     title: 'Új hír a Schönherz Alumni csoportban!',
     content:

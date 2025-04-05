@@ -1,14 +1,16 @@
 import { Body, Html, Preview, Section, Text } from '@react-email/components';
 
 import { Footer } from './footer';
+import { GroupDisplay } from './group-display';
 import { Header } from './header';
 import { ConfiguredTailwind } from './tailwind';
 
 interface GeneralEmailProps {
   content: string;
+  group?: { id: string; name: string };
 }
 
-export default function GeneralEmail({ content }: GeneralEmailProps) {
+export default function GeneralEmail({ content, group }: GeneralEmailProps) {
   const contentParagraphs = content.split('\n');
   return (
     <Html>
@@ -27,6 +29,7 @@ export default function GeneralEmail({ content }: GeneralEmailProps) {
               <br />
               Schönherz Alumni
             </Text>
+            {group && <GroupDisplay group={group} />}
           </Section>
           <Footer />
         </Body>
@@ -37,4 +40,8 @@ export default function GeneralEmail({ content }: GeneralEmailProps) {
 
 GeneralEmail.PreviewProps = {
   content: 'Ez egy példa e-mail tartalomra.\n\nMásodik bekezdés.',
+  group: {
+    id: '1',
+    name: 'Schönherz Alumni',
+  },
 };

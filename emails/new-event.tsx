@@ -6,20 +6,20 @@ import { getFormattedDateInterval } from '@/lib/utils';
 
 import { StyledButton } from './button';
 import { Footer } from './footer';
+import { GroupDisplay } from './group-display';
 import { Header } from './header';
 import { ConfiguredTailwind } from './tailwind';
 
 interface NewEventEmailProps {
-  groupName: string;
+  group: { id: string; name: string };
   event: Event;
   eventLink: string;
-  groupId?: string;
 }
 
-export default function NewEventEmail({ eventLink, event, groupName, groupId }: NewEventEmailProps) {
+export default function NewEventEmail({ eventLink, event, group }: NewEventEmailProps) {
   return (
     <Html>
-      <Preview>Új esemény a {groupName} csoportban!</Preview>
+      <Preview>Új esemény a {group.name} csoportban!</Preview>
       <ConfiguredTailwind>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
@@ -61,10 +61,11 @@ export default function NewEventEmail({ eventLink, event, groupName, groupId }: 
             <Text>
               Üdvözlettel,
               <br />
-              {groupName} & Schönherz Alumni
+              Schönherz Alumni
             </Text>
+            <GroupDisplay group={group} />
           </Section>
-          <Footer canUnsubscribe groupId={groupId} />
+          <Footer canUnsubscribe groupId={group.id} />
         </Body>
       </ConfiguredTailwind>
     </Html>
@@ -72,13 +73,17 @@ export default function NewEventEmail({ eventLink, event, groupName, groupId }: 
 }
 
 NewEventEmail.PreviewProps = {
-  groupName: 'Schönherz Alumni',
+  group: {
+    name: 'Schönherz Alumni',
+    id: '1',
+  },
   event: {
     name: 'Találkozó',
     description: 'Közös találkozó a régi iskolatársakkal.',
     startDate: new Date(),
     endDate: addHours(new Date(), 1),
     location: 'BME Q épület',
+    groupId: '1',
   },
   eventLink: 'https://alumni.sch.bme.hu/events/1',
 };

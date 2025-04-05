@@ -100,10 +100,9 @@ async function notifyPublishedNews(): Promise<number> {
       subject: news.title,
       html: render(
         NewNewsEmail({
-          groupName: news.group.name,
+          group: { id: news.groupId, name: news.group.name },
           news,
           newsLink: `${SITE_URL}/groups/${news.group.id}/news/${news.id}`,
-          groupId: news.group.id,
           htmlContent: contentHtml,
         })
       ),

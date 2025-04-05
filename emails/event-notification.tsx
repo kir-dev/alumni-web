@@ -6,6 +6,7 @@ import { getFormattedDateInterval } from '@/lib/utils';
 
 import { StyledButton } from './button';
 import { Footer } from './footer';
+import { GroupDisplay } from './group-display';
 import { Header } from './header';
 import { ConfiguredTailwind } from './tailwind';
 
@@ -60,8 +61,9 @@ export default function EventNotificationEmail({ eventLink, event, groupName }: 
             <Text>
               Üdvözlettel,
               <br />
-              {groupName} & Schönherz Alumni
+              Schönherz Alumni
             </Text>
+            <GroupDisplay group={{ name: groupName, id: event.groupId }} />
           </Section>
           <Footer />
         </Body>
@@ -78,6 +80,7 @@ EventNotificationEmail.PreviewProps = {
     startDate: new Date(),
     endDate: addHours(new Date(), 1),
     location: 'BME Q épület',
+    groupId: '1',
   },
   eventLink: 'https://alumni.sch.bme.hu/events/1',
 };

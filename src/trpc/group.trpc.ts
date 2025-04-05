@@ -119,7 +119,7 @@ const createMembership = async (groupId: string, user: { id: string; email: stri
       subject: 'Csoporthoz csatlakoztál!',
       html: render(
         MembershipStatusEmail({
-          groupName: membership.group.name,
+          group: { id: membership.groupId, name: membership.group.name },
           status: StatusMap[membership.status].label,
         })
       ),
@@ -181,7 +181,7 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
       subject: 'Csoporttagságod státusza megváltozott',
       html: render(
         MembershipStatusEmail({
-          groupName: membership.group.name,
+          group: { id: membership.groupId, name: membership.group.name },
           status: StatusMap[membership.status].label,
         })
       ),
@@ -279,7 +279,7 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
     html: render(
       GroupGeneralEmail({
         content: opts.input.content,
-        groupId: opts.input.groupId,
+        group: { id: group.id, name: group.name },
       })
     ),
   });
@@ -292,6 +292,14 @@ export const sendEmail = groupAdminProcedure.input(SendEmailDto).mutation(async 
 });
 
 async function sendJoinNotificationToGroupAdmins(groupId: string, user: User) {
+  const group = await prismaClient.group.findUnique({
+    where: {
+      id: groupId,
+    },
+  });
+
+  if (!group) return;
+
   const groupAdmins = await prismaClient.membership.findMany({
     where: {
       groupId,
@@ -318,7 +326,8 @@ async function sendJoinNotificationToGroupAdmins(groupId: string, user: User) {
     subject: 'Új csatlakozási kérelem a csoportodhoz',
     html: render(
       GeneralEmail({
-        content: `${user.lastName} ${user.firstName} csatlakozni szeretne a csoportodhoz.`,
+        content: `${user.lastName} ${user.firstName} csatlakozni szeretne a ${group.name} csoportba.`,
+        group: { id: group.id, name: group.name },
       })
     ),
   });

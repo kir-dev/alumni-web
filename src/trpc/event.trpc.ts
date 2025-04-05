@@ -53,10 +53,9 @@ export const createEvent = groupAdminProcedure.input(CreateEventDto).mutation(as
     subject: event.name,
     html: render(
       NewEventEmail({
-        groupId: event.groupId,
+        group: { id: event.groupId, name: event.group.name },
         eventLink: `${SITE_URL}/groups/${event.groupId}/events/${event.id}`,
         event,
-        groupName: event.group.name,
       })
     ),
   });
@@ -216,7 +215,7 @@ export const deleteEvent = groupAdminProcedure.input(DeleteEventDto).mutation(as
   await batchSendEmail({
     to: event.EventApplication.map(({ user }) => user.email),
     subject: 'Esemény törölve',
-    html: render(DeleteEventEmail({ event, groupName: event.group.name })),
+    html: render(DeleteEventEmail({ event, group: { id: event.groupId, name: event.group.name } })),
   });
 
   await addAuditLog({

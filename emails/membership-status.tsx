@@ -3,30 +3,32 @@ import { Body, Html, Preview, Section, Text } from '@react-email/components';
 import { cn } from '@/lib/utils';
 
 import { Footer } from './footer';
+import { GroupDisplay } from './group-display';
 import { Header } from './header';
 import { ConfiguredTailwind } from './tailwind';
 
 interface MemberStatusEmailProps {
-  groupName: string;
+  group: { id: string; name: string };
   status: 'Elfogadva' | 'Függőben' | 'Elutasítva' | 'Szülő csoportra vár';
 }
 
-export default function MembershipStatusEmail({ groupName, status }: MemberStatusEmailProps) {
+export default function MembershipStatusEmail({ group, status }: MemberStatusEmailProps) {
   return (
     <Html>
-      <Preview>{groupName} csoporttagságod státusza megváltozott</Preview>
+      <Preview>{group.name} csoporttagságod státusza megváltozott</Preview>
       <ConfiguredTailwind>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves kolléga 👋</Text>
-            <Text>A(z) {groupName} csoporttagságod státusza megváltozott:</Text>
+            <Text>A(z) {group.name} csoporttagságod státusza megváltozott:</Text>
             <StatusBadge status={status} />
             <Text>
               Üdvözlettel,
               <br />
-              {groupName} & Schönherz Alumni
+              Schönherz Alumni
             </Text>
+            <GroupDisplay group={group} />
           </Section>
           <Footer />
         </Body>
@@ -50,6 +52,9 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 MembershipStatusEmail.PreviewProps = {
-  groupName: 'Csoportnév',
+  group: {
+    name: 'Schönherz Alumni',
+    id: '1',
+  },
   status: 'Elutasítva',
 } satisfies MemberStatusEmailProps;
