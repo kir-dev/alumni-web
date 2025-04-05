@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: NewsPageProps): Promise<Metad
     };
 
   return {
-    title: getSuffixedTitle(news.content),
+    title: getSuffixedTitle(news.title),
     description: news.content,
   };
 }
