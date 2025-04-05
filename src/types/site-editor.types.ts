@@ -1,8 +1,5 @@
 import { z } from 'zod';
 
-import { SpecialSiteSlugs } from '@/lib/static-site';
-import { slugify } from '@/lib/utils';
-
 export type StaticSite = {
   title: string;
   blocks: StaticSiteBlock[];
@@ -24,12 +21,7 @@ export const CreateSiteDto = z.object({
 });
 
 export const CreateGroupSiteDto = z.object({
-  title: z
-    .string()
-    .min(5, 'Cím túl rövid')
-    .refine((value) => !SpecialSiteSlugs.includes(slugify(value)), {
-      message: 'Ez a cím fenn van tartva. Kérlek válassz másikat.',
-    }),
+  title: z.string().min(5, 'Cím túl rövid'),
   groupId: z.string(),
   blocks: z.array(
     z.object({

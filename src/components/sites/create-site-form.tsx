@@ -7,35 +7,20 @@ import { BlockFieldDistributor } from '@/components/sites/editor/block-field-dis
 import { LoadingButton } from '@/components/ui/button';
 import { Form, FormMessage } from '@/components/ui/form';
 import { SpecialSiteSlugs } from '@/lib/static-site';
-import { slugify } from '@/lib/utils';
 import { CreateSiteDto, StaticSiteBlock } from '@/types/site-editor.types';
 
 interface CreateSiteFormProps {
   onSave: (input: z.infer<typeof CreateSiteDto>) => void;
   isLoading: boolean;
-  isTitleRestricted?: boolean;
 }
 
-export function CreateSiteForm({ onSave, isLoading, isTitleRestricted }: CreateSiteFormProps) {
+export function CreateSiteForm({ onSave, isLoading }: CreateSiteFormProps) {
   const form = useForm<z.infer<typeof CreateSiteDto>>({
     defaultValues: {
       title: '',
       blocks: [],
     },
-    resolver: zodResolver(
-      CreateSiteDto.refine(
-        (data) => {
-          if (isTitleRestricted) {
-            return !SpecialSiteSlugs.includes(slugify(data.title));
-          }
-          return true;
-        },
-        {
-          message: 'Ez a cím fenn van tartva. Kérlek válassz másikat.',
-          path: ['title'],
-        }
-      )
-    ),
+    resolver: zodResolver(CreateSiteDto),
   });
 
   const onAddBlock = (type: StaticSiteBlock['type']) => {
@@ -71,6 +56,10 @@ export function CreateSiteForm({ onSave, isLoading, isTitleRestricted }: CreateS
           className='bg-transparent text-3xl font-bold text-primary-900 dark:text-primary-100 outline-none w-full'
           {...form.register('title')}
         />
+        <p className='text-sm text-slate-500'>
+          A következő speciális oldalak megjelennek a láblécben: {SpecialSiteSlugs.map((slug) => slug.label).join(', ')}
+          .
+        </p>
         {form.formState.errors.title && <FormMessage>{form.formState.errors.title.message}</FormMessage>}
 
         <BlockFieldDistributor control={form.control} name='blocks' />

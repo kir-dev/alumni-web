@@ -3,23 +3,23 @@ import Link from 'next/link';
 import { TbHeartFilled } from 'react-icons/tb';
 
 import { Button } from '@/components/ui/button';
+import { prismaClient } from '@/config/prisma.config';
+import { SpecialSiteSlugs } from '@/lib/static-site';
 
-const FooterLinks: { label: string; href: string }[] = [
-  { label: 'Kezdőlap', href: '/' },
-  { label: 'Szolgáltatások', href: '/sites/szolgaltatasok' },
-  { label: 'Impresszum', href: '/sites/impresszum' },
-  { label: 'Adatvédelem', href: '/sites/adatvedelem' },
-  { label: 'Kapcsolat', href: '/sites/kapcsolat' },
-];
+interface FooterProps {
+  groupId: string | undefined;
+}
 
-export function Footer() {
+export async function Footer({ groupId }: FooterProps) {
   const year = new Date().getFullYear();
+  const staticSites = await getStaticSites(groupId);
+
   return (
     <footer className='bg-slate-900 text-white text-center'>
       <div className='flex justify-between items-center container p-10 flex-col md:flex-row gap-10'>
         <div>
           <div className='flex gap-2 items-center flex-wrap'>
-            {FooterLinks.map(({ label, href }) => (
+            {staticSites.map(({ label, href }) => (
               <Button key={label} className='text-white p-0' variant='link' asChild>
                 <Link href={href}>{label}</Link>
               </Button>
@@ -45,4 +45,29 @@ export function Footer() {
       </div>
     </footer>
   );
+}
+
+async function getStaticSites(groupId: string | undefined): Promise<{ label: string; href: string }[]> {
+  const baseLinks = [
+    {
+      label: 'Kezdőlap',
+      href: '/',
+    },
+  ];
+
+  const staticSites = await prismaClient.staticSite.findMany({
+    where: {
+      groupId: groupId ?? null,
+    },
+  });
+
+  const prefix = groupId ? `/groups/${groupId}` : '';
+
+  return [
+    ...baseLinks,
+    ...SpecialSiteSlugs.filter((link) => staticSites.some((site) => site.url === link.href)).map((link) => ({
+      label: link.label,
+      href: `${prefix}/sites/${link.href}`,
+    })),
+  ];
 }

@@ -71,7 +71,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <NavbarWrapper group={domain?.group} />
         {children}
-        <Footer />
+        <Footer groupId={domain?.group?.id} />
         <Toaster />
       </body>
     </html>

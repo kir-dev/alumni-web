@@ -21,5 +21,5 @@ export function CreateGroupSite({ groupId }: CreateGroupSiteProps) {
     router.refresh();
   };
 
-  return <CreateSiteForm isTitleRestricted onSave={onSave} isLoading={createSite.isPending} />;
+  return <CreateSiteForm onSave={onSave} isLoading={createSite.isPending} />;
 }

@@ -9,6 +9,7 @@ import { AddBlockField } from '@/components/sites/editor/add-block-field';
 import { BlockFieldDistributor } from '@/components/sites/editor/block-field-distributor';
 import { Button, LoadingButton } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { SpecialSiteSlugs } from '@/lib/static-site';
 import { EditSiteDto, StaticSiteBlock } from '@/types/site-editor.types';
 
 interface EditSiteFormProps {
@@ -67,6 +68,10 @@ export function EditSiteForm({ site, onSave, onDelete, isLoading, isDeleting }: 
           className='bg-transparent text-3xl font-bold text-primary-900 dark:text-primary-100 outline-none w-full'
           {...form.register('title')}
         />
+        <p className='text-sm text-slate-500'>
+          A következő speciális oldalak megjelennek a láblécben: {SpecialSiteSlugs.map((slug) => slug.label).join(', ')}
+          .
+        </p>
         <BlockFieldDistributor control={form.control} name='blocks' />
         <AddBlockField onAdd={onAddBlock} />
         <div className='flex justify-between gap-2 mt-10'>
