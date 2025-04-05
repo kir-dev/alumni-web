@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { DeleteNews } from '@/components/group/delete-news';
 import Providers from '@/components/providers';
+import { TextRenderer } from '@/components/sites/render/text-renderer';
 import { Button } from '@/components/ui/button';
 import { UpdatedAt } from '@/components/ui/updated-at';
 import { prismaClient } from '@/config/prisma.config';
@@ -43,15 +44,11 @@ export default async function NewsDetailsPage({ params }: { params: { id: string
 
   if (!news) return notFound();
 
-  const paragraphs = news.content.split('\n');
-
   return (
     <main>
       <h1>{news.title}</h1>
       <p>{formatHu(news.publishDate, 'yyyy. MMMM dd. HH:mm')}</p>
-      {paragraphs.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
-      ))}
+      <TextRenderer content={news.content} />
       <UpdatedAt date={news.updatedAt} className='mt-5' />
       <Providers>
         {userCanEdit && (

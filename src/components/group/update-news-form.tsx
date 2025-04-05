@@ -8,12 +8,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { trpc } from '@/_trpc/client';
-import { AiWrapper } from '@/components/ai/ai-wrapper';
 import { LoadingButton } from '@/components/ui/button';
-import { CheckboxField, DateTimeField, TextAreaField, TextField } from '@/components/ui/fields';
+import { CheckboxField, DateTimeField, TextField } from '@/components/ui/fields';
 import { Form } from '@/components/ui/form';
 import { getNewsGenerationContext } from '@/lib/ai';
 import { UpdateNewsDto } from '@/types/news.types';
+
+import { NewsContentEditor } from './news-content-editor';
 
 interface UpdateNewsFormProps {
   news: News;
@@ -39,15 +40,19 @@ export function UpdateNewsForm({ news, group }: UpdateNewsFormProps) {
     });
   });
 
-  const context = useMemo(() => getNewsGenerationContext(group), [group]);
+  const title = form.watch('title');
+
+  const context = useMemo(() => getNewsGenerationContext(group, title), [group, title]);
 
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
         <TextField control={form.control} name='title' label='Hír címe' />
-        <AiWrapper onGenerate={(text) => form.setValue('content', text)} context={context}>
-          <TextAreaField control={form.control} name='content' label='Hír tartalma' />
-        </AiWrapper>
+        <NewsContentEditor
+          value={form.watch('content')}
+          onChange={(value) => form.setValue('content', value)}
+          context={context}
+        />
         <DateTimeField control={form.control} name='publishDate' label='Publikálás dátuma (opcionális)' />
         <CheckboxField
           control={form.control}

@@ -14,10 +14,10 @@ interface NewNewsEmailProps {
   groupId?: string;
   news: News;
   newsLink: string;
+  htmlContent: string;
 }
 
-export default function NewNewsEmail({ news, newsLink, groupName, groupId }: NewNewsEmailProps) {
-  const contentParagraphs = news.content.split('\n');
+export default function NewNewsEmail({ news, newsLink, groupName, groupId, htmlContent }: NewNewsEmailProps) {
   return (
     <Html>
       <Preview>Új hír a {groupName} csoportban!</Preview>
@@ -55,9 +55,8 @@ export default function NewNewsEmail({ news, newsLink, groupName, groupId }: New
                 </Column>
               </Row>
             </Section>
-            {contentParagraphs.map((paragraph) => (
-              <Text key={paragraph}>{paragraph}</Text>
-            ))}
+            {/* eslint-disable-next-line react/no-danger */}
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
             <StyledButton href={newsLink}>Hír megnyitása</StyledButton>
             <Text>
               Üdvözlettel,
@@ -80,5 +79,5 @@ NewNewsEmail.PreviewProps = {
       'Lórum ipse számos máshol nehezen tentalatlan rajságot és boszlos válácsot is priblik. Néhányan azt kallták, Néhányan azt kallták, hogy szóbeli szomjasan oktálnia kacsolnia, mert a gumentás éjszaka lozik perepítnie. A gumentás gyakran minus vagy lemimpés vakanság gúnyomát tolnolta fel. A hátlan alacsonyság, akit „pika” fonsot isedetnek, a saját kotyokáját és dulását füllente a helgésben, de datóságkor füregt, hogy tudlékat hasizáljon meg, fakát tolódjon és tyúkányzást fintsen. Az első 40 félzetésben azt érzte meg, hogyan legyen gyüge, és bujas oloma volt, amely szánkódt a kokiban. Ezután az alacsonyság fagymató olomában életett a helgésből, de csak egy elménye és dulan, kedves faréka volt. A káltáron olányos három gúnyom a hatla hásos jogásai. Az edést, a dundát azért fargatódják, mert ermetet mozik, mivel pohomokkal gyüge oloma számontos volt és hősi poszlyát ecelt.',
     publishDate: addHours(new Date(), -1),
   },
-  newsLink: 'https://alumni.sch.bme.hu/news/1',
+  newsLink: 'https://alumni.sch.bme.hu/groups/1/news/1',
 };

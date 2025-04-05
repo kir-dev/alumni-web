@@ -2,6 +2,9 @@ import { MembershipStatus } from '@prisma/client';
 import { render } from '@react-email/render';
 import { addDays, subDays, subMonths, subYears } from 'date-fns';
 import { NextRequest, NextResponse } from 'next/server';
+import { remark } from 'remark';
+import html from 'remark-gfm';
+import remarkGfm from 'remark-html';
 
 import { SITE_URL } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
@@ -87,6 +90,9 @@ async function notifyPublishedNews(): Promise<number> {
   });
 
   for (const news of newsFromPastDay) {
+    const processedContent = await remark().use(remarkGfm).use(html).process(news.content);
+    const contentHtml = processedContent.toString();
+
     await batchSendEmail({
       to: Array.from(
         new Set([...news.group.members.map((member) => member.user.email), ...(news.group.legacyMaillist ?? [])])
@@ -96,8 +102,9 @@ async function notifyPublishedNews(): Promise<number> {
         NewNewsEmail({
           groupName: news.group.name,
           news,
-          newsLink: `${SITE_URL}/news/${news.id}`,
+          newsLink: `${SITE_URL}/groups/${news.group.id}/news/${news.id}`,
           groupId: news.group.id,
+          htmlContent: contentHtml,
         })
       ),
     });

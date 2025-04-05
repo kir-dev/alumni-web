@@ -1,7 +1,7 @@
 import { Group } from '@prisma/client';
 
-export function getNewsGenerationContext(group: Group) {
-  return `Egy hírt kell írnod plain text formátumban, nem lehet formázni, dupla sortöréssel elválasztva a bekezdéseket. A hírt egy csoportnak kell írni, a csoport neve: ${group.name}, a csoport leírása: ${group.description}`;
+export function getNewsGenerationContext(group: Group, title: string) {
+  return `Egy hírt kell írnod plain text formátumban, nem lehet formázni, dupla sortöréssel elválasztva a bekezdéseket. A hírt egy csoportnak kell írni, a csoport neve: ${group.name}, a csoport leírása: ${group.description}. A hír címe: ${title}, ezt már nem kell beleírni a tartalomba.`;
 }
 
 export function getEventGenerationContext(
