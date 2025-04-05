@@ -15,7 +15,7 @@ export const CheckDomainDto = z.object({
 });
 
 export type DomainConfig = {
-  misconfigured: boolean;
+  verified: boolean;
   [key: string]: any;
 };
 

@@ -40,7 +40,7 @@ export default function DomainSettings({ domain, groupId }: DomainSettingsProps)
 
   let buttonVariant: VariantProps<typeof buttonVariants>['variant'] = 'outline';
   if (checkDomain.data) {
-    buttonVariant = checkDomain.data.misconfigured ? 'destructiveOutline' : 'successOutline';
+    buttonVariant = checkDomain.data.verified ? 'successOutline' : 'destructiveOutline';
   }
 
   const onDomainAdd = async (values: z.infer<typeof AddDomainDto>) => {
@@ -56,11 +56,11 @@ export default function DomainSettings({ domain, groupId }: DomainSettingsProps)
 
   useEffect(() => {
     if (checkDomain.data) {
-      setCheckEnabled(checkDomain.data.misconfigured);
+      setCheckEnabled(!checkDomain.data.verified);
     } else {
       setCheckEnabled(Boolean(addDomain.status === 'success' || domain));
     }
-  }, [checkDomain.data?.misconfigured, addDomain.status, domain]);
+  }, [checkDomain.data, addDomain.status, domain]);
 
   return (
     <Dialog>
@@ -78,7 +78,7 @@ export default function DomainSettings({ domain, groupId }: DomainSettingsProps)
           <DomainResult
             loading={deleteDomain.isPending}
             onDelete={onDomainDelete}
-            misconfigured={checkDomain.data?.misconfigured ?? true}
+            verified={checkDomain.data?.verified ?? false}
             domain={domain?.domain ?? 'n/a'}
           />
         ) : (
@@ -123,21 +123,21 @@ function DomainForm({ onSubmit, groupId, loading }: DomainFormProps) {
 
 interface DomainResultProps {
   onDelete: () => void;
-  misconfigured: boolean;
+  verified: boolean;
   domain: string;
   loading: boolean;
 }
 
-export function DomainResult({ misconfigured, domain, loading, onDelete }: DomainResultProps) {
+export function DomainResult({ verified, domain, loading, onDelete }: DomainResultProps) {
   return (
     <>
-      <div className={cn('flex items-center gap-2', misconfigured ? 'text-red-500' : 'text-green-500')}>
-        {misconfigured ? <TbX size={30} /> : <TbCheck size={30} />}
+      <div className={cn('flex items-center gap-2', verified ? 'text-green-500' : 'text-red-500')}>
+        {verified ? <TbCheck size={30} /> : <TbX size={30} />}
         <div>
           {domain}
           <br />
           <span className='text-sm opacity-80'>
-            {misconfigured ? 'A domén nincs megfelelően beállítva' : 'A domén megfelelően beállítva'}
+            {verified ? 'A domén megfelelően beállítva' : 'A domén nincs megfelelően beállítva'}
           </span>
           <br />
         </div>

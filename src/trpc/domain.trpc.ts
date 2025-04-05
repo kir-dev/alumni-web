@@ -65,7 +65,7 @@ export const checkDomain = groupAdminProcedure.input(CheckDomainDto).query(async
     const domainConfig = await getDomainConfig(domain.domain);
 
     return {
-      misconfigured: Boolean(domainConfig.misconfigured),
+      verified: Boolean(domainConfig.verified),
     };
   } catch (e) {
     if (isAxiosError(e)) {
