@@ -51,7 +51,7 @@ export function EditGroupForm({ group }: EditGroupFormProps) {
           control={form.control}
           name='icon'
           label='Csoport ikonja (opcionális)'
-          description='Csoport ikonja csak doménnel rendelkező csoportok esetén jelenik meg a felső menüben.'
+          description='Négyzetes képet válassz! A csoport ikonja a saját domén navigációs sávjában, a csoportok listájában és a csoport oldalán jelenik meg.'
         />
         <LoadingButton isLoading={updateGroup.isPending} className='mt-5' type='submit'>
           Mentés

@@ -1,11 +1,13 @@
 import { MembershipStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TbBrowserPlus, TbCalendarPlus, TbEdit, TbNotes, TbTextPlus, TbUsersGroup } from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
+import { GroupIcon } from '@/components/group/group-icon';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { JoinButton } from '@/components/group/join-button';
 import { NewsListItem } from '@/components/group/news-list-item';
@@ -17,7 +19,6 @@ import { LEGACY_MAIL_LIST_ENABLED } from '@/config/environment.config';
 import { prismaClient } from '@/config/prisma.config';
 import { canEdit, getGroup, getMembership, getSession, isApprovedGroupMember, isSuperAdmin } from '@/lib/server-utils';
 import { generateGlobalThemePalette, getSuffixedTitle } from '@/lib/utils';
-
 const MembershipCounter = dynamic(() => import('@/components/group/membership-counter'), { ssr: false });
 
 const SendEmail = dynamic(() => import('@/components/group/send-email'), { ssr: false });
@@ -98,8 +99,9 @@ export default async function GroupDetailPage({ params }: GroupPageProps) {
       {group.color && <style>{generateGlobalThemePalette(group.color)}</style>}
       <Card>
         <CardHeader>
-          <CardTitle>
-            {group.name}{' '}
+          <CardTitle className='space-x-2'>
+            <GroupIcon icon={group.icon} />
+            {group.name}
             <MembershipCounter approvedCount={membershipCount.approved} pendingCount={membershipCount.pending} />
           </CardTitle>
         </CardHeader>

@@ -7,10 +7,12 @@ import { TbChevronRight } from 'react-icons/tb';
 
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
+import { GroupIcon } from './group-icon';
+
 const MembershipCounter = dynamic(() => import('./membership-counter'), { ssr: false });
 
 interface GroupListItemProps {
-  group: Pick<Group, 'id' | 'name'>;
+  group: Pick<Group, 'id' | 'name' | 'icon'>;
   approvedCount?: number;
 }
 
@@ -19,7 +21,10 @@ export function GroupListItem({ group, approvedCount }: GroupListItemProps) {
     <Link href={`/groups/${group.id}`}>
       <Card className='mt-2'>
         <CardHeader className='flex-row justify-between items-center'>
-          <CardTitle className='text-lg'>{group.name}</CardTitle>
+          <CardTitle className='text-lg'>
+            <GroupIcon icon={group.icon} />
+            {group.name}
+          </CardTitle>
           <div className='flex gap-2 items-center'>
             {typeof approvedCount === 'number' && <MembershipCounter approvedCount={approvedCount} />}
             <TbChevronRight className='text-slate-500' />
