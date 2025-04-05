@@ -13,29 +13,50 @@ import { getDomainForHost } from '@/lib/server-utils';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: 'Schönherz Alumni Információs Rendszer',
-  description: 'Schönherz Alumni Információs Rendszer',
-  verification: {
-    google: GOOGLE_SITE_VERIFICATION,
-  },
-  keywords: [
-    'Schönherz',
-    'Alumni',
-    'Információs',
-    'Rendszer',
-    'sch',
-    'bme vik',
-    'bme',
-    'vik',
-    'események',
-    'hírek',
-    'egyetem',
-    'alumni',
-    'közösség',
-    'jelentkezés',
-  ],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const domain = await getDomainForHost();
+  const groupName = domain?.group?.name ?? 'Schönherz';
+  const title = `${groupName} Alumni Információs Rendszer`;
+  const description =
+    domain?.group?.description ??
+    'A Schönherz Alumni Információs Rendszer összeköti a jelenlegi és egykori kollégistákat, lehetőséget biztosítva a kapcsolattartásra, eseményekre és hírekre.';
+
+  return {
+    title,
+    description,
+    verification: {
+      google: GOOGLE_SITE_VERIFICATION,
+    },
+    keywords: [
+      groupName,
+      'Alumni',
+      'Információs',
+      'Rendszer',
+      'sch',
+      'bme vik',
+      'bme',
+      'vik',
+      'események',
+      'hírek',
+      'egyetem',
+      'alumni',
+      'közösség',
+      'jelentkezés',
+    ],
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: 'hu_HU',
+      siteName: `${groupName} Alumni`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
