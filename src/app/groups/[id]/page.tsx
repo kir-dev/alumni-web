@@ -1,7 +1,6 @@
 import { MembershipStatus } from '@prisma/client';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TbBrowserPlus, TbCalendarPlus, TbEdit, TbNotes, TbTextPlus, TbUsersGroup } from 'react-icons/tb';
