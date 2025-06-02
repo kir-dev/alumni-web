@@ -107,7 +107,17 @@ const createMembership = async (groupId: string, user: { id: string; email: stri
     },
     include: {
       group: true,
-      user: true,
+      user: {
+        include: {
+          rootGroup: {
+            select: {
+              name: true,
+              icon: true,
+              color: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -121,6 +131,7 @@ const createMembership = async (groupId: string, user: { id: string; email: stri
         MembershipStatusEmail({
           group: { id: membership.groupId, name: membership.group.name },
           status: StatusMap[membership.status].label,
+          rootGroup: membership.user.rootGroup,
         })
       ),
     });
@@ -155,7 +166,17 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
       status: opts.input.status,
     },
     include: {
-      user: true,
+      user: {
+        include: {
+          rootGroup: {
+            select: {
+              name: true,
+              icon: true,
+              color: true,
+            },
+          },
+        },
+      },
       group: true,
     },
   });
@@ -183,6 +204,7 @@ export const editMembership = groupAdminProcedure.input(EditMembershipDto).mutat
         MembershipStatusEmail({
           group: { id: membership.groupId, name: membership.group.name },
           status: StatusMap[membership.status].label,
+          rootGroup: membership.user.rootGroup,
         })
       ),
     });

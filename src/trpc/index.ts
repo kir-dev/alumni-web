@@ -47,6 +47,7 @@ import {
   resetPassword,
   toggleSuperAdmin,
   updateProfile,
+  updateRootGroup,
 } from '@/trpc/user.trpc';
 
 import { setLegacyMailList, unsubscribeFromLegacyMailList } from './legacy-mail-list.trpc';
@@ -102,6 +103,7 @@ export const appRouter = router({
   getMembers,
   setLegacyMailList,
   unsubscribeFromLegacyMailList,
+  updateRootGroup,
 });
 
 export type AppRouter = typeof appRouter;

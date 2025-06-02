@@ -33,6 +33,7 @@ export const UpdateUserProfileDto = z.object({
     .string({ required_error: 'Levelezési cím megadása kötelező' })
     .min(5, 'A cím legalább 5 karakter hosszú kell legyen'),
   graduationDate: z.string().datetime().nullable(),
+  rootGroupId: z.string().nullish(),
 });
 
 export const PasswordResetDto = z.object({

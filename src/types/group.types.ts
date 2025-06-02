@@ -64,3 +64,9 @@ export const MemberQuery = z.object({
     .optional(),
   isAdministrator: z.boolean().optional(),
 });
+
+export type RootGroup = {
+  name?: string | null;
+  icon?: string | null;
+  color?: string | null;
+} | null;

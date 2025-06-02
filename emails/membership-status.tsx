@@ -1,6 +1,7 @@
 import { Body, Html, Preview, Section, Text } from '@react-email/components';
 
 import { cn } from '@/lib/utils';
+import { RootGroup } from '@/types/group.types';
 
 import { Footer } from './footer';
 import { GroupDisplay } from './group-display';
@@ -10,15 +11,16 @@ import { ConfiguredTailwind } from './tailwind';
 interface MemberStatusEmailProps {
   group: { id: string; name: string };
   status: 'Elfogadva' | 'Függőben' | 'Elutasítva' | 'Szülő csoportra vár';
+  rootGroup?: RootGroup;
 }
 
-export default function MembershipStatusEmail({ group, status }: MemberStatusEmailProps) {
+export default function MembershipStatusEmail({ group, status, rootGroup }: MemberStatusEmailProps) {
   return (
     <Html>
       <Preview>{group.name} csoporttagságod státusza megváltozott</Preview>
-      <ConfiguredTailwind>
+      <ConfiguredTailwind rootGroup={rootGroup}>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
-          <Header />
+          <Header rootGroup={rootGroup} />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves kolléga 👋</Text>
             <Text>A(z) {group.name} csoporttagságod státusza megváltozott:</Text>
@@ -26,11 +28,11 @@ export default function MembershipStatusEmail({ group, status }: MemberStatusEma
             <Text>
               Üdvözlettel,
               <br />
-              Schönherz Alumni
+              {rootGroup?.name || 'Schönherz Alumni'}
             </Text>
             <GroupDisplay group={group} />
           </Section>
-          <Footer />
+          <Footer rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>

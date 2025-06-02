@@ -18,6 +18,7 @@ async function run() {
       lastName: faker.person.lastName(),
       phone: faker.phone.number(),
       graduationDate: faker.date.recent({ days: 365 }),
+      rootGroupId: null,
     });
   }
   await prisma.user.createMany({ data: users });

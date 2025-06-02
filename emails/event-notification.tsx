@@ -3,6 +3,7 @@ import { Body, Column, Html, Preview, Row, Section, Text } from '@react-email/co
 import { addHours } from 'date-fns';
 
 import { getFormattedDateInterval } from '@/lib/utils';
+import { RootGroup } from '@/types/group.types';
 
 import { StyledButton } from './button';
 import { Footer } from './footer';
@@ -14,13 +15,19 @@ interface EventNotificationEmailProps {
   groupName: string;
   event: Event;
   eventLink: string;
+  rootGroup?: RootGroup;
 }
 
-export default function EventNotificationEmail({ eventLink, event, groupName }: EventNotificationEmailProps) {
+export default function EventNotificationEmail({
+  eventLink,
+  event,
+  groupName,
+  rootGroup,
+}: EventNotificationEmailProps) {
   return (
     <Html>
       <Preview>Közeleg a(z) {groupName} csoport eseménye!</Preview>
-      <ConfiguredTailwind>
+      <ConfiguredTailwind rootGroup={rootGroup}>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
@@ -61,11 +68,11 @@ export default function EventNotificationEmail({ eventLink, event, groupName }: 
             <Text>
               Üdvözlettel,
               <br />
-              Schönherz Alumni
+              {rootGroup?.name || 'Schönherz Alumni'}
             </Text>
             <GroupDisplay group={{ name: groupName, id: event.groupId }} />
           </Section>
-          <Footer />
+          <Footer rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>

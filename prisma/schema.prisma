@@ -25,8 +25,9 @@ model Group {
   parentGroup    Group?   @relation("ParentGroup", fields: [parentGroupId], references: [id])
   subGroups      Group[]  @relation("ParentGroup")
 
-  members Membership[]
-  events  Event[]
+  members         Membership[]
+  events          Event[]
+  registeredUsers User[]       @relation("UserRootGroup")
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -129,6 +130,8 @@ model User {
   emailVerified  DateTime?
   isSuperAdmin   Boolean   @default(false)
   graduationDate DateTime?
+  rootGroupId    String?
+  rootGroup      Group?    @relation("UserRootGroup", fields: [rootGroupId], references: [id], onDelete: SetNull)
 
   phone   String @default("")
   address String @default("")

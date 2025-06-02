@@ -121,6 +121,14 @@ export function generateGlobalThemePalette(baseColor: string) {
   return text;
 }
 
+export function getHexForColor(color: string) {
+  const colors = fullConfig.theme?.colors;
+  if (!colors) return '';
+  const colorScheme = colors[color as keyof typeof colors];
+  if (!colorScheme) return '';
+  return colorScheme[500];
+}
+
 export function getAvailableColors(): { value: string; color: string }[] {
   const colors = fullConfig.theme?.colors;
   if (!colors) return [];
@@ -131,4 +139,32 @@ export function getAvailableColors(): { value: string; color: string }[] {
       if (['primary', 'bme'].includes(a.value)) return -1;
       return 1;
     });
+}
+
+export function generateColorPaletteFromHex(color: string) {
+  const lightenHexColor = (hex: string, percent: number) => {
+    const num = parseInt(hex.slice(1), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+    const G = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + amt));
+    const B = Math.min(255, Math.max(0, (num & 0x0000ff) + amt));
+    return `#${((1 << 24) | (R << 16) | (G << 8) | B).toString(16).slice(1)}`;
+  };
+
+  const darkenHexColor = (hex: string, percent: number) => {
+    return lightenHexColor(hex, -percent);
+  };
+
+  return {
+    50: lightenHexColor(color, 90),
+    100: lightenHexColor(color, 70),
+    200: lightenHexColor(color, 50),
+    300: lightenHexColor(color, 30),
+    400: lightenHexColor(color, 10),
+    500: color,
+    600: darkenHexColor(color, 10),
+    700: darkenHexColor(color, 30),
+    800: darkenHexColor(color, 50),
+    900: darkenHexColor(color, 70),
+  };
 }

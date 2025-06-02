@@ -1,13 +1,15 @@
 import { Link, Text } from '@react-email/components';
 
 import { SITE_URL } from '@/config/environment.config';
+import { RootGroup } from '@/types/group.types';
 
 interface FooterProps {
   canUnsubscribe?: boolean;
   groupId?: string;
+  rootGroup?: RootGroup;
 }
 
-export function Footer({ canUnsubscribe, groupId }: FooterProps) {
+export function Footer({ canUnsubscribe, groupId, rootGroup }: FooterProps) {
   return (
     <>
       {canUnsubscribe && (
@@ -24,7 +26,7 @@ export function Footer({ canUnsubscribe, groupId }: FooterProps) {
         </Text>
       )}
       <Text className='text-center text-slate-500 text-sm'>
-        &copy; {new Date().getFullYear()} Schönherz Alumni, minden jog fenntartva.
+        &copy; {new Date().getFullYear()} {rootGroup?.name || 'Schönherz & VIK Alumni'}, minden jog fenntartva.
       </Text>
     </>
   );

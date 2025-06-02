@@ -3,6 +3,7 @@ import { Body, Column, Html, Preview, Row, Section, Text } from '@react-email/co
 import { addHours } from 'date-fns';
 
 import { getFormattedDateInterval } from '@/lib/utils';
+import { RootGroup } from '@/types/group.types';
 
 import { Footer } from './footer';
 import { GroupDisplay } from './group-display';
@@ -12,9 +13,10 @@ import { ConfiguredTailwind } from './tailwind';
 interface DeleteEventEmailProps {
   event: Event;
   group: { id: string; name: string };
+  rootGroup?: RootGroup;
 }
 
-export default function DeleteEventEmail({ event, group }: DeleteEventEmailProps) {
+export default function DeleteEventEmail({ event, group, rootGroup }: DeleteEventEmailProps) {
   return (
     <Html>
       <Preview>Törölve: {event.name}</Preview>
@@ -66,11 +68,11 @@ export default function DeleteEventEmail({ event, group }: DeleteEventEmailProps
             <Text>
               Üdvözlettel,
               <br />
-              Schönherz Alumni
+              {rootGroup?.name || 'Schönherz Alumni'}
             </Text>
             <GroupDisplay group={group} />
           </Section>
-          <Footer />
+          <Footer rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>

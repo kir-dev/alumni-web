@@ -1,5 +1,7 @@
 import { Body, Html, Preview, Section, Text } from '@react-email/components';
 
+import { RootGroup } from '@/types/group.types';
+
 import { Footer } from './footer';
 import { GroupDisplay } from './group-display';
 import { Header } from './header';
@@ -8,14 +10,15 @@ import { ConfiguredTailwind } from './tailwind';
 interface GeneralEmailProps {
   content: string;
   group?: { id: string; name: string };
+  rootGroup?: RootGroup;
 }
 
-export default function GeneralEmail({ content, group }: GeneralEmailProps) {
+export default function GeneralEmail({ content, group, rootGroup }: GeneralEmailProps) {
   const contentParagraphs = content.split('\n');
   return (
     <Html>
       <Preview>{contentParagraphs[0]}</Preview>
-      <ConfiguredTailwind>
+      <ConfiguredTailwind rootGroup={rootGroup}>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
           <Header />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
@@ -27,11 +30,11 @@ export default function GeneralEmail({ content, group }: GeneralEmailProps) {
             <Text>
               Üdvözlettel,
               <br />
-              Schönherz Alumni
+              {rootGroup?.name || 'Schönherz Alumni'}
             </Text>
             {group && <GroupDisplay group={group} />}
           </Section>
-          <Footer />
+          <Footer rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>

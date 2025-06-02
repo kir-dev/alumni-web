@@ -2,11 +2,20 @@ import { isBefore, subYears } from 'date-fns';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
-import { TbHome, TbMailCheck, TbMailExclamation, TbMailX, TbPhone, TbUserExclamation } from 'react-icons/tb';
+import {
+  TbHome,
+  TbMailCheck,
+  TbMailExclamation,
+  TbMailX,
+  TbPhone,
+  TbUserExclamation,
+  TbUsersGroup,
+} from 'react-icons/tb';
 
 import { EventListItem } from '@/components/group/event-list-item';
 import { GroupListItem } from '@/components/group/group-list-item';
 import { RequestEmailVerification } from '@/components/profile/request-email-verification';
+import { RootGroupSelector } from '@/components/profile/root-group-selector';
 import { SignOut } from '@/components/profile/sign-out';
 import { Tfa } from '@/components/profile/tfa';
 import Providers from '@/components/providers';
@@ -37,6 +46,7 @@ export default async function ProfilePage() {
     },
     include: {
       TfaToken: true,
+      rootGroup: true,
     },
   });
 
@@ -80,6 +90,16 @@ export default async function ProfilePage() {
   const emailVerified = Boolean(user.emailVerified);
   const profileOutdated = isBefore(new Date(user.updatedAt), subYears(new Date(), 1));
 
+  // Get all root groups (groups with a domain)
+  const rootGroups = await prismaClient.group.findMany({
+    where: {
+      parentGroupId: null,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  });
+
   return (
     <main>
       <h1>Profil</h1>
@@ -120,6 +140,12 @@ export default async function ProfilePage() {
               />
               <IconValueDisplay icon={TbPhone} value={user.phone} type='tel' />
               <IconValueDisplay icon={TbHome} value={user.address} type='address' />
+              <IconValueDisplay
+                prefix='Forrás csoport:'
+                icon={TbUsersGroup}
+                value={user.rootGroup?.name || 'Nincs'}
+                type='text'
+              />
             </div>
           </div>
           <div className='flex flex-col gap-2'>
@@ -128,6 +154,7 @@ export default async function ProfilePage() {
               <UpdateProfileForm user={user} />
               <PasswordChangeDialog />
               <Tfa token={user.TfaToken} />
+              <RootGroupSelector rootGroupId={user.rootGroupId} rootGroups={rootGroups} />
             </Providers>
           </div>
         </CardContent>

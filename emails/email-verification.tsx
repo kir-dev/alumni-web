@@ -1,5 +1,7 @@
 import { Body, Html, Preview, Section, Text } from '@react-email/components';
 
+import { RootGroup } from '@/types/group.types';
+
 import { StyledButton } from './button';
 import { Footer } from './footer';
 import { Header } from './header';
@@ -8,15 +10,16 @@ import { ConfiguredTailwind } from './tailwind';
 interface EmailVerificationProps {
   name: string;
   verificationLink: string;
+  rootGroup?: RootGroup;
 }
 
-export default function EmailVerification({ name, verificationLink }: EmailVerificationProps) {
+export default function EmailVerification({ name, verificationLink, rootGroup }: EmailVerificationProps) {
   return (
     <Html>
       <Preview>Kérünk erősítsd meg az e-mail címed!</Preview>
-      <ConfiguredTailwind>
+      <ConfiguredTailwind rootGroup={rootGroup}>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
-          <Header />
+          <Header rootGroup={rootGroup} />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves {name} 👋</Text>
             <Text>Az e-mail címed megerősítését a következő linkre kattintva teheted meg:</Text>
@@ -25,10 +28,10 @@ export default function EmailVerification({ name, verificationLink }: EmailVerif
             <Text>
               Üdvözlettel,
               <br />
-              Schönherz Alumni
+              {rootGroup?.name || 'Schönherz Alumni'}
             </Text>
           </Section>
-          <Footer />
+          <Footer rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>

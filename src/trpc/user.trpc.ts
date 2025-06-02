@@ -10,6 +10,7 @@ import EmailVerification from '@/emails/email-verification';
 import PasswordResetEmail from '@/emails/password-reset';
 import Welcome from '@/emails/welcome';
 import { singleSendEmail } from '@/lib/email';
+import { getDomainForHost } from '@/lib/server-utils';
 import { generateRandomString, hashPassword } from '@/lib/utils';
 import { privateProcedure, publicProcedure, superAdminProcedure } from '@/trpc/trpc';
 import {
@@ -35,11 +36,29 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Ez az e-mail cím már regisztrálva van' });
   }
 
+  // Get the root group from the domain
+  const domain = await getDomainForHost();
+  const rootGroupId = domain?.groupId;
+
+  // Fetch root group details if available
+  let rootGroup = null;
+  if (rootGroupId) {
+    rootGroup = await prismaClient.group.findUnique({
+      where: { id: rootGroupId },
+      select: {
+        name: true,
+        icon: true,
+        color: true,
+      },
+    });
+  }
+
   const user = await prismaClient.user.create({
     data: {
       ...data,
       graduationDate: data.graduationDate ? new Date(data.graduationDate) : null,
       password: hashPassword(password),
+      rootGroupId, // Set the root group ID
     },
     select: {
       email: true,
@@ -49,6 +68,13 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
       address: true,
       graduationDate: true,
       id: true,
+      rootGroup: {
+        select: {
+          name: true,
+          icon: true,
+          color: true,
+        },
+      },
     },
   });
 
@@ -72,6 +98,7 @@ export const registerUser = publicProcedure.input(RegisterDto).mutation(async (o
       Welcome({
         name: user.firstName,
         verificationLink: `${SITE_URL}/api/verify/${verificationToken.token}`,
+        rootGroup,
       })
     ),
   });
@@ -97,6 +124,15 @@ export const resetPassword = publicProcedure.input(PasswordResetDto).mutation(as
     where: {
       email: opts.input.email,
     },
+    include: {
+      rootGroup: {
+        select: {
+          name: true,
+          icon: true,
+          color: true,
+        },
+      },
+    },
   });
 
   if (!user) return;
@@ -121,6 +157,7 @@ export const resetPassword = publicProcedure.input(PasswordResetDto).mutation(as
       PasswordResetEmail({
         name: user.firstName,
         resetLink: `${SITE_URL}/password-reset/${verificationToken.token}`,
+        rootGroup: user.rootGroup,
       })
     ),
   });
@@ -226,7 +263,26 @@ export const getMyUser = privateProcedure.query(async (opts) => {
 });
 
 async function createEmailVerificationSession(userId: string) {
-  const user = await prismaClient.user.update({
+  // Find the user with root group info
+  const user = await prismaClient.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      rootGroup: {
+        select: {
+          name: true,
+          icon: true,
+          color: true,
+        },
+      },
+    },
+  });
+
+  if (!user) throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+
+  // Reset the emailVerified field
+  await prismaClient.user.update({
     where: {
       id: userId,
     },
@@ -235,10 +291,7 @@ async function createEmailVerificationSession(userId: string) {
     },
   });
 
-  if (!user) {
-    throw new Error('User not found');
-  }
-
+  // Delete any existing email verification tokens
   await prismaClient.verificationToken.deleteMany({
     where: {
       userId: user.id,
@@ -246,11 +299,12 @@ async function createEmailVerificationSession(userId: string) {
     },
   });
 
-  const token = await prismaClient.verificationToken.create({
+  // Create a new verification token
+  const verificationToken = await prismaClient.verificationToken.create({
     data: {
       user: {
         connect: {
-          id: userId,
+          id: user.id,
         },
       },
       token: generateRandomString(32),
@@ -265,7 +319,8 @@ async function createEmailVerificationSession(userId: string) {
     html: render(
       EmailVerification({
         name: user.firstName,
-        verificationLink: `${SITE_URL}/api/verify/${token.token}`,
+        verificationLink: `${SITE_URL}/api/verify/${verificationToken.token}`,
+        rootGroup: user.rootGroup,
       })
     ),
   });
@@ -407,3 +462,47 @@ export const importUsers = superAdminProcedure.input(ImportUsersDto).mutation(as
 
   return [];
 });
+
+export const updateRootGroup = privateProcedure
+  .input(z.object({ rootGroupId: z.string().nullable() }))
+  .mutation(async (opts) => {
+    if (!opts.ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
+
+    // If rootGroupId is null, set it to null in the database
+    // Otherwise, verify that the group exists
+    if (opts.input.rootGroupId) {
+      const group = await prismaClient.group.findUnique({
+        where: {
+          id: opts.input.rootGroupId,
+        },
+      });
+
+      if (!group) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'A megadott csoport nem létezik',
+        });
+      }
+    }
+
+    // Update the user's root group
+    const user = await prismaClient.user.update({
+      where: {
+        id: opts.ctx.session.user.id,
+      },
+      data: {
+        rootGroupId: opts.input.rootGroupId,
+      },
+      include: {
+        rootGroup: {
+          select: {
+            name: true,
+            icon: true,
+            color: true,
+          },
+        },
+      },
+    });
+
+    return user;
+  });

@@ -43,6 +43,15 @@ async function notifyOutdatedProfiles(): Promise<number> {
         gt: subDays(subYears(new Date(), 1), 1),
       },
     },
+    include: {
+      rootGroup: {
+        select: {
+          name: true,
+          icon: true,
+          color: true,
+        },
+      },
+    },
   });
 
   await batchSendEmail({

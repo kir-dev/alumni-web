@@ -1,6 +1,15 @@
 import { Tailwind, TailwindProps } from '@react-email/components';
 
-export function ConfiguredTailwind({ config, children, ...props }: TailwindProps) {
+import { generateColorPaletteFromHex, getHexForColor } from '@/lib/utils';
+import { RootGroup } from '@/types/group.types';
+
+interface ConfiguredTailwindProps extends TailwindProps {
+  rootGroup?: RootGroup;
+}
+
+export function ConfiguredTailwind({ config, children, rootGroup: group, ...props }: ConfiguredTailwindProps) {
+  const primaryColor = getHexForColor(group?.color ?? 'primary');
+
   return (
     <Tailwind
       config={{
@@ -10,18 +19,7 @@ export function ConfiguredTailwind({ config, children, ...props }: TailwindProps
           },
           extend: {
             colors: {
-              primary: {
-                50: '#f6f9fc',
-                100: '#d0d8e0',
-                200: '#a2b1c2',
-                300: '#7389a3',
-                400: '#456285',
-                500: '#163b66',
-                600: '#122f52',
-                700: '#0d233d',
-                800: '#091829',
-                900: '#040c14',
-              },
+              primary: generateColorPaletteFromHex(primaryColor),
             },
           },
         },

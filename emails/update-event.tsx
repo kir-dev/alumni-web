@@ -4,6 +4,7 @@ import { addHours } from 'date-fns';
 
 import { formatHu } from '@/lib/utils';
 import { Difference } from '@/types/event.types';
+import { RootGroup } from '@/types/group.types';
 
 import { Footer } from './footer';
 import { Header } from './header';
@@ -12,15 +13,16 @@ import { ConfiguredTailwind } from './tailwind';
 interface UpdateEventEmailProps {
   eventName: string;
   difference: Difference<Event>;
+  rootGroup?: RootGroup;
 }
 
-export default function UpdateEventEmail({ eventName, difference }: UpdateEventEmailProps) {
+export default function UpdateEventEmail({ eventName, difference, rootGroup }: UpdateEventEmailProps) {
   return (
     <Html>
       <Preview>A(z) {eventName} eseményt frissítették.</Preview>
-      <ConfiguredTailwind>
+      <ConfiguredTailwind rootGroup={rootGroup}>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
-          <Header />
+          <Header rootGroup={rootGroup} />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves csoporttársunk 👋</Text>
             <Text>A(z) {eventName} eseményünket frissítettük.</Text>
@@ -57,7 +59,7 @@ export default function UpdateEventEmail({ eventName, difference }: UpdateEventE
               <br />a szervezők
             </Text>
           </Section>
-          <Footer />
+          <Footer rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>

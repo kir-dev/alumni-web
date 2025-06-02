@@ -3,6 +3,7 @@ import { Body, Column, Html, Preview, Row, Section, Text } from '@react-email/co
 import { addHours } from 'date-fns';
 
 import { getFormattedDateInterval } from '@/lib/utils';
+import { RootGroup } from '@/types/group.types';
 
 import { StyledButton } from './button';
 import { Footer } from './footer';
@@ -14,15 +15,16 @@ interface NewEventEmailProps {
   group: { id: string; name: string };
   event: Event;
   eventLink: string;
+  rootGroup?: RootGroup;
 }
 
-export default function NewEventEmail({ eventLink, event, group }: NewEventEmailProps) {
+export default function NewEventEmail({ eventLink, event, group, rootGroup }: NewEventEmailProps) {
   return (
     <Html>
       <Preview>Új esemény a {group.name} csoportban!</Preview>
-      <ConfiguredTailwind>
+      <ConfiguredTailwind rootGroup={rootGroup}>
         <Body className='font-sans bg-slate-100 text-slate-700 p-2'>
-          <Header />
+          <Header rootGroup={rootGroup} />
           <Section className='bg-white p-10 rounded-lg max-w-2xl'>
             <Text className='font-bold'>Kedves csoporttársunk 👋</Text>
             <Text>Szeretettel meghívunk legújabb eseményünkre!</Text>
@@ -61,11 +63,11 @@ export default function NewEventEmail({ eventLink, event, group }: NewEventEmail
             <Text>
               Üdvözlettel,
               <br />
-              Schönherz Alumni
+              {rootGroup?.name || 'Schönherz Alumni'}
             </Text>
             <GroupDisplay group={group} />
           </Section>
-          <Footer canUnsubscribe groupId={group.id} />
+          <Footer canUnsubscribe groupId={group.id} rootGroup={rootGroup} />
         </Body>
       </ConfiguredTailwind>
     </Html>
